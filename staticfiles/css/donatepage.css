@@ -1,0 +1,108 @@
+
+  body {
+    background-color: #ffffff;
+    background-image: url('{% static "img/background3.jpg" %}');
+    background-size: cover;
+    background-repeat: no-repeat;
+    background-attachment: fixed;
+    background-position: center bottom;
+  }
+  /* Navbar styling */
+  .navbar-brand img {
+      height: 100px;
+      width: auto;
+  }
+  .navbar {
+      background-color: #174786;
+      height: 100px;
+    }
+    
+  .navbar-nav .nav-link {
+    color: #333;
+    margin: 0 10px;
+  }
+  .nav-link{
+    text-align: center;
+  }
+  .navbar-nav .nav-link:hover {
+    color: #007bff;
+  }
+  .mt-5 {
+    margin-top: 3rem;
+  }
+  .h2 {
+    font-size: 2rem;
+    font-weight: bold;
+    margin-bottom: 2rem;
+    text-align:center;
+  }
+  .clinic-card {
+    border: 1px solid #ccc;
+    border-radius: 5px;
+    padding: 15px;
+    margin: 10px;
+    text-align: center;
+    background-color: #ffffff;
+    box-shadow: 0 2px 6px rgba(0, 0, 0, 0.1);
+  }
+  .clinic-image {
+    width: 100%;
+    height: 150px;
+    object-fit: cover;
+    border-radius: 5px;
+  }
+  .clinic-name {
+    font-size: 20px;
+    font-weight: bold;
+    margin-top: 10px;
+    color: #ff8200;
+  }
+  .clinic-info {
+    font-size: 14px;
+    color: #000000;
+    margin-top: 10px;
+    text-align: left;
+  }
+  .small-image {
+    max-width: 100px; /* Adjust the width as needed */
+    height: auto;
+    margin-top: 10px;
+  }
+  .modal-title {
+    font-size: 20px;
+    font-weight: bold;
+    margin-top: 10px;
+    color: #ff8200;
+  }
+  .modal-body {
+    font-size: 18px;
+    color: #000000;
+    text-align: left;
+  }
+  .btn-donate-clinic {
+    font-size: 16px;
+    padding: 10px 20px;
+    border-radius: 5px;
+    background-color: #109f26;
+    border-color: #109f26;
+    color: #fff;
+    width: 100%;
+    margin-top: 10px;
+  }
+  .btn-donate-clinic:hover {
+    background-color: #068c15;
+    border-color: #068c15;
+  }
+  .btn-go-back {
+    font-size: 16px;
+    padding: 10px 20px;
+    border-radius: 5px;
+    border: 2px solid #092b57;
+    color: #092b57;
+    text-decoration: none;
+    margin-top: 20px;
+    transition: background-color 0.3s, color 0.3s, border-color 0.3s;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+  }

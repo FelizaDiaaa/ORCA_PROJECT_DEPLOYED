@@ -1,0 +1,433 @@
+<!DOCTYPE html>
+<html lang="en">
+    {% load static %}
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
+    <link href="https://maxcdn.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css" rel="stylesheet"> <!-- Bootstrap CSS link -->
+    <link rel="icon" type="image/x-icon" href="{% static 'img/orca web logo.png' %}">
+    <script src="https://unpkg.com/sweetalert/dist/sweetalert.min.js"></script>
+    <title>Volunteer Registration</title>
+
+    <style>
+       /* Heading 1 */
+        @import url('https://fonts.googleapis.com/css2?family=Arvo:wght@700&display=swap');
+        /* Subheaders */
+        @import url('https://fonts.googleapis.com/css2?family=Nunito:wght@500&display=swap');
+        /* body base text */
+        @import url('https://fonts.googleapis.com/css2?family=Hind+Guntur&display=swap');
+
+        body {
+            all: initial;
+            background-color: #FFCC9D;
+            font-family: 'Hind Guntur';
+            font-size: 1rem;
+        }   
+        .container{
+            padding: 16px;
+            width: 100vw;
+            height: fit-content;
+            min-height: 100vh;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+        
+        .Subheaders{
+            font-family: 'Nunito';
+            font-size: 1.875rem;
+            font-weight: bold;
+            color: #174786;
+            padding: 20px 0;
+        }
+        .Subheaders > span {
+            font-size: 2.986rem;
+        }
+
+        .center {
+            height: auto;
+            width: 100%;
+        }
+        .r-box {
+            padding: 0;
+            margin: 0;
+            width: 100%;
+            display: grid;
+            place-items: center;
+        }
+
+        .input-b{
+            all: initial;
+            width: 100%;
+        }
+        
+       .below{
+            width: 100%;
+            display: grid;
+            grid-template-columns: auto auto;
+            justify-content: space-between;
+            cursor: pointer;
+            padding-top: 20px;
+       }
+
+       .g-back{
+            text-decoration: none;
+            background-color: #5e7e9a0d;
+            color: #1e262d;
+       }
+
+       .g-back:hover {
+            background-color: #5e7e9a59;
+            color: #000 ;
+            transition: .9s;
+        }
+
+        .reg-btn {
+            background-color: #ff8200;
+            color: #f8f8f8;
+        }
+        .reg-btn:active {
+            background-color: #174786;
+        }
+        
+        .reg-btn, .g-back {
+            border: none;
+            padding: 12px 16px;
+            font-size: 1.10rem;
+            border-radius: 5px;
+        }
+
+        .volunteer-container {
+            padding: 32px;
+            display: flex;
+            background-color: #f8f8f8;
+            border-radius: 5px;
+            width: fit-content;
+            min-width: 30vw;
+            height: auto;
+            flex-direction: column;
+            filter: drop-shadow(2px 2px 3px);
+        }
+        
+        .volunteer-form {
+            align-items: center;
+            justify-content: center;
+            flex: 1;
+            max-width: 600px;
+            padding: 30px;
+            border-radius: 8px;
+            background-color: white;
+            box-shadow: 5px 5px 15px -1px #1f1f20, -5px -5px 15px -1px #737982;
+        }
+        
+        .volunteer-form_button {
+            display: flex; 
+            flex-direction: column; 
+            align-items: center;
+            justify-content: center;
+        }
+        
+        .volunteer-form-logo {
+            text-align: center;
+            margin-bottom: 20px;
+        }
+        
+        .volunteer-form-logo img {
+            max-width: 300px;
+            max-height: 300px;
+        }
+        
+        .form-section {
+            margin-bottom: 20px;
+        }
+        
+        .btn-primary{
+            width: 75%;
+            border-radius: 5px;
+            background-color: #FF8400;
+            border: none;
+        }
+        
+        .btn-primary:hover{
+            background-color: #ea7603;
+        }
+        
+        .btn-secondary{
+            align-items: center;
+            justify-content: center;
+            width: 75%;
+            border-radius: 5px;
+            background-color: #6c757d;
+        }
+        
+        .btn-width {
+            width: 100%;
+        }
+        
+        .volunteer-form-group{
+            margin-bottom: 30px;
+            gap: 16px;
+        }
+    
+        .form-control{
+            display: block;
+            width: 100%;
+            height: calc(1.5em + 0.75rem + 2px);
+            padding: 0.375rem 0.75rem;
+            font-size: 1rem;
+            font-weight: 400;
+            line-height: 1.5;
+            color: #495057;
+            background-color: #fff;
+            background-clip: padding-box;
+            border: 1px solid #ced4da;
+            border-radius: 0.25rem;
+            transition: border-color .15s ease-in-out, ybox-shadow .15s ease-in-out;
+        }
+        
+        .form-label {
+            font-weight: bold;
+            font-family: 'Canva Sans', Arial;
+            color: rgba(43, 43, 43, 0.848);
+        }
+
+        .labels{
+            all: initial;
+            width: 400px;
+            
+        }
+        .col-custom {
+            all: initial;
+            width: 100%;
+            padding: 0;
+            margin: 0;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            gap: 16px;
+            font-family: 'Hind Guntur';
+            padding-bottom: 16px;
+            font-size: 1rem;
+        }
+        
+        /* Media queries for responsiveness */
+        @media screen and (max-width: 768px) {
+            body {
+                background-position: center;
+                background-size: auto;
+            }
+        
+            .volunteer-container {
+                flex-direction: column;
+                align-items: center;
+            }
+        
+            .volunteer-form {
+                max-width: 100%;
+                padding: 20px;
+            }
+        
+            .col-md-9 {
+                flex-basis: 100%;
+                margin-bottom: 10px;
+            }
+        
+            .btn-width {
+                width: 100%;
+            }
+
+            .col-custom {
+                all: initial;
+                width: 100%;
+                padding: 0;
+                margin: 0;
+                display: flex;
+                flex-direction: column;
+                justify-content: center;
+                gap: 16px;
+                font-family: 'Hind Guntur';
+                padding-bottom: 16px;
+                font-size: 1rem;
+            }
+            .labels{
+                all: initial;
+            }
+            .d-flex{
+                align-items: center;
+                flex-wrap: wrap;
+            }
+        }
+    </style>
+</head>
+
+<body>
+    <div class="container">
+        <div class="volunteer-container">
+            <div class="w-100 d-flex justify-content-center">
+               <h2 class="Subheaders">VOLUNTEER REGISTRATION</h2>
+            </div>
+           <div class="r-box">
+               <form id="volunteerForm"  method="POST" enctype="multipart/form-data">
+                   {% csrf_token %}
+                   <div class="center">
+                       <div class="volunteer-form-group d-flex col">
+                           <div class="col-md-9 labels">
+                               <label for="firstName" class="form-label">First Name <span style="color: rgb(202, 6, 6)">*</span></label>
+                               <input type="text" name="firstname" id="firstName" class="form-control" required>
+                           </div>
+                           <div class="col-md-9 labels">
+                               <label for="lastName" class="form-label">Last Name <span style="color: rgb(202, 6, 6)">*</span></label>
+                               <input type="text" name="lastname" id="lastName" class="form-control" required>
+                           </div>
+                       </div>
+
+                       <div class="volunteer-form-group d-flex col">
+                           <div class="col-md-9 labels">
+                               <label for="sex" class="form-label">Sex <span style="color: rgb(202, 6, 6)">*</span></label>
+                               <select name="sex" id="sex" class="form-control" required>
+                                   <option value="" disabled selected></option>
+                                   <option value="Male">Male</option>
+                                   <option value="Female">Female</option>
+                               </select>
+                           </div>
+                            <div class="col-md-9 labels">
+                               <label for="contactNumber" class="form-label">Contact Number <span style="color: rgb(202, 6, 6)">*</span></label>
+                               <input type="tel" name="contactnumber" class="form-control" id="contactNumber" required>
+                           </div>
+                       </div>
+
+
+                       <div class="volunteer-form-group d-flex col">
+                            <div class="col-md-9 labels">
+                               <label for="address" class="form-label">Address <span style="color: rgb(202, 6, 6)">*</span></label>
+                               <input id="address" name="address" class="form-control" rows="3" required></input>
+                           </div>
+                            <div class="col-md-9 labels">
+                               <label for="email" class="form-label">Email <span style="color: rgb(202, 6, 6)">*</span></label>
+                               <input type="email" name="email" id="email" class="form-control" required>
+                           </div>
+                       </div>
+                     
+
+                       <div class="volunteer-form-group d-flex col">
+                            <div class="col-md-9 labels">
+                                <label for="password" class="form-label">Password <span style="color: rgb(202, 6, 6)">*</span></label>
+                                <div style="display:flex; align-items: center">
+                                    <input type="password" name="password" id="password" class="form-control" required>
+                                    <i class="toggle-password fas fa-eye" onclick="togglePassword('password')"></i>
+                                </div>
+                           </div>
+                            <div class="col-md-9 labels">
+                                <label for="confirmPassword" class="form-label">Confirm Password <span style="color: rgb(202, 6, 6)">*</span></label>
+                                <div style="display:flex; align-items: center">
+                                    <input type="password" id="confirmPassword" name="confirmPassword" class="form-control" required>
+                                    <i class="toggle-password fas fa-eye" onclick="togglePassword('confirmPassword')"></i>
+                                </div>
+                           </div>
+                       </div>
+
+
+                       <div class="volunteer-form-group d-flex col">
+                        <div class="col-md-9 labels">
+                            <label for="validID" class="form-label">
+                                Valid ID <span style="color: rgb(202, 6, 6)">*</span> 
+                                <i style="font-weight: normal; font-size: small;"> (Front and Back of your ID)</i>
+                            </label>
+                        
+                            <br>
+                        
+                            <label for="validID" style="font-weight: normal;">For front</label>
+                            <input type="file" class="form-control" id="validID" accept="image/*" name="validID" required/>
+                        
+                            <br>
+                        
+                            <label for="validID1" style="font-weight: normal;">For back</label>
+                            <input type="file" class="form-control" id="validID1" accept="image/*" name="validID1" required/>
+                        </div>
+                        
+                       </div>
+
+                   </div>
+               </form>
+            </div>
+
+            <div class="below">
+                <a href="main" class="g-back" style="text-decoration: none;">Go Back</a>
+                <button onclick= "registerButton()" class="reg-btn">REGISTER</button>
+            </div>
+        </div>   
+    </div>
+    <!-- Bootstrap JS and jQuery -->
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.16.0/umd/popper.min.js"></script>
+    <script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js"></script>
+
+    <script>
+    function togglePassword(inputId) {
+        const passwordInput = document.getElementById(inputId);
+        const icon = document.querySelector(`#${inputId} + .toggle-password`);
+    
+        if (passwordInput.type === 'password') {
+            passwordInput.type = 'text';
+            icon.classList.remove('fa-eye');
+            icon.classList.add('fa-eye-slash');
+        } else {
+            passwordInput.type = 'password';
+            icon.classList.remove('fa-eye-slash');
+            icon.classList.add('fa-eye');
+        }
+        }
+    function registerButton() {
+        event.preventDefault()
+        var myForm = document.querySelector('#volunteerForm');
+        var formData = new FormData(myForm);
+        fetch('/volunteer', {
+            method: 'POST',
+            body: formData
+        })
+        .then(response => response.json())
+        .then(data => { 
+            if(data.noData == true) {
+                swal({
+                    title: "Successfully Registered!",
+                    text:  "Reload the page to login!",
+                    icon: "success",
+                    buttons: {
+                      login: {
+                        text: "Ok",
+                        value: "login",
+                        className: "btn btn-primary",
+                      }
+                    }
+                  }).then((value) => {
+                    if (value === "login") {
+                      window.location.href = '/login';
+                    }
+                  });
+            } else {
+                swal({
+                    title: "Error!",
+                    text: data.error,
+                    icon: "error",
+                    buttons: {
+                      login: {
+                        text: "Ok",
+                        value: "login",
+                        className: "btn btn-danger",
+                      }
+                    }
+                  }).then((value) => {
+                    if (value === "login") {
+                      swal.close()
+                    }
+                  });
+            }
+        })
+        .catch(error => {
+           // window.location.href="Registration Success!!!"
+        });
+    }
+    </script>
+</body>
+</html>

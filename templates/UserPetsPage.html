@@ -1,0 +1,439 @@
+<!DOCTYPE html>
+<html lang="en">
+    {% load static %}
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
+  <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
+  <link rel="icon" type="image/x-icon" href="{% static 'img/orca web logo.png' %}">
+  <title>User Pets Page</title>
+  <style>
+
+    .flex-grow-1{
+      height: auto;
+      min-height: 100vh;
+      display: flex;
+      background-color: #FFEED9;
+    }
+    
+    .profile-box{
+      background: white;
+      border-radius: 5px;
+      padding: 20px;
+      box-shadow: 0 1px 10px rgba(0, 0, 0, 0.1);
+      margin-bottom: 10px;
+      margin: 10px;
+    }
+    
+    /* .profile-box img{
+      width: 230px;
+      height: 150px;
+      object-fit: cover;
+    } */
+
+    .container-img{
+      overflow: hidden;
+      border-radius: 100%;
+      width: 230px;
+      height: 230px;
+      background-color: #000000;
+      
+    }
+
+    .pet-name {
+      font-size: 18px;
+      text-align: center;
+      font-weight: bold;
+      margin-top: 10px;
+      color: #ff8200;
+    }
+    .pet-info {
+      color: #000000;
+
+    }
+
+    @media (max-width: 768px){
+      .container{
+        flex-wrap: wrap;
+        justify-content: center;
+        align-items: center;
+      }
+      .sidebar-text {
+        display: none;
+      }
+      .profile-box{
+        padding: 10px;
+      }
+      .side-logo{
+        width: 40px;
+        margin-left: -10px;
+      }
+    }
+
+    .hashtag-container {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 8px;
+      border: 1px solid #ccc;
+      padding: 8px;
+      width: 100%;
+    }
+
+    .hashtag {
+      background-color: #e0e0e0;
+      padding: 4px 8px;
+      border-radius: 4px;
+      cursor: pointer;
+    }
+
+    .hashtag:hover {
+      background-color: #c0c0c0;
+    }
+    .hashtag-badge {
+        display: inline-flex;
+        align-items: center;
+        background-color: #e0e0e0;
+        padding: 4px 8px;
+        border-radius: 4px;
+        margin: 4px;
+      }
+      
+      .hashtag {
+        margin-right: 4px;
+      }
+      
+      .badge-close {
+        cursor: pointer;
+        margin-left: 4px;
+        font-weight: bold;
+      }
+      /* Add this style to your existing CSS */
+
+      #optionsList {
+        display: flex;
+        flex-wrap: wrap;
+        gap: 10px; /* Adjust the gap between options as needed */
+      }
+      
+      /* Style the custom checkbox */
+      .hashtag-option + label {
+        flex: 0 0 calc(33.33% - 10px); /* Adjust the width of each option, considering the gap */
+        position: relative;
+        padding-left: 30px; /* Space for the custom checkbox */
+        cursor: pointer;
+        margin-bottom: 10px; /* Adjust the margin between rows as needed */
+      }
+      
+      .hashtag-option + label:before {
+        content: "";
+        position: absolute;
+        left: 0;
+        top: 0;
+        width: 20px; /* Size of the custom checkbox */
+        height: 20px;
+        border: 2px solid #007bff; /* Border color */
+        background-color: #fff; /* Background color */
+        border-radius: 4px; /* Rounded corners */
+        box-sizing: border-box;
+        transition: background-color 0.3s;
+      }
+      
+      .hashtag-option:checked + label:before {
+        background-color: #007bff; /* Change background color when checked */
+        border-color: #007bff; /* Change border color when checked */
+      }
+      
+      /* Style the text next to the checkbox */
+      .hashtag-option + label:after {
+        content: attr(data-option);
+        margin-left: 8px; /* Space between checkbox and text */
+      }
+      
+      
+      
+  </style>
+</head>
+
+<body>
+  <div class="d-flex">
+   {% include 'UserDashboard.html' %}
+    <!--USER PROFILE INFORMATION-->
+    <div class="flex-grow-1 p-5">
+        <!--pets and add a pet button-->
+        <form id="fetchBreed" method="POST">
+          {% csrf_token %}
+        </form>
+        <div class="row-md-3">
+          <div class="d-flex justify-content-between align-items-center mb-3">
+            <h2 class="mb-0">PETS</h2>
+            <button id="addPetButton" class="btn btn-primary" data-bs-toggle="modal" data-bs-target="#addPetModal">
+                Add a Pet
+            </button>
+          </div>
+
+          <!--pets-->
+          <div class="container d-flex flex-wrap">
+              {% for pets in pets %}
+                <div class="profile-box">
+                  <div class="container-img">
+                    <img src={{pets.pet_picture}} alt="pet photo" style="height: 230px;">
+                  </div>
+                    <div class="pet-name">{{pets.pet_name}}</div>
+                      <div class="pet-info">
+                        <strong>Birthdate: </strong>{{ pets.pet_birthdate|date:"F d, Y" }}</br>
+                        <strong>Age: </strong>{{pets.pet_age}}</br>
+                        <strong>Gender: </strong>{{pets.pet_gender}}</br>
+                        <strong>Type: </strong>{{pets.pet_type}}</br>
+                        <strong>Breed: </strong>{{pets.pet_breed}}</br>
+                      </div>
+                      <br/>
+                </div>
+              {% endfor %} 
+          </div>
+
+  <!-- Modal for adding a pet -->
+  <div class="modal fade" id="addPetModal" tabindex="-1" aria-labelledby="addPetModalLabel" aria-hidden="true" data-bs-backdrop="false">
+    <div class="modal-dialog">
+      <div class="modal-content">
+        <div class="modal-header">
+          <h5 class="modal-title" name="addAPet" id="addPetModalLabel">Add a New Pet</h5>
+          <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+        </div>
+        <div class="modal-body">
+          <form id="petsField" method="POST" enctype="multipart/form-data">
+            {% csrf_token %}
+            <div class="mb-3">
+              <label for="petPic" class="form-label">Pet Picture</label>
+              <input type="file" class="form-control" id="petPic" accept="image/*" name="pet_picture" required>
+            </div>
+            <div class="mb-3">
+              <label for="petName" class="form-label">Pet Name</label>
+              <input type="text" name="pet_name" class="form-control" id="petName" name="petName" required>
+            </div>
+
+            <div class="mb-3">
+              <label for="birthdate" class="form-label">Birthdate</label>
+              <input type="date" class="form-control" onchange = "calculateAgeFunction()" id="birthdate" name="pet_birthdate" required>
+            </div>
+
+            <div class="mb-3">
+              <label for="age" class="form-label">Age</label>
+              <input type="word" class="form-control" id="age"  disabled>
+              <input type="word" class="form-control" id="age1" name="pet_age" hidden>
+            </div>
+
+            <div class="mb-3">
+              <label for="sex" class="form-label">Sex</label>
+              <select class="form-select" id="sex" name="pet_gender" required>
+                <option value="" disabled selected></option>
+                <option value="male">Male</option>
+                <option value="female">Female</option>
+              </select>
+            </div>
+
+            <div class="mb-3">
+              <label for="petType" class="form-label">Pet Type</label>
+              <select class="form-select" name="pet_type" id="petType" name="petType" required onchange="petTypeChanged()">
+                <option value="dog">Dog</option>
+                <option value="cat">Cat</option>
+              </select>
+            </div>
+
+            <div>
+              <label for="optionsList" class="form-label">Breeds Options</label>
+              <div id="optionsList"></div>
+            </div>
+
+            <div class="mb-3">
+              <label for="breed" class="form-label">Breed</label>
+              <textarea type="text" class="form-control" id="breed" name="pet_breed" required> </textarea>
+              <div class="hashtag-container" id="hashtagContainer"></div>
+            </div>
+
+            <button type="submit" class="btn btn-primary">Add Pet</button>
+          </form>
+        </div>
+      </div>
+    </div>
+  </div>
+  </div>
+
+
+   <!-- Include Bootstrap JavaScript -->
+   <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
+
+</body>
+<script>
+  function calculateAgeFunction() {
+    const dateToday = new Date();
+    const petBirthday = new Date(document.getElementById('birthdate').value);
+    let ageYears = dateToday.getFullYear() - petBirthday.getFullYear();
+    const monthGap = dateToday.getMonth() - petBirthday.getMonth();
+
+    if (monthGap < 0 || (monthGap === 0 && dateToday.getDate() < petBirthday.getDate())) {
+        ageYears--;
+    }
+
+    let ageMonths = dateToday.getMonth() - petBirthday.getMonth();
+    if (dateToday.getDate() < petBirthday.getDate()) {
+        ageMonths--;
+        // Adjust negative months to wrap around to the previous year
+        ageMonths = (ageMonths + 12) % 12;
+    }
+
+    let ageString = '';
+    if (ageYears > 0) {
+        ageString += ageYears === 1 ? '1 year' : `${ageYears} years`;
+    }
+
+    if (ageMonths > 0) {
+        if (ageString.length > 0) {
+            ageString += ' and ';
+        }
+        ageString += ageMonths === 1 ? '1 month' : `${ageMonths} months`;
+    }
+
+    const ageInput = document.getElementById('age');
+    if (ageInput) {
+        ageInput.value = ageString;
+    }
+
+    const ageInput1 = document.getElementById('age1');
+    if (ageInput1) {
+        ageInput1.value = ageString;
+    }
+}
+
+function petTypeChanged() {
+  const petTypeSelect = document.getElementById('petType');
+  const selectedPetType = petTypeSelect.value;
+  const myForm = document.querySelector('#fetchBreed')
+  const formData = new FormData(myForm);
+  formData.append('pet_type_breeds', selectedPetType)
+  fetch('/userpets', {
+    method: 'POST',
+    body: formData
+  })
+  .then(response => response.json())
+  .then(data => { 
+    const defaultBreeds = data.breeds.map(breed => breed.breed);
+
+    // Set default breeds to the optionsList
+    setDefaultBreeds(defaultBreeds);
+  })
+}
+const inputText = document.getElementById('breed');
+const hashtagContainer = document.getElementById('hashtagContainer');
+const optionsList = document.getElementById('optionsList');
+
+inputText.addEventListener('input', syncCheckboxesWithTextArea);
+
+function syncCheckboxesWithTextArea() {
+  const text = inputText.value;
+  const hashtags = extractHashtags(text);
+
+  // Uncheck all checkboxes
+  optionsList.querySelectorAll('.hashtag-option').forEach(checkbox => {
+    checkbox.checked = false;
+  });
+
+  // Check checkboxes corresponding to hashtags in the text area
+  hashtags.forEach(tag => {
+    const cleanedTag = tag.replace('#', '');
+    const checkbox = optionsList.querySelector(`.hashtag-option[data-option="${cleanedTag}"]`);
+    if (checkbox) {
+      checkbox.checked = true;
+    }
+  });
+}
+const options = [];
+
+function setDefaultBreeds(defaultBreeds) {
+  optionsList.innerHTML = ''; // Clear existing options
+
+  defaultBreeds.forEach(breed => {
+    const checkbox = document.createElement('input');
+    checkbox.type = 'checkbox';
+    checkbox.className = 'hashtag-option';
+    checkbox.dataset.option = breed;
+    const label = document.createElement('label');
+    label.appendChild(checkbox);
+    label.appendChild(document.createTextNode(breed));
+
+    optionsList.appendChild(label);
+  });
+}
+inputText.addEventListener('input', updateHashtags);
+
+// Event listener for options
+optionsList.addEventListener('change', (event) => {
+  if (event.target.classList.contains('hashtag-option')) {
+    const option = event.target.dataset.option;
+    if (event.target.checked) {
+      appendToInput(option);
+    } else {
+      removeHashtag(option);
+    }
+  }
+});
+
+function updateHashtags() {
+  const text = inputText.value;
+  const hashtags = extractHashtags(text);
+  displayHashtags(hashtags);
+}
+
+function extractHashtags(text) {
+  const hashtags = text.split(',').map(tag => tag.trim());
+  return hashtags.filter(tag => tag.startsWith(''));
+}
+
+function displayHashtags(hashtags) {
+  hashtagContainer.innerHTML = '';
+
+  hashtags.forEach((tag) => {
+    const badgeElement = document.createElement('div');
+    badgeElement.classList.add('hashtag-badge');
+    badgeElement.innerHTML = `<span class="hashtag">${tag}</span><span class="badge-close">x</span>`;
+
+    const closeButton = badgeElement.querySelector('.badge-close');
+    closeButton.addEventListener('click', () => removeHashtag(tag));
+
+    hashtagContainer.appendChild(badgeElement);
+  });
+}
+function removeHashtag(tag) {
+  const currentText = inputText.value;
+  const newText = currentText.replace(new RegExp(`\\b${tag}\\b,?`, 'g'), '').replace(/,\s*$/, '').trim();
+  inputText.value = newText;
+  updateHashtags();
+
+  // Uncheck the corresponding option in the options list if the removed word is equal to the checked input
+  const optionCheckbox = optionsList.querySelector(`.hashtag-option[data-option="${tag}"]`);
+  if (optionCheckbox) {
+    optionCheckbox.checked = false;
+  }
+}
+
+
+function appendToInput(option) {
+  const currentText = inputText.value;
+  const cleanedOption = option.replace('#', ''); // Remove '#' character
+
+  // Check if the input already contains text
+  if (currentText.trim() === '') {
+    inputText.value = cleanedOption; // If empty, set the input value without a comma
+  } else {
+    const newText = `${currentText}, ${cleanedOption}`;
+    inputText.value = newText;
+  }
+
+  updateHashtags();
+}
+window.onload = function () {
+  petTypeChanged();
+};
+</script>
+</html>

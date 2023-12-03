@@ -1,0 +1,197 @@
+/* Sidebar logo */
+.side-logo{
+    text-align: center;
+    margin-bottom: 1rem;
+  }
+  .side-logo img{
+    max-width: 100%;
+    height: auto;
+  }
+  .lists{
+    list-style: none;
+    padding-left: 0;
+  }
+  .lists li{
+    display: flex;
+    align-items: center;
+    padding-top: 1rem;
+    padding-bottom: 1rem;
+    transition: background-color 0.3s;
+  }
+  
+  .lists a{
+    color: white;
+    text-decoration: none;
+    margin-right: 10px;
+  }
+  .lists a i{
+    margin-right: 10px;
+  }
+  .lists li:hover{
+    background-color: #292b2c;
+  }
+  .lists li:hover .fa-home,
+  .lists li:hover .fa-user,
+  .lists li:hover .fa-calendar-alt,
+  .lists li:hover .fa-paw,
+  .lists li:hover .fa-star,
+  .lists li:hover .fa-sign-out-alt {
+    transform: scale(1.2);
+    transition: transform 0.3s;
+  }
+  /*FOR EACH CLINIC*/
+  .clinic-container {
+    display: flex;
+    flex-wrap: wrap;
+    flex-direction: column;
+    flex-direction: row;
+    justify-content: center;
+    gap: 20px;
+  }
+  .clinic-box {
+    flex: 1;
+    background: #f1f1f1;
+    border-radius: 10px;
+    padding: 15px;
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+    margin-bottom: 20px;
+  }
+  .clinic-box img {
+    width: 100%;
+    height: 150px;
+    object-fit: cover;
+    border-radius: 5px;
+  }
+  
+  /*SET APPOINTMENT & VIEW DOCTORS BUTTONS*/
+  .clinic-buttons {
+    display: flex;
+    flex-direction: column;
+    justify-content: space-between;
+    margin-top: 10px;
+  }
+  /*EACH BUTTON*/
+  .clinic-button {
+    padding: 5px 10px;
+    background-color: #ff8200;
+    color: white;
+    border: none;
+    border-radius: 5px;
+    cursor: pointer;
+    margin-bottom: 5px;
+  }
+  
+  .btn-primary{
+    background-color: #ff8200;
+    border-color: #ff8200;
+  }
+  .btn-secondary{
+    background-color: #109f26;
+    border-color: #109f26;
+  }
+  .clinic-button:hover {
+    background-color: #0056b3;
+  }
+  .clinic-heading {
+      font-size: 30px;
+      font-weight: bold;
+      margin-bottom: 20px;
+      color: #000000;
+    }
+  .clinic-name {
+    font-size: 20px;
+    text-align: center;
+    font-weight: bold;
+    margin-top: 10px;
+    color: #ff8200;
+  }
+  .clinic-info {
+    font-size: 14px;
+    color: #000000;
+    margin-top: 10px;
+    text-align: left;
+  }
+  /* Main content area */
+  .flex-grow-1{
+    padding: 1rem;
+  }
+  /* Clinic and Volunteer box descriptions */
+  .clinic-box p{
+    margin-bottom: 5px;
+  }
+  @media (max-width: 768px){
+    .sidebar-text {
+      display: none;
+    }
+    .clinic-box{
+      padding: 10px;
+    }
+  
+    .modal-dialog {
+      margin: 30px auto;
+    }
+  
+    .doctor-box {
+      padding: 10px;
+    }
+  
+    .doctor-name {
+      font-size: 1rem;
+    }
+  
+    .doctor-description {
+      font-size: 0.8rem;
+    }
+  }
+  
+  /*FOR SET AN APPOINTMENT MODAL*/
+  .modal-dialog {
+    max-width: 800px;
+  }
+  /* Add some space below the modal header */
+  .modal-body {
+    margin-top: 15px;
+  }
+  
+  /*FOR VIEW VET DOCTORS MODAL*/
+  #viewDoctorsModal .modal-content {
+      border-radius: 10px;
+    }
+  
+    #viewDoctorsModal .modal-header {
+      background-color: #f8f9fa;
+      border-bottom: none;
+    }
+  
+    #viewDoctorsModal .modal-title {
+      font-size: 1.5rem;
+      font-weight: bold;
+    }
+  
+    /* Style for doctor boxes */
+    .doctor-box {
+      text-align: center;
+      padding: 15px;
+      background-color: #ffffff;
+      border-radius: 10px;
+      box-shadow: 0px 0px 5px rgba(0, 0, 0, 0.2);
+      margin-bottom: 20px;
+    }
+  
+    .doctor-box img {
+      width: 100px; /* Adjust the width as needed */
+      height: 100px; /* Adjust the height as needed */
+      border-radius: 50%;
+      margin-bottom: 10px;
+    }
+  
+    .doctor-name {
+      font-size: 1.2rem;
+      font-weight: bold;
+      margin-bottom: 5px;
+    }
+  
+    .doctor-description {
+      font-size: 0.9rem;
+      color: #6c757d;
+    }

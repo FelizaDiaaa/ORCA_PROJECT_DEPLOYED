@@ -1,0 +1,674 @@
+<!DOCTYPE html>
+<html lang="en">
+    {% load static %}
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <!-- Bootstrap CSS -->
+  <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
+  <!-- Font Awesome CSS -->
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
+  <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+  <!-- Custom CSS -->
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/flatpickr/dist/flatpickr.min.css">
+  <link rel="stylesheet" href="{% static 'css/userhomepage.css' %}">
+  <link rel="icon" type="image/x-icon" href="{% static 'img/orca web logo.png' %}">
+  <title>USER HOME PAGE</title>
+  
+  <style>
+    
+    .inactive {
+      background-color: white; /* Adjust the background color for inactive buttons */
+    }
+    .unavailable {
+      background-color: #af1b13; /* Adjust the background color for inactive buttons */
+    }
+
+    .reserved {
+      background-color:blue; /* Adjust the background color for inactive buttons */
+    }
+    
+    .active {
+      background-color: #4CAF50; /* Adjust the background color for active buttons */
+      color: white; /* Adjust the text color for active buttons */
+    }
+    
+    .button-style{
+      padding: 7px 14px;
+      font-size: 20px;
+      display: flex;
+      flex-wrap: wrap;
+      gap: 4px;
+    }
+
+    button{
+      border-width: thin;
+      border-radius: 5px;
+    }
+
+    /*FOR EACH CLINIC*/
+    .clinic-container {
+      padding: 0;
+      margin: 0;
+      width: 100%;
+    }
+    .flex-grow-1{
+      height: auto;
+      min-height: 100vh;
+      display: flex;
+      background-color: #FFEED9;
+    }
+    .card-container {
+      all: initial;
+      display: grid;
+      grid-template-columns: auto auto auto;
+      grid-gap:32px
+    }
+    .card {
+      width: 380px;
+      min-width: 300px;
+      height: auto;
+    }
+    .row {
+      width: 100%;
+    }
+    .col .clinic-box {
+      flex: 1;
+      background: #ffffff;
+      border-radius: 5px;
+      padding: 20px;
+      margin: 20px;
+      box-shadow: 0 1px 10px rgba(0, 0, 0, 0.1);
+      margin-bottom: 20px;
+    }
+    .clinic-box img {
+      width: 100%;
+      height: 150px;
+      object-fit: cover;
+      border-radius: 5px;
+    }
+
+    /*SET APPOINTMENT & VIEW DOCTORS BUTTONS*/
+    .clinic-buttons {
+      position: absolute;
+      bottom: 0;
+      width: 100%;
+      display: flex;
+      flex-direction: column;
+      margin-top: 10px;
+    }
+
+    /*EACH BUTTON*/
+    .clinic-button {
+      background-color: #ff8200;
+      color: white;
+      border: none;
+      cursor: pointer;
+      margin-bottom: 5px;
+      border-radius: 5px;
+      padding: 5px 10px;
+    }
+
+    .btn-primary{
+      background-color: #FF6600;
+      border-color: #ff8200;
+    }
+
+    .btn-secondary{
+      background-color: #2C786C;
+      border-color: #109f26;
+    }
+
+    /* Apply Volunteer Button */
+    .clinic-button.btn-apply-volunteer {
+      background-color: #b7150c;
+    }
+
+    .clinic-button.btn-apply-volunteer:disabled {
+      background-color: #9a322c;
+      color: #999;
+      cursor: default;
+    }
+
+    .clinic-heading {
+        font-size: 30px;
+        font-weight: bold;
+        margin-bottom: 20px;
+        color: #000000;
+      }
+    .clinic-name {
+      font-size: 20px;
+      text-align: center;
+      font-weight: bold;
+      margin-top: 10px;
+      color: #ff8200;
+    }
+    .clinic-info {
+      font-size: 14px;
+      color: #000000;
+      margin-top: 10px;
+      text-align: left;
+      list-style-type: none;
+    }
+    /* Clinic and Volunteer box descriptions */
+    .clinic-box p{
+      margin-bottom: 5px;
+    }
+
+    .legend{
+      display: none;
+    }
+    .legend ::after{
+      display: block;
+    }
+
+    @media (max-width: 768px){
+      .clinic-container {
+        flex-wrap: wrap;
+        justify-content: center;
+        align-items: center;
+      }
+      
+      .clinic-box {
+        margin: 10px 0;
+      }
+      .sidebar-text {
+        display: none;
+      }
+      .clinic-box{
+        padding: 10px;
+      }
+
+      .modal-dialog {
+        margin: 30px auto;
+      }
+
+      .doctor-box {
+        padding: 10px;
+      }
+
+      .doctor-name {
+        font-size: 1rem;
+      }
+
+      .doctor-description {
+        font-size: 0.8rem;
+      }
+      .side-logo{
+        width: 40px;
+        margin-left: -10px;
+      }
+    }
+
+    /*FOR SET AN APPOINTMENT MODAL*/
+    .modal-dialog {
+      max-width: 800px;
+    }
+    /* Add some space below the modal header */
+    .modal-body {
+      margin-top: 15px;
+    }
+
+    /*FOR VIEW VET DOCTORS MODAL*/
+    #viewDoctorsModal .modal-content {
+      border-radius: 10px;
+    }
+
+    #viewDoctorsModal .modal-header {
+      background-color: #f8f9fa;
+      border-bottom: none;
+    }
+
+    #viewDoctorsModal .modal-title {
+      font-size: 1.5rem;
+      font-weight: bold;
+    }
+        /* Style for doctor boxes */
+    .doctor-box {
+      text-align: center;
+      padding: 15px;
+      background-color: #ffffff;
+      border-radius: 10px;
+      box-shadow: 0px 0px 5px rgba(0, 0, 0, 0.2);
+      margin-bottom: 20px;
+      margin: 10px;
+    }
+      .doctor-box img {
+        width: 100px; /* Adjust the width as needed */
+        height: 100px; /* Adjust the height as needed */
+        border-radius: 50%;
+        margin-bottom: 10px;
+    }
+      .doctor-name {
+        font-size: 1.2rem;
+        font-weight: bold;
+        margin-bottom: 5px;
+      }
+      .doctor-description {
+      font-size: 0.9rem;
+      color: #6c757d;
+      }
+      .disabled-link {
+        pointer-events: none;
+        color: #888; 
+        cursor: not-allowed !important;
+      }
+  </style>
+</head>
+
+<body>
+  <div class="d-flex">
+    {% include 'UserDashboard.html' %}
+    <div class="flex-grow-1 p-5 row">
+      <h3 class="clinic-heading">LIST OF CLINICS</h3>
+      <div class="clinic-container">
+        <!-- Clinics -->
+        <div class="d-flex w-100 p-0 m-0" style="background-color: #2C786C;">
+          <form id="organizationClinics" method="POST">
+            {% csrf_token %}
+          </form>
+          <form id="servicesClinics" method="POST">
+            {% csrf_token %}
+          </form>
+          <div class="card-container">
+          {% for organization in organizations %}
+          <div class="card">
+            <div class="clinic-box">
+              <img src={{organization.cliniclogo}} alt="Clinic 1">
+              <div class="clinic-name">{{organization.organization_name}}</div>
+                <ul class="clinic-info">
+                  <li><strong>Address: </strong>{{organization.address}}</li>
+                  <li><strong>Contact Number: </strong>{{organization.contactnumber}}</li>
+                  <li><strong>Business Hours: </strong>{{BusinessHours.day}}</li> 
+                </ul>
+                <div class="clinic-buttons">
+                  <button class="clinic-button btn-primary" onclick= "getOrgID({{organization.id}})" data-bs-toggle="modal" data-bs-target="#appointmentModal">Set an Appointment</button>
+                  <button class="clinic-button btn-secondary" onclick="getVetOrgID({{organization.id}})" data-bs-toggle="modal" data-bs-target="#viewDoctorsModal">View Vet Doctors</button>
+                  {% if organization.organization_exists_in_records %}
+                    {% if organization.volunteer_status == 1 %}
+                        <button type="button" class="clinic-button btn-apply-volunteer" disabled >Waiting for Approval</button>
+                    {% else %}
+                        <button class="clinic-button btn-apply-volunteer" disabled>You're a Volunteer!</button>
+                    {% endif %}
+                  {% else %}
+                    {% if users.usertype == 1 or users.usertype == 5 or users.usertype == 2 %}
+                      <button class="clinic-button btn-apply-volunteer" onclick="getClientVolunteerID({{organization.id}})" >Apply Volunteer</button>
+                    {% else %}
+                      <button class="clinic-button btn-apply-volunteer disabled-link" onclick="getClientVolunteerID({{organization.id}})" >Apply Volunteer</button>
+                    {% endif %}
+                  {% endif %}
+                </div>
+            </div>
+            
+          </div>
+          {% endfor %}
+
+          </div>
+        </div>
+      </div>
+    
+      <!--FOR HIGHLIGHTS-->
+      <div class="row">
+        <form id="highlightsFields" method="POST" enctype="multipart/form-data">
+          {% csrf_token %}
+          {% for item in highlights %}
+          <div class = "row">
+            <div class="clinic-box">
+              <img src={{item.highlightsphoto}} alt="highlight photo">
+                <p><strong>{{item.highlightsdescription}}</strong></p>
+            </div>
+          </div>
+          {% endfor %}
+        </form>
+      </div>
+      </div>
+    </div>
+
+    <!-- Modal for Set Appointment -->
+    <div class="modal fade" id="appointmentModal" tabindex="-1" aria-labelledby="appointmentModalLabel" aria-hidden="true">
+      <div class="modal-dialog">
+        <div class="modal-content">
+          <div class="modal-header">
+            <h5 class="modal-title" id="appointmentModalLabel">SET AN APPOINTMENT</h5>
+            <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+          </div>
+          <form id="appointmentsDate" method="POST" >
+            {% csrf_token %}
+          </form>
+          <form id="appointmentFields" method="POST" >
+              {% csrf_token %}
+            <div class="modal-body">
+                <div class="mb-3">
+                  <label for="serviceType" class="form-label">Choose Service Type: <span style="color: rgb(202, 6, 6)">*</span></label>
+                    <select class="form-select" name="servicetype" id="serviceType" required onchange="handleServiceChange()">
+                  </select>
+                </div>
+                <div class="mb-3">
+                  <label for="petSelect" class="form-label">Choose Pet: <span style="color: rgb(202, 6, 6)">*</span></label>
+                  {% for pet in pets %}
+                    <div class="form-check">
+                      <input type="checkbox" class="form-check-input" name="pettobring" id="pet{{ pet.id }}" value="{{ pet.id }}" onchange="handleServiceChange()">
+                      <label class="form-check-label" for="pet{{ pet.id }}">{{ pet.pet_name }}</label>
+                    </div>
+                  {% endfor %}
+                </div>
+                <div class="mb-3">
+                  <label for="appointmentDate" class="form-label">Date: <span style="color: rgb(202, 6, 6)">*</span></label>
+                  <input type="text" name="appointmentdate" class="form-control" id="appointmentDate" onchange="getHours()" required>
+                </div>
+                  <div class="legend">
+                    <span>Red</span><span>Green</span><span>Blue</span>
+                  </div>
+                  <div class="button-style" id="buttonContainer"></div>
+                  <input type="time" name="appointmenttime" class="form-control" id="appointmentTime" hidden required>
+                <div class="mb-3">
+                  <div class="hashtag-container" id="hashtagContainer"></div>
+                </div>
+            </div>
+            <div class="modal-footer">
+              <button type="submit"  class="btn btn-primary">Schedule Appointment</button>
+            </div>
+        </form>
+        </div>
+      </div>
+    </div>
+
+
+    <!-- Modal for View Vet Doctors -->
+    <div class="modal fade" id="viewDoctorsModal" tabindex="-1" aria-labelledby="viewDoctorsModalLabel" aria-hidden="true">
+      <div class="modal-dialog modal-lg">
+        <div class="modal-content">
+          <div class="modal-header">
+            <h5 class="modal-title" id="viewDoctorsModalLabel">Veterinary Doctors</h5>
+            <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+          </div>
+          <div class="modal-body">
+              <div class="row">
+                <div class="d-flex col" id="veterinarianInfo">
+                  <!-- <div class="d-flex flex-wrap" id="veterinarianInfo"></div> -->
+                </div>
+              </div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+
+    <!-- Modal for Apply Volunteer -->
+    <div class="modal fade" id="uploadImageModal" tabindex="-1" aria-labelledby="uploadImageModalLabel" aria-hidden="true">
+      <div class="modal-dialog">
+        <div class="modal-content">
+          <form id= "clientApplyForVolunteer" method="POST" enctype="multipart/form-data">
+            {% csrf_token %}
+          <div class="modal-header">
+            <h5 class="modal-title" id="uploadImageModalLabel">Apply to Volunteer</h5>
+            <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+          </div>
+            <div class="modal-body">
+              <div class="col-md-6">
+                  <label for="validID" class="volunteer-form-label">Valid ID <span style="color: rgb(202, 6, 6)">*</span></label>
+                  <br>
+                  <label for="validID" style="font-weight: normal;">Front:</label>
+                  <input type="file" name="validID" class="form-control" id="validID" accept="image/*" required/>
+                  <br>
+                  <label for="validID1" style="font-weight: normal;">Back:</label>
+                  <input type="file" name="validID1" class="form-control" id="validID1" accept="image/*" required/>
+                  <input type="text" name="orgHiddenId" hidden id="orgHiddenId">
+              </div>
+            </div>
+          <div class="modal-footer">
+            <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
+            <button type="submit" class="btn btn-primary">Submit Application</button>
+          </div>
+        </form>
+        </div>
+      </div>
+    </div>
+
+    
+    <!-- Modal for Apply Volunteer -->
+    <div class="modal fade" id="yesNoModal" tabindex="-1" aria-labelledby="yesNoModalLabel" aria-hidden="true">
+      <div class="modal-dialog">
+        <div class="modal-content">
+          <div class="modal-header">
+            <h5 class="modal-title" id="yesNoModalLabel">Are you sure?</h5>
+            <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+          </div>
+            <div class="modal-body">
+              <form id= "volunteerForVolunteer" method="POST">
+                {% csrf_token %}
+                <div class="col-md-6">
+                  <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">No</button>
+                  <input type="text" hidden id="orgIdHidden" name="orgIdHidden">
+                  <button type="submit" class="btn btn-primary">Yes</button>
+                </div>
+              </form>
+            </div>
+        </div>
+      </div>
+    </div>
+
+
+  <!-- Bootstrap JavaScript (Make sure you have Bootstrap JavaScript included) -->
+  <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
+  <script src="https://cdn.jsdelivr.net/npm/flatpickr"></script>
+</body>
+
+<script>
+function handleServiceChange() {
+  document.getElementById('appointmentTime').value = "";
+  getHours()
+}
+var OrgID = ""
+function getOrgID(id){
+  document.cookie = "orgstr" + "=" + id
+  var myForm = document.querySelector('#servicesClinics')
+  var formData = new FormData(myForm)
+  formData.append("servicesID", id)
+  fetch('/userhome', {
+    method: 'POST',
+    body: formData
+  }) .then(response => response.json())
+  .then(data => { 
+    disableDates(data.businesshours)
+    const serviceSelect = document.getElementById("serviceType");
+    while (serviceSelect.firstChild) {
+      serviceSelect.removeChild(serviceSelect.firstChild);
+    }
+    data.services.forEach(service => {
+      const option = document.createElement("option");
+      option.value = service.service_offered;
+      option.textContent = service.service_offered;
+      serviceSelect.appendChild(option);
+  });
+  })
+}
+function getClientVolunteerID(id) {
+    if ({{users.usertype}}=== 1) {
+      $('#uploadImageModal').modal('show');
+      var orgIdHiddenInput = document.getElementById("orgHiddenId");
+      orgIdHiddenInput.value = id;
+    }
+    else {
+      $('#yesNoModal').modal('show');
+      var orgIdHiddenInput = document.getElementById("orgIdHidden");
+      orgIdHiddenInput.value = id;
+    }
+  
+} 
+function clientApplyForVolunteer() {
+  var myForm = document.querySelector('#clientApplyForVolunteer');
+  var formData = new FormData(myForm);
+  fetch('/userhome', {
+      method: 'POST',
+      body: formData
+  })
+}
+
+function getVetOrgID(id) {
+  var myForm = document.querySelector('#organizationClinics')
+  var formData = new FormData(myForm)
+  formData.append("vetID", id)
+  fetch('/userhome', {
+    method: 'POST',
+    body: formData
+  }) .then(response => response.json())
+  .then(data => { 
+    data.veterinarians.forEach(veterinarian => {
+      createVeterinarianModal(veterinarian);
+  });
+  })
+
+}
+
+function createVeterinarianModal(veterinarianData) {
+  var veterinarianInfo = document.getElementById('veterinarianInfo');
+  var modal = document.createElement('div');
+  modal.classList.add('modal', 'fade');
+
+  var doctorBox = document.createElement('div');
+  doctorBox.classList.add('doctor-box');
+
+  var vetImage = document.createElement('img');
+  vetImage.src = veterinarianData.profilepicture;
+  vetImage.alt = 'Doctor 1';
+
+  var vetName = document.createElement('div');
+  vetName.classList.add('doctor-name');
+  vetName.textContent = veterinarianData.vetname;
+
+  var vetDescription = document.createElement('p');
+  vetDescription.classList.add('doctor-description');
+  vetDescription.textContent = veterinarianData.vetdescription;
+
+  doctorBox.appendChild(vetImage);
+  doctorBox.appendChild(vetName);
+  doctorBox.appendChild(vetDescription);
+
+  modal.appendChild(doctorBox);
+
+  document.body.appendChild(modal);
+  veterinarianInfo.appendChild(doctorBox);
+
+}
+$('#viewDoctorsModal').on('hidden.bs.modal', function (e) {
+  // Clear the content of the "veterinarianInfo" element
+  var veterinarianInfo = document.getElementById('veterinarianInfo');
+  veterinarianInfo.innerHTML = '';
+});
+
+function getHours() { 
+  var myForm = document.querySelector('#appointmentFields')
+  var formData = new FormData(myForm)
+  formData.append("isBusinessHours", true)
+  fetch('/userhome', {
+    method: 'POST',
+    body: formData
+  }) .then(response => response.json())
+  .then(data => {
+    displayButtons(data.appointments_time);
+  });
+  }
+  function displayButtons(appointmentTimes) {
+    var buttonContainer = document.getElementById('buttonContainer');
+    buttonContainer.innerHTML = ''; // Clear previous buttons
+  
+    appointmentTimes.forEach(appointment => {
+      var petsChecked = countCheckbox()
+      var button = document.createElement('button');
+      button.textContent = appointment.appointment_time;
+      var myForm = document.querySelector('#appointmentsDate')
+      var formData = new FormData(myForm)
+      formData.append("isBusinessHoursDate", true)
+      formData.append("servicesType", document.getElementById('serviceType').value)
+      formData.append("time_appointed", appointment.appointment_time)
+      formData.append("date_appointed", document.getElementById('appointmentDate').value)
+      fetch('/userhome', {
+        method: 'POST',
+        body: formData
+      }) .then(response => response.json())
+      .then(data => {
+        console.log(data.choosen_service_duration * petsChecked)
+        if (data.min_duration + data.total_duration > 60 || (data.choosen_service_duration * petsChecked)+ data.total_duration > 60) {
+          button.disabled = true;
+          button.classList.add('unavailable'); // Add a class for styling
+        }   
+        else {
+          button.addEventListener('click', function(event) {
+            event.preventDefault();
+            document.getElementById('appointmentTime').value = appointment.appointment_time;
+            handleButtonClick(this);
+          });
+        }
+        });
+        buttonContainer.appendChild(button);
+    });
+  }
+  
+  function handleButtonClick(clickedButton) {
+    event.preventDefault()
+    var buttons = document.querySelectorAll('#buttonContainer button');
+    buttons.forEach(button => {
+      button.classList.remove('active');
+      button.classList.add('inactive');
+    });
+  
+    clickedButton.classList.remove('inactive');
+    clickedButton.classList.add('active');
+  }
+  function dayToNumber(day) {
+      const daysMap = {
+          'sun': 0,
+          'mon': 1,
+          'tue': 2,
+          'wed': 3,
+          'thu': 4,
+          'fri': 5,
+          'sat': 6
+      };
+
+      return daysMap[day.toLowerCase()];
+  }
+
+  function disableDates(businessHours) {
+    // Get the date input element
+    const dateInput = document.getElementById('appointmentDate');
+    const currentDate = new Date();
+    const maxDate = new Date();
+    maxDate.setDate(currentDate.getDate() + 15);
+
+    // Generate an array of allowed days based on business hours
+    const allowedDays = businessHours.map(entry => entry.day.toLowerCase());
+
+    // Get the days to disable
+    const daysToDisable = ['sun', 'mon', 'tue', 'wed', 'thu', 'fri', 'sat'].filter(day => !allowedDays.includes(day));
+    flatpickr('#appointmentDate', {
+      disable: [
+        function(date) {
+          return daysToDisable.map(dayToNumber).includes(date.getDay());
+        }
+      ],
+      minDate: currentDate,
+      maxDate: maxDate
+    });
+  
+  }
+  function countCheckbox() {
+    document.getElementById('appointmentTime').value = "";
+    var checkboxes = document.querySelectorAll('input[name="pettobring"]');
+
+    // Count the number of checked checkboxes
+    var checkedCount = 0;
+    checkboxes.forEach(function (checkbox) {
+        if (checkbox.checked) {
+            checkedCount++;
+        }
+    });
+    if (checkedCount == 0)
+      checkedCount = 1
+    return checkedCount
+}
+  
+</script>
+
+</html>

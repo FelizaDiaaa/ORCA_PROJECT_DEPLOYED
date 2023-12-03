@@ -1,0 +1,271 @@
+<!DOCTYPE html>
+<html lang="en">
+  {% load static %}
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <link rel="icon" type="image/x-icon" href="{% static 'img/orca web logo.png' %}">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
+  <link rel="stylesheet" href="{% static 'css/styles.css' %}">
+  
+  <title>ORCA MAIN PAGE</title>
+</head>
+  <style>
+    /* large screen */
+    .lg-screen{
+      height: 100%;
+      margin: 0 32px 0 0;
+    }
+    .l-nav{
+      height: 100%;
+      display: flex;
+    }
+    .nav-item{
+      height: 100%;
+      list-style: none;
+    }
+    .l-custom{
+      height: 100%;
+      display: flex;
+      justify-items: center;
+      align-items: center;
+      padding: 0 32px 0 32px;
+    }
+    .l-custom:hover{
+      background-color: #A9A9A9;
+      transition: .9s;
+    }
+    .bg-special-btn{
+      background-color:#FF5B22;
+    }
+    .bg-special-btn1{
+      background-color:#D71313;
+    }
+    .hamburger-btn {
+      visibility: hidden;
+    }
+    .mobile-menu {
+      visibility: hidden;
+    }
+    .content {
+      height: auto;
+      width: 100%;
+    }
+    .hero {
+      height: 100vh;
+      width: 100%;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      background-image: url('/static/img/background3.jpg');
+      background-size: cover;
+      background-repeat: no-repeat;
+    }
+    .container{
+      height: 100%;
+      width: 60vw;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      text-align: center;
+    }
+    .hr {
+      height: 5px;
+      width: 100%;
+      background-color: #000;
+      margin: 4px 0 16px 0;
+    }
+    .orca {
+      display: flex;
+      flex-direction: row;
+      color: #FF8200;
+    }
+    .orca-name {
+      color: #174786;
+    }
+    /* unique styling for mainpage */
+    @media screen and (max-width: 640px) {
+      h1 {
+        font-size: 2.5em !important;
+      }
+      .lg-screen {
+        visibility: hidden;
+      }
+      .hero {
+        background-image: none;
+      }
+      .hamburger-btn {
+        position: absolute;
+        visibility: visible;
+        right: 50px;
+      }
+    }
+    @media screen and (max-width: 1024px){
+      h1 {
+        font-size: 2em;
+      }
+      .content {
+        height: 100vh;
+      }
+      .lg-screen {
+        visibility: hidden;
+      }
+      .hero {
+        background-image: none;
+      }
+      .hamburger-btn {
+        position: absolute;
+        visibility: visible;
+        right: 56px;
+      }
+      .hamburger-btn:active {
+        scale: 1.15;
+      }
+      .menu {
+        position: absolute;
+        background-color: #1e262d;
+        height: 100vh;
+        width: 100vw;
+        left: 0;
+        top: 0;
+        display: flex;
+        flex-direction: column;
+        justify-content: center;
+        align-items: center;
+        z-index: -2;
+      }
+      ul {
+        list-style: none;
+      }
+      a {
+        color: #f8f8f8;
+        text-decoration: none;
+      }
+      .mbl-btn1, .mbl-btn2, .user-form {
+        height: 64px;
+        width: 100vw;
+        display: flex;
+        justify-content: center;
+        align-items: center;
+      }
+      .mbl-btn1 > a, .mbl-btn2 > a{
+        height: 100%;
+        width: 100%;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+      }
+      .mbl-btn1 {
+        background-color: #FF5B22;
+      }
+      .mbl-btn2 {
+        background-color: #D71313;
+      }
+      .user-form {
+        height: 100px;
+        width: 100vw;
+        display: flex;
+        justify-content: space-evenly;
+        align-items: center;
+        padding: 0 32px 0 32px;
+      }
+      .login-btn > a {
+        background-color: #174786;
+        padding: 12px 32px 12px 32px;
+      }
+      .reg-btn > a {
+        background-color: #93939324;
+        padding: 12px 32px 12px 32px;
+      }
+    }
+  </style>
+<body>
+  <div class="header">
+    <div class="brand-name">
+      <div class="logo-container">
+        <a class="navbar-brand d-flex " href="main">
+          <img src = "{% static 'img/orca web logo.png' %}" style="max-height: 60px;" alt="Logo">
+        </a>
+      </div>
+      <div class="outer-lo">
+        <div class="org-name">
+          <div>NGO</div>
+          <div>VETERINARY</div>
+          <div>CLINICS</div>
+        </div>
+      </div>
+    </div>
+    <div class="hamburger-btn" onclick="handleToggle()">
+      <i class="fa fa-bars" style="font-size:32px; color: #f8f8f8; cursor: pointer;"></i>
+    </div>
+    <nav class="mobile-menu">
+      <ul class="menu">
+        <li class="mbl-btn1">
+          <a href="donate">Donate</a>
+        </li>
+        <li class="mbl-btn2">
+          <a href="volunteerorg">Volunteer</a>
+        </li>
+        <ul class="user-form">
+          <li class="reg-btn">  
+            <a class="nav-item" href="register">Register</a>
+          </li>
+          <li class="login-btn">  
+            <a class="nav-item" href="login">Login</a>
+          </li>
+        </ul>
+      </ul>
+    </nav>
+    <nav class="lg-screen">
+      <ul class="l-nav">
+        <li class="nav-item bg-special-btn">
+          <a class="l-custom" href="donate" style="text-decoration: none; color: #f8f8f8;">Donate</a>
+        </li>
+        <li class="nav-item bg-special-btn1">
+          <a class="l-custom" href="volunteerorg" style="text-decoration: none; color: #f8f8f8;">Volunteer</a>
+        </li>
+        <li class="nav-item">
+          <a class="l-custom" href="register" style="text-decoration: none; color: #f8f8f8;">Register</a>
+        </li>
+        <li class="nav-item">
+          <a class="l-custom" href="login" style="text-decoration: none; color: #f8f8f8;">Login</a>
+        </li>
+      </ul>
+    </nav>
+  </div>
+
+  <div class="content">
+    <!-- Main content -->
+    <div class="hero">
+      <div class="container">
+        <div>
+          <!-- Introduction -->
+          <h1 class="orca">
+            <div>
+              <span class = "orca-name">ORCA:</span>
+              ONE-STEP REGISTRATION FOR ANIMAL CARE AND ASSISTANCE</div>
+          </h1>
+          <!-- Description -->
+          <div class="hr"></div>
+          <p style="  font-family: 'Aileron', arial;color: #174786;"><strong>ORCA: Connecting Care and Compassion.</strong> Our NGO Vet Clinics offer a seamless platform to book appointments for your pet's needs that provide an avenue to become a valued volunteer in organizations dedicated to improving animal welfare.</p>
+        </div>
+      </div>
+    </div>
+  </div>
+  
+  <script>
+    function handleToggle(){
+      var menu = document.querySelector(".mobile-menu");
+      var computedStyle = window.getComputedStyle(menu);
+
+      var visibility = computedStyle.getPropertyValue("visibility");
+
+      if(visibility === "hidden"){
+        menu.style.visibility = "visible";
+      }else{
+        menu.style.visibility = "hidden";
+      }
+    }
+  </script>
+</body>
+</html>

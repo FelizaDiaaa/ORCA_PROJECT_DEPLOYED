@@ -1,0 +1,67 @@
+body {
+  background-color: #ffffff;
+  /* background-image: url('{% static "img/background4.jpg" %}'); */
+  background-size: cover;
+  background-repeat: no-repeat;
+  background-attachment: fixed;
+  background-position: center bottom;
+}
+.container {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  height: 100vh;
+}
+
+.registration-form {
+  align-items: center;
+  justify-content: center;
+  flex: 1;
+  max-width: 600px;
+  padding: 30px;
+  border-radius: 8px;
+  box-shadow: 5px 5px 15px -1px #1f1f20, -5px -5px 15px -1px #737982;
+}
+.registration-form h2 {
+  font-size: 30px;
+  font-weight: bold;
+  color: #174786;
+}
+
+.form-label{
+  font-weight: bold;
+    font-family: 'Canva Sans', Arial;
+    color: rgba(43, 43, 43, 0.848);
+}
+
+.logo {
+  text-align: center;
+  margin-bottom: 20px;
+}
+.logo img {
+  max-width: 300px;
+  max-height: 300px;
+}
+.form-section {
+  margin-bottom: 20px;
+}
+
+.btn-primary{
+  width: 75%;
+  border-radius: 5px;
+  background-color: #FF8400;
+  border: none;
+}
+
+.btn-primary:hover{
+    background-color: #ea7603;
+}
+
+.btn-secondary{
+  align-items: center;
+  justify-content: center;
+  width: 75%;
+  border-radius: 5px;
+  background-color: #6c757d;
+}
+

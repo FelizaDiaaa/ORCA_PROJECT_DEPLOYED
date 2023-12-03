@@ -1,0 +1,5 @@
+**/migrations/
+*.pyc
+__pycache__/
+images/
+pdfs/

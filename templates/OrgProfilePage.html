@@ -1,0 +1,843 @@
+<!DOCTYPE html>
+<html lang="en">
+    {% load static %}
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
+  <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.min.js"></script>
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
+  <link rel="icon" type="image/x-icon" href="{% static 'img/orca web logo.png' %}">
+  <title>Org Profile Page</title>
+
+  <style>
+    .profile-box{
+      height: auto;
+      padding: 15px;
+      box-shadow: 5px 5px 15px -1px #1f1f20, -5px -5px 15px -1px #737982;
+      position: relative; 
+    }
+
+    .profile-box img{
+      width: 150px;
+      height: 150px;
+      overflow: hidden;
+      padding: 4px;
+      background-color: #fff;
+      border-radius: 100%;
+      filter: drop-shadow(#000 2px 0 3px);
+      object-fit: contain;
+    }
+    .zoomed-image {
+        position: fixed;
+        top: 0;
+        left: 0;
+        width: 100%;
+        height: 100%;
+        background-color: rgba(0, 0, 0, 0.7);
+        z-index: 1200; /* Update the z-index value to be higher than the modal backdrop */
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        overflow: auto;
+    }
+    
+    .zoomed-image img {
+        width: 500px;
+        height: 500px;
+    }
+
+     /* Main content area */
+
+    .profile-info strong {
+      font-size: 16px;
+      font-weight: bold;
+      color: #333;
+    }
+
+    .profile-info span {
+      margin-left: 5px;
+    }
+
+    /* Clinic and Volunteer box descriptions */
+    .profile-box p{
+        margin-bottom: 5px;
+        font-size: 25px;
+        font-weight: bold;
+
+    }
+
+    .edit-button {
+      position: absolute;
+      background: transparent;
+      top: 10px;
+      right: 10px;
+      padding: 10px;
+      background-color: rgba(255, 255, 255, 0.8);
+      border: none;
+      cursor: pointer;
+      transition: background-color 0.3s;
+    }
+
+    .edit-button i {
+      color: #333; /* Icon color */
+      font-size: 30px;
+    }
+
+    .edit-button:hover {
+      background-color: rgba(255, 255, 255, 1);
+    }
+
+   /* Certificate Images */
+    .certificate-images img {
+      width: 200px;
+      height: 150px;
+      margin: 10px 0;
+      border-radius: 0%;
+    }
+
+    /* QR Code Images */
+    .qr-code-images img {
+      width: 100px;
+      height: 100px;
+      margin: 10px 10px;
+      border-radius: 0%;
+      cursor: pointer;
+    }
+    .row{
+      align-items: center;
+    }
+
+    @media (max-width: 768px){
+      .sidebar-text {
+        display: none;
+      }
+      nav{
+        width: 100%;
+      }
+
+      .side-logo{
+        width: 40px;
+        margin-left: -10px;
+      }
+
+      /* Adjust padding for main content on mobile */
+      .flex-grow-1 {
+        padding: 1rem;
+      }
+
+      /* Adjust profile box size on mobile */
+      .profile-box {
+        width: 100%;
+        height: auto;
+        padding: 10px;
+      }
+
+      /* Center profile image on mobile */
+      .profile-box img {
+        width: 50%;
+        margin: 0 auto;
+      }
+      .certificate-images img {
+        width: 100px;
+        height: 75px;
+      }
+      .qr-code-images img {
+        width: 90px;
+        height: 75px;
+      }
+        
+      /* Make profile info text smaller on mobile */
+      .profile-info strong {
+        font-size: 14px;
+      }
+
+      /* Adjust the modal width for mobile */
+      .modal-dialog {
+        max-width: 90%;
+      }
+    }
+    /* Hide the default file input text */
+    input[type="file"] {
+        opacity: 0;
+        position: absolute;
+        z-index: -1;
+    }
+
+    /* Style the input group */
+    .input-group {
+        position: relative;
+        width: 30% !important;
+    }
+
+    /* Style the input group text (icon) */
+    .input-group-text {
+        cursor: pointer;
+        background-color: #007bff;
+        color: #fff;
+        border-color: #007bff;
+    }
+
+    /* Style the input group text on hover */
+    .input-group-text:hover {
+        background-color: #0056b3;
+        color: #fff;
+        border-color: #0056b3;
+    }
+    .edit_img{
+      width: 150px;
+      height: 150px;
+      overflow: hidden;
+      padding: 4px;
+      background-color: #fff;
+      border-radius: 100%;
+      filter: drop-shadow(#000 2px 0 3px);
+    }
+    .hrs-container {
+      all: initial;
+      display: flex;
+      flex-direction: column;
+      gap: 24px;
+      padding: 32px 0;
+    }
+    .day-container {
+      display: grid;
+      place-items: center;
+      grid-template-columns: auto auto;
+      border-bottom: 2px solid #0000002c;
+      padding-bottom: 16px;
+      /* filter: drop-shadow(1px 0 1px); */
+    }
+    
+    .time-container {
+      display: flex;
+      flex-direction: row;
+      justify-content: flex-end;
+      align-items: center;
+      grid-gap: 32px;
+      width: 100%;
+      height: 100%;
+    }
+    .switch-label {
+        display: grid;
+        place-items: center;
+        justify-content: center;
+        align-items: start;
+        width: 80%;
+    }
+    .am, .pm{
+      height: fit-content;
+      display: grid;
+      grid-template-columns: auto auto;
+      justify-content: space-between;
+      gap: 16px;
+    }
+    .switch {
+        position: relative;
+        display: inline-block;
+        width: 60px;
+        height: 34px;
+    }
+    .col-md-6 {
+      grid-template-columns: auto;
+      place-items: center ;
+      width: 100px;
+      padding: 0;
+
+    }
+    .switch>input {
+        opacity: 0;
+        width: 0;
+        height: 0;
+    }
+
+    .slider {
+        position: absolute;
+        cursor: pointer;
+        top: 0;
+        left: 0;
+        right: 0;
+        bottom: 0;
+        background-color: #ccc;
+        -webkit-transition: .4s;
+        transition: .4s;
+        border-radius: 34px;
+    }
+
+    .slider:before {
+        position: absolute;
+        content: "";
+        height: 26px;
+        width: 26px;
+        left: 4px;
+        bottom: 4px;
+        background-color: white;
+        -webkit-transition: .4s;
+        transition: .4s;
+        border-radius: 50%;
+    }
+
+    .switch input:checked + .slider {
+        background-color: #2196F3;
+    }
+
+    .switch input:focus + .slider {
+        box-shadow: 0 0 1px #2196F3;
+    }
+
+    .switch input:checked + .slider:before {
+        -webkit-transform: translateX(26px);
+        -ms-transform: translateX(26px);
+        transform: translateX(26px);
+    }
+
+    .time-input {
+        width: 120px;
+        padding:2px 8px;
+    }
+    @media screen and (min-width: 375px) and (max-width: 768px) {
+        .mbl-responsive {
+          display: flex;
+          flex-direction: column;
+          justify-content:center;
+          align-items: center;
+        }
+        .day-container {
+          display: flex;
+          flex-direction: column;
+        }
+        .time-container {
+          display: grid;
+          grid-gap: 16px;
+          padding: 8px;
+          grid-template-columns: auto;
+          height: fit-content;
+              justify-content: space-evenly;
+      }
+      .am, .pm {
+        height: 100%;
+      }
+
+    }
+  </style>
+</head>
+
+<body>
+  <div class="d-flex">
+    {% include 'OrgDashboard.html' %}
+    <!-- ORGANIZATION PROFILE INFORMATION -->
+    <form id="businessHoursEdit" method="POST">
+      {% csrf_token %}
+    </form>
+    <div class="flex-grow-1 p-4">
+      <div class="container p-0 m-0 row">
+        <h3 class="mb-3">ORGANIZATION INFO</h3>
+        <div class="col d-flex gap-4 mbl-responsive">
+            <div class="col">
+                <div class="profile-box h-100">
+                  <button class="edit-button" data-bs-toggle="modal" data-bs-target="#editProfileModal">
+                    <i class="fas fa-edit"></i>
+                  </button>
+
+                  <img id="profileImage" src={{organization.cliniclogo}} alt="profile photo">
+                  <hr>
+                  <div class="profile-info">
+                    <strong>ORGANIZATION NAME </strong><br />{{organization.organization_name}}<br>
+                    <strong>CONTACT NUMBER </strong><br />{{organization.user.contactnumber}}<br>
+                    <strong>CLINIC LOCATION </strong><br />{{organization.user.address}}<br>
+                    <strong>EMAIL </strong><br />{{organization.user.email}}</span><br>
+                    <strong>CERTIFICATE OF ACCREDITATION </strong><br /><a href="{{organization.certificate_of_accreditation}}" target="_blank">{{organization.certificate_of_accreditation}}</a>
+                  </div>
+                  <!-- QR Codes for Donations -->
+                  <h4 class="mb-3">QR Codes for Donations</h4>
+                  <div class="qr-code-images">
+                    <img src="{{organization.qrcodebuymeacoffee}}" onclick="enlargeImage('{{organization.qrcodebuymeacoffee}}')" alt="QR Code 1">
+                    <img src="{{organization.qrcodegcash}}" onclick="enlargeImage('{{organization.qrcodegcash}}')" alt="QR Code 2">
+                    <img src="{{organization.qrcodepaypal}}" onclick="enlargeImage('{{organization.qrcodepaypal}}')" alt="QR Code 3">                    
+                  </div>
+                </div>
+            </div>
+          
+          <div class="profile-box col">
+            <h3> Business Hours </h3>
+            <div class="hrs-container">
+              <div class="day-container">
+                <div class="switch-label">
+                  <div class="col-md-6"> 
+                      <label for="sun" class="switch-input">Sunday</label>
+                      <label class="switch">
+                          <input type="checkbox" id="sun" name="days[]" value="sun">
+                          <span class="slider"></span>
+                      </label>
+                  </div>
+                </div>
+                <div class="time-container">
+                  <div class="am">
+                    <span>From:</span>
+                    <input type="time" class="time-input" name="time_in_sun" value="08:00"> 
+                  </div>
+                  <div class="pm">
+                    <span>To:</span>
+                    <input type="time" class="time-input" name="time_out_sun" value="17:00">
+                  </div>
+                </div>
+              </div>
+              <div class="day-container">
+                  <div class="switch-label">
+                    <div class="col-md-6">
+                      <label for="mon" class="switch-input">Monday</label>
+                      <label class="switch">
+                          <input type="checkbox" id="mon" name="days[]" value="mon" checked>
+                          <span class="slider"></span>
+                      </label>
+                    </div>
+                  </div>
+                  <div class="time-container">
+                    <div class="am">
+                      <span>From:</span>
+                      <input type="time" class="time-input" name="time_in_mon" value="08:00"> 
+                    </div>
+                    <div class="pm">
+                      <span>To:</span>
+                      <input type="time" class="time-input" name="time_out_mon" value="17:00">
+                    </div>
+                  </div>
+                </div>
+                <div class="day-container">
+                  <div class="switch-label">
+                    <div class="col-md-6">
+                      <label for="tue" class="switch-input">Tuesday</label>
+                      <label class="switch">
+                          <input type="checkbox" id="tue" name="days[]" value="tue" checked>
+                          <span class="slider"></span>
+                      </label>
+                    </div>
+                  </div>
+                  <div class="time-container">
+                    <div class="am">
+                      <span>From:</span>
+                      <input type="time" class="time-input" name="time_in_tue" value="08:00">
+                    </div> 
+                    <div class="pm">
+                      <span>To:</span>
+                      <input type="time" class="time-input" name="time_out_tue" value="17:00">
+                    </div>
+                  </div>
+                </div>
+            
+                <div class="day-container">
+                  <div class="switch-label">
+                    <div class="col-md-6">
+                      <label for="wed" class="switch-input">Wednesday</label>
+                      <label class="switch">
+                          <input type="checkbox" id="wed" name="days[]" value="wed" checked>
+                          <span class="slider"></span>
+                      </label>
+                    </div>
+                  </div>
+                  <div class="time-container">
+                    <div class="am">
+                      <span>From:</span>
+                      <input type="time" class="time-input" name="time_in_wed" value="08:00">
+                    </div>
+                    <div class="pm">
+                      <span>To:</span>
+                      <input type="time" class="time-input" name="time_out_wed" value="17:00">
+                    </div>
+                  </div>
+                </div>
+                <div class="day-container">
+                  <div class="switch-label">
+                    <div class="col-md-6">
+                      <label for="thu" class="switch-input">Thursday</label>
+                      <label class="switch">
+                          <input type="checkbox" id="thu" name="days[]" value="thu" checked>
+                          <span class="slider"></span>
+                      </label>
+                    </div>
+                  </div>
+                  <div class="time-container">
+                    <div class="am">
+                      <span>From:</span>
+                      <input type="time" class="time-input" name="time_in_thu" value="08:00"> 
+                    </div>
+                    <div class="pm">
+                      <span>To:</span>
+                      <input type="time" class="time-input" name="time_out_thu" value="17:00">
+                    </div>
+                  </div>
+                </div>
+                <div class="day-container">
+                  <div class="switch-label">
+                    <div class="col-md-6">
+                      <label for="fri" class="switch-input">Friday</label>
+                      <label class="switch">
+                          <input type="checkbox" id="fri" name="days[]" value="fri" checked>
+                          <span class="slider"></span>
+                      </label>
+                    </div>
+                  </div>
+                  <div class="time-container">
+                    <div class="am">
+                      <span>From:</span>
+                      <input type="time" class="time-input" name="time_in_fri" value="08:00">
+                    </div>
+                    <div class="pm">
+                      <span>To:</span>
+                      <input type="time" class="time-input" name="time_out_fri" value="17:00">
+                    </div>
+                  </div>
+                </div>
+                <div class="day-container">
+                    <div class="switch-label">
+                      <div class="col-md-6">
+                        <label for="sat" class="switch-input">Saturday</label>
+                        <label class="switch">
+                            <input type="checkbox" id="sat" name="days[]" value="sat" checked>
+                            <span class="slider"></span>
+                        </label>
+                      </div>
+                    </div>
+                    <div class="time-container">
+                      <div class="am">
+                        <span>From:</span>
+                        <input type="time" class="time-input" name="time_in_sat" value="08:00">
+                      </div>
+                      <div class="pm">
+                        <span>To:</span>
+                        <input type="time" class="time-input" name="time_out_sat" value="17:00">
+                      </div>
+                    </div>
+                </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+  
+
+  <!-- Edit Profile Modal -->
+  <div class="modal fade" id="editProfileModal" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
+    <div class="modal-dialog" role="document">
+      <div class="modal-content">
+        <div class="modal-header">
+          <h5 class="modal-title" id="exampleModalLabel">Edit Organization Profile</h5>
+          <button type="button" class="close" data-bs-dismiss="modal" aria-label="Close">
+            <span aria-hidden="true">&times;</span>
+          </button>
+        </div>
+        <div class="modal-body">
+          <!-- Edit Profile Form -->
+          <form id="orgProfileEditFields" method="POST" enctype="multipart/form-data">
+            <input type="hidden" name="id" id="id" value = {{organization.id}}>
+            <!-- Profile Image Upload -->
+            {% csrf_token %}
+            <div class="mb-3">
+              <label for="changeOrgPhoto" class="form-label">Org Photo</label>
+              
+              <!-- Display current organization logo -->
+              <div class="current-logo-container">
+                  <img id="currentLogo" class="edit_img" src="{{ organization.cliniclogo }}" alt="Current Logo" class="current-logo">
+              </div>
+              
+              <!-- Input for changing organization logo -->
+              <div class="input-group">
+                  <input type="file" class="form-control" id="changeOrgPhoto" accept="image/*" name="profileorg" onchange="displaySelectedProfile()">
+                  <label class="input-group-text" for="changeOrgPhoto">
+                      <!-- Icon for the input -->
+                      <i class="fas fa-upload"></i>
+                  </label>
+              </div>
+          </div>
+          
+            <!-- Organization Name -->
+            <div class="mb-3">
+              <label for="orgNameInput" class="form-label">Organization Name</label>
+              <input type="text" class="form-control" value="{{organization.organization_name}}" id="orgNameInput" name="nameoforg">
+            </div>
+            <!-- Contact Number -->
+            <div class="mb-3">
+              <label for="contactNumberInput" class="form-label">Contact Number</label>
+              <input type="text" class="form-control" value="{{organization.user.contactnumber}}" id="contactNumberInput" name="contactnumber">
+            </div>
+            <!-- Clinic Location -->
+            <div class="mb-3">
+              <label for="clinicLocationInput" class="form-label">Clinic Location</label>
+              <input type="text" class="form-control" value="{{organization.user.address}}" id="clinicLocationInput" name="address">
+            </div>
+            <!-- Email -->
+            <div class="mb-3">
+              <label for="emailInput" class="form-label">Email</label>
+              <input type="email" class="form-control" value="{{organization.user.email}}" id="emailInput" name="email" disabled>
+              <input type="email" class="form-control" value="{{organization.user.email}}" id="emailInput1" name="email1" hidden>
+            </div>
+          
+            <!-- Certificate of Accreditation -->
+            <div class="mb-3">
+              <label for="certAccreditation" class="form-label">
+                  Certificate of Accreditation
+              </label>
+          
+              <!-- Display the PDF link if a file is selected -->
+              <div id="pdfLinkContainer">
+                  {% if organization.certificate_of_accreditation %}
+                      <a href="{{organization.certificate_of_accreditation}}" target="_blank">
+                          View Certificate of Accreditation
+                          <i class="fas fa-external-link-alt mr-3"></i> <!-- Icon for opening in a new tab -->
+                      </a>
+                      <i class="fas fa-upload upload-icon" onclick="triggerFileInput('certAccreditation')"></i>
+                  {% endif %}
+              </div>
+          
+              <!-- Input for changing Certificate of Accreditation -->
+              <div class="input-group mt-3">
+                  <input id="certAccreditation" type="file" class="form-control" name="accreditationcertificate" accept=".pdf">
+              </div>
+            </div>
+          
+          
+           <!-- QR Code for Donations -->
+           <div class="row">
+              <div class="col-md-4">
+                  <div class="mb-3">
+                      <label for="qrCodeInput1" class="form-label">
+                          QR Code 1 for Donations
+                      </label>
+          
+                      <!-- Display the QR Code 1 image -->
+                      <div class="qr-code-images">
+                          <img id="qrCodeImage1" src="{{organization.qrcodebuymeacoffee}}" alt="QR Code 1" class="img-fluid">
+                          <i class="fas fa-upload upload-icon" onclick="triggerFileInput('qrCodeInput1')"></i>
+                      </div>
+          
+                      <!-- Input for changing QR Code 1 -->
+                      <div class="input-group">
+                          <input type="file" class="form-control" id="qrCodeInput1" name="buymeacoffee" accept="image/*" onchange="displaySelectedImage('qrCodeInput1', 'qrCodeImage1')">
+                      </div>
+                  </div>
+              </div>
+          
+              <div class="col-md-4">
+                  <div class="mb-3">
+                      <label for="qrCodeInput2" class="form-label">
+                          QR Code 2 for Donations
+                      </label>
+          
+                      <!-- Display the QR Code 2 image -->
+                      <div class="qr-code-images">
+                          <img id="qrCodeImage2" src="{{organization.qrcodegcash}}" alt="QR Code 2" class="img-fluid">
+                          <i class="fas fa-upload upload-icon" onclick="triggerFileInput('qrCodeInput2')"></i>
+                      </div>
+          
+                      <!-- Input for changing QR Code 2 -->
+                      <div class="input-group">
+                          <input type="file" class="form-control" id="qrCodeInput2" name="gcash" accept="image/*" onchange="displaySelectedImage('qrCodeInput2', 'qrCodeImage2')">
+                      </div>
+                  </div>
+              </div>
+          
+              <div class="col-md-4">
+                  <div class="mb-3">
+                      <label for="qrCodeInput3" class="form-label">
+                          QR Code 3 for Donations
+                      </label>
+          
+                      <!-- Display the QR Code 3 image -->
+                      <div class="qr-code-images">
+                          <img id="qrCodeImage3" src="{{organization.qrcodepaypal}}" alt="QR Code 3" class="img-fluid">
+                          <i class="fas fa-upload upload-icon" onclick="triggerFileInput('qrCodeInput3')"></i>
+                      </div>
+          
+                      <!-- Input for changing QR Code 3 -->
+                      <div class="input-group">
+                          <input type="file" class="form-control" id="qrCodeInput3" name="paypal" accept="image/*" onchange="displaySelectedImage('qrCodeInput3', 'qrCodeImage3')">
+                      </div>
+                  </div>
+              </div>
+          </div>
+          
+
+            <button type="submit" onclick="updateOrgForm({{organization.id}})" class="btn btn-primary">Save Changes</button>
+          </form>
+        </div>  
+      </div>
+    </div>
+  </div>
+
+</body>
+<script>
+    function updateOrgForm(organizationedit){
+        event.preventDefault();
+        var myForm = document.querySelector('#orgProfileEditFields');
+        var formData = new FormData(myForm);
+        formData.append("organization_id", organizationedit)
+        fetch('/orgprofile', {
+            method: 'POST',
+            body: formData
+        }) .then(response => response.json())
+        .then(data => { 
+          if (data.accepted)
+            location.reload();
+        })
+    }
+    function displaySelectedProfile() {
+      var input = document.getElementById('changeOrgPhoto');
+      var currentLogo = document.getElementById('currentLogo');
+      
+      if (input.files && input.files[0]) {
+          var reader = new FileReader();
+          
+          reader.onload = function (e) {
+              currentLogo.src = e.target.result;
+          };
+          
+          reader.readAsDataURL(input.files[0]);
+      }
+  }
+  function displaySelectedImage(inputId, imageId) {
+    const input = document.getElementById(inputId);
+    const image = document.getElementById(imageId);
+
+    if (input.files && input.files[0]) {
+        const reader = new FileReader();
+
+        reader.onload = function (e) {
+            image.src = e.target.result;
+        };
+
+        reader.readAsDataURL(input.files[0]);
+    }
+  }
+  function triggerFileInput(inputId) {
+    // Trigger the click event of the hidden file input
+    document.getElementById(inputId).click();
+  }
+  document.getElementById('certAccreditation').addEventListener('change', function () {
+      var pdfLinkContainer = document.getElementById('pdfLinkContainer');
+      var fileInput = document.getElementById('certAccreditation');
+
+      // Clear the existing link
+      pdfLinkContainer.innerHTML = '';
+
+      // Display the new link if a file is selected
+      if (fileInput.files.length > 0) {
+          var newPdfLink = document.createElement('a');
+          newPdfLink.href = URL.createObjectURL(fileInput.files[0]);
+          newPdfLink.target = '_blank';
+          newPdfLink.textContent = fileInput.files[0].name;
+          
+          var newPdfIcon = document.createElement('i');
+          var newPdfIcon1 = document.createElement('i');
+          newPdfIcon.className = 'fas fa-external-link-alt';
+          newPdfIcon1.className = "fas fa-upload upload-icon";
+          newPdfIcon1.onclick = function() {
+            triggerFileInput('certAccreditation');
+          };
+
+          newPdfLink.appendChild(newPdfIcon);
+
+          pdfLinkContainer.appendChild(newPdfLink);
+          pdfLinkContainer.appendChild(newPdfIcon1);
+      }
+  });
+  function enlargeImage(imageSrc) {
+      
+    var zoomedContainer = document.createElement('div');
+    var zoomedImage = document.createElement('img');
+  
+    zoomedImage.src = imageSrc;
+  
+    zoomedContainer.classList.add('zoomed-image');
+    zoomedContainer.onclick = function () {
+      zoomedContainer.remove();
+    };
+    zoomedContainer.appendChild(zoomedImage);
+    document.body.appendChild(zoomedContainer);
+  }
+    document.addEventListener('DOMContentLoaded', function () {
+      const businessHours = [];
+
+      {% for item in businesshours %}
+          businessHours.push({
+              day: '{{ item.day }}',
+              open_time: '{{ item.open_time }}',
+              close_time: '{{ item.close_time }}'
+          });
+      {% endfor %}
+      // List of all days
+      const allDays = ['sun', 'mon', 'tue', 'wed', 'thu', 'fri', 'sat'];
+
+      allDays.forEach(day => {
+          const switchElement = document.getElementById(day);
+          if (!switchElement) return;
+
+          const timeInElement = document.querySelector(`[name="time_in_${day}"]`);
+          const timeOutElement = document.querySelector(`[name="time_out_${day}"]`);
+
+          // Find business hours data for the current day
+          const dayData = businessHours.find(item => item.day === day);
+          if (dayData && dayData.open_time && dayData.close_time) {
+              switchElement.checked = true;
+              timeInElement.value = formatTime(dayData.open_time);
+              timeOutElement.value = formatTime(dayData.close_time);
+          } else {
+              switchElement.checked = false;
+              timeInElement.value = '08:00';
+              timeOutElement.value = '17:00';
+          }
+          switchElement.addEventListener('change', function () {
+            handleSwitchChange(day, switchElement.checked);
+          });
+          timeInElement.addEventListener('change', function () {
+            if (!switchElement.checked) 
+                return
+            else
+                handleSwitchChange(day, switchElement.checked);
+          });
+
+          timeOutElement.addEventListener('change', function () {
+            if (!switchElement.checked) 
+                return
+            else
+                handleSwitchChange(day, switchElement.checked);
+              });
+      });
+    });
+    function formatTime(timeString) {
+      const parts = timeString.split(' ');
+      const hourMinute = parts[0].split(':');
+      let hour = hourMinute[0].length === 1 ? '0' + hourMinute[0] : hourMinute[0];
+      const minute = hourMinute[1] || '00';
+      const ampm = (parts[1] || 'am').toLowerCase().replace(/\.$|\.+/g, '');
+      if (ampm === 'pm') {
+          hour = (hour % 12) + 12;
+      }
+      return `${hour}:${minute}`;
+  }
+  
+
+  function handleSwitchChange(day, isChecked) {
+    const timeInElement = document.querySelector(`[name="time_in_${day}"]`);
+    const timeOutElement = document.querySelector(`[name="time_out_${day}"]`);
+
+    const timeInValue = timeInElement.value;
+    const timeOutValue = timeOutElement.value;
+    event.preventDefault();
+    var myForm = document.querySelector('#businessHoursEdit');
+    var formData = new FormData(myForm);
+    formData.append("time_in", timeInValue)
+    formData.append("time_out", timeOutValue)
+    formData.append("day", day)
+    formData.append("isChecked", isChecked)
+    fetch('/orgprofile', {
+        method: 'POST',
+        body: formData
+    }) .then(response => response.json())
+    .then(data => { 
+      if (data.switched)
+        console.log("Succes!")
+    })
+  }
+  </script>
+</html>

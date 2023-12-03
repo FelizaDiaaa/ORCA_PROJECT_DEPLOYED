@@ -1,0 +1,149 @@
+<!DOCTYPE html>
+<html lang="en">
+    {% load static %}
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.2/css/all.min.css">
+    <!-- Bootstrap CSS link -->
+    <link href="https://maxcdn.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css" rel="stylesheet">
+    <link rel="icon" type="image/x-icon" href="{% static 'img/orca web logo.png' %}">
+    <title>System Admin Login Page</title>
+
+    <style>
+        body{
+            background-color: #FFCC9D;
+            background-image: url('{% static "img/.jpg" %}');
+            background-size: cover;
+            background-repeat: no-repeat;
+            background-attachment: fixed;
+            background-position: center bottom;
+        }   
+        
+        .container{
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            height: 100vh;
+        }
+            
+        .form{
+            align-items: center;
+            border-radius: 8px;
+            padding: 1.25em;
+            background: none;
+            background-color: white;
+            box-shadow: 5px 5px 15px -1px #1f1f20, -5px -5px 15px -1px #737982;
+        }
+        
+        .form-logo{
+            margin-bottom: 20px;
+        }
+        
+        .form-logo img{
+            height: 200px;
+        }
+        
+        .form_button{
+            display: flex; 
+            flex-direction: column; 
+            align-items: center;
+            justify-content: center;
+        }
+        
+        .btn-primary{
+            width: 75%;
+            border-radius: 5px;
+            border-color: #ff8200;
+            background-color: #ff8200;
+            border: none;
+        }
+        
+        .btn-primary:hover{
+            background-color: #ea7603;
+        }
+        
+        .btn-secondary{
+            width: 75%;
+            border-radius: 5px;
+            background-color: #6c757d;
+        }
+        
+        .form-group{
+            margin-bottom: 1.5rem;
+        }
+        
+        .form-control{
+            border: 1px solid black;
+            outline: none;
+            padding: 0.625em;
+            border-radius: 5px;
+            width: 100%;
+        }
+        
+        .form-label{
+            font-weight: bold;
+            font-family: 'Canva Sans', Arial;
+            color: rgba(43, 43, 43, 0.848);
+        }
+        
+        /* Media queries for responsiveness */
+        @media screen and (max-width: 600px){
+        .container {
+            max-width: 100%;
+            padding: 0.625em;
+            align-items: center;
+            justify-content: center;
+        }
+        
+        .form {
+            padding: 1.25em;
+            background-color: white;
+        }
+        
+        .form-group {
+            margin-bottom: 1rem;
+        }
+        
+        .form-logo img {
+            height: 100px;
+            margin-right: 0;
+        }
+        
+        .btn-primary{
+            width: 80%;
+        }
+        .btn-secondary{
+            width: 50%;
+        }
+        }
+    </style>
+</head>
+<body>
+    <!-- Login Form -->
+    <div class="container">
+        <!-- Login Form Content -->
+        <form class="form" method="POST" id="loginForm">
+            {% csrf_token %} 
+            <div class="form-logo">
+                <img src = "{% static 'img/orca logo 2.png' %}" alt="Logo" height="50">
+            </div>
+
+            <div class="form-group">
+                <label for="email" class="form-label">Username <span style="color: rgb(202, 6, 6)">*</span></label>
+                <input type="text" name="email" id = "email" placeholder="username" class="form-control" required>
+            </div>
+
+            <div class="form-group">
+                <label for="password" class="form-label">Password <span style="color: rgb(202, 6, 6)">*</span></label>
+                <input type="password" name="password" id = "password" placeholder="********" class="form-control" required>
+            </div>
+
+            <div class="form_button">
+                <button class="btn btn-primary login_button mb-3">LOGIN</button>
+                <a href="main" class="btn btn-secondary back_button">Go Back</a>
+            </div>
+        </form>
+    </div>
+</body>
+</html>

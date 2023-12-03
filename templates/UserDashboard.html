@@ -1,0 +1,344 @@
+<!DOCTYPE html>
+<html lang="en">
+    {% load static %}
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <!-- Font Awesome CSS -->
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
+  <!-- Custom CSS -->
+  <link rel="stylesheet" href="{% static 'css/userdashboard.css' %}">
+  <link rel="icon" type="image/x-icon" href="{% static 'img/orca web logo.png' %}">
+  <title>MAIN USER SiDE NAVIGATION PANEL</title>
+</head>
+<style>
+  .dashboard {
+    position:static;
+    height: 100vh;
+    width: 100vw;
+    margin-left: 240px;
+  }
+  .user-identifier{
+    color: white;
+    font-size: 1em;
+    font-weight:500;
+    width: 100%;
+  }
+  .side-logo {
+    width: 240px;
+    height: 240px;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+  }
+  .side-logo > img {
+    max-height: 144px;
+    max-width: 144px;
+  }
+  .navbar-container {
+    height: 100%;
+    width: 100%;
+    z-index: 500;
+  }
+  .c-width {
+    width: 240px;
+    height: 100vh;
+  }
+  .nav-menu {
+    list-style: none;
+    width: 100%;
+    height: 100%;
+    margin: 0;
+    padding: 0;
+    cursor: pointer;
+  }
+  .navbtn, .navbtn1{
+    width:  240px;
+    height: fit-content;
+    display: flex;
+    flex-direction: column;
+  }
+  .navbtn > a {
+    padding: 14px 24px;
+    color: #f8f8f8;
+    text-decoration: none;
+    width: 100%;
+  }
+  .navbtn:hover a{
+    color: #f8f8f869;
+    background-color:rgba(255, 255, 255, 0.01) ;
+  }
+
+  .navbtn1 > a {
+    padding: 14px 24px;
+    color: gray;
+    text-decoration: line-through;
+    width: 100%;
+    cursor: not-allowed;
+  }
+  .navbtn1:hover a{
+    background-color:rgba(255, 255, 255, 0.01);
+  }
+  .nav-content {
+    position: fixed;
+    display: flex;
+    height: 100vh;
+  }
+  .burg-button {
+    display: none;
+  }
+  .mobile-menu, .nav-mob {
+    display: none;
+  }
+  ul {
+    list-style: none;
+  }
+  a {
+    text-decoration: none;
+  }
+  @media screen and (min-width: 768px) and (max-width: 1080px){
+    .navbtn > a > span, .navbtn1 > a > span {
+      display: none;
+    }
+    .navbtn > .b-bot, .navbtn1 > .b-bot{
+      width: 64px;
+      height: 64px;
+      border-bottom: 2px solid #6c757d;
+    }
+    .b-bot{
+      display: flex;
+      justify-items: center;
+      align-items: center;
+    }
+    .c-width {
+      width: 64px;
+      height: 100vh;
+      transition: .2s;
+    }
+    .side-logo {
+      width: 100%;
+      height: fit-content;
+      display: flex;
+      flex-direction: column;
+      justify-items: center;
+      align-items: center;
+    }
+    .side-logo > img {
+      max-height: 54px;
+      max-width: 54px;
+      margin: 16px 0 0 0;
+    }
+    .user-identifier{
+      display: none;
+    }
+    .nav-content {
+      width: 64px;
+    }
+    .dashboard {
+      margin-left : 64px;
+    }
+  }
+  @media screen and (max-width: 767px) {
+    .navbar-container, .user-identifier {
+      display: none;
+    }
+    .dashboard {
+      padding: 0;
+      margin: 0;
+      padding-top: 80px;
+      width: 100%;
+    }
+    .burg-button {
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      width: fit-content;
+      height: 100%;
+      margin-right: 16px;
+    }
+    
+    .side-logo {
+      all: initial;
+      height: 100%;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      margin-left: 16px;
+      width: fit-content;
+    }
+    .side-logo > img {
+      max-height: 54px;
+      max-width: 54px;
+    }
+    .c-width {
+      all: initial;
+      position: fixed;
+      width: 100%;
+      height: 80px;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      background-color: #1e262d;
+    }
+    .mobile-menu {
+      all: initial;
+      display: none;
+      position: fixed;
+      top: 0;
+      right: 0;
+      width: 50vw;
+      height: 100vh;
+      z-index: -1;
+      background-color: #1e262d;
+    }
+    .nav-menu {
+      width: 100%;
+      display: flex;
+      flex-direction: column;
+      justify-content: center;
+      align-items: start;
+      height: fit-content;
+      padding: 100px 0 0 0;
+    }
+    .res-mobile {
+      width: 100vw;
+      height: 80px;
+      background-color: #1e262d;
+      overflow: hidden;
+      display: grid;
+      grid-template-columns: auto auto;
+      padding: 0 24px;
+      place-items: center;
+      justify-content: space-between;
+    }
+    .mobile-menu {
+      position: absolute;
+      height: 100vh;
+      width: 100vw;
+      grid-template-columns: auto;
+      display: none;
+      background-color: #fff;
+    }
+    .nav-mob {
+      display: block;
+      z-index: -1;
+    }
+    .m-r-img {  
+      display: grid;
+      grid-template-columns: auto auto;
+      place-items: center;
+    }
+    .user-identifier > span {
+      padding-left: 10px;
+    }
+  }
+  .disabled-link {
+    pointer-events: none;
+    color: #888; 
+    cursor: not-allowed !important;
+  }
+</style>
+
+<body>
+  <div class="nav-content">
+    <nav class="c-width" style="background-color: #1e262d;">
+      <div class="side-logo" style="background-color: #1e262d!important;">
+        <img src="{%static 'img/orca web logo.png'%}" alt="Logo">
+        {% if users.usertype == 1 or users.usertype == 5%}
+          <p style="padding: 16px 0 8px 0;" class="user-identifier">CLIENT</p> 
+        {% elif users.usertype == 2 %}
+          <p style="padding: 16px 0 8px 0;" class="user-identifier">APPLYING FOR VOLUNTEER</p> 
+        {% elif users.usertype == 4 %}
+          <p style="padding: 16px 0 8px 0;" class="user-identifier">VOLUNTEER</p> 
+        {% elif users.usertype == 6 %}
+          <p style="padding: 16px 0 8px 0;" class="user-identifier">CLIENT and VOLUNTEER</p> 
+        {% endif %}
+        
+      </div>
+      <div class="burg-button">
+        <i class="fa fa-bars" style="font-size:32px; color: #f8f8f8;"></i>
+      </div>
+      <div class="navbar-container">
+        <ul class="nav-menu">
+          <li class="navbtn"><a class="b-bot" href="userhome"><i class="fas fa-home" style="padding-right: 16px; width: 32px;"></i><span>Home</span></a></li>
+          <li class="navbtn"><a class="b-bot" href="userprofile"><i class="fas fa-user" style="padding-right: 16px; width: 32px;"></i><span>User Profile</span></a></li>
+          <li class="navbtn"><a class="b-bot" href="userappointments"><i class="far fa-calendar-alt" style="padding-right: 16px; width: 32px;"></i><span>Appointments</span></a></li>
+          <li class="navbtn"><a class="b-bot" href="userpets"><i class="fas fa-paw" style="padding-right: 16px; width: 32px;"></i><span>My Pets</span></a></li>
+          {% if users.usertype == 1 or users.usertype == 5 or users.usertype == 2 %}
+            <li class="navbtn1">
+              <a class="b-bot disabled-link" href="#">
+                <i class="fas fa-lock" style="padding-right: 16px; width: 32px;"></i><span>My Highlights</span>
+              </a>
+            </li>
+          {% else %}
+            <li class="navbtn">
+              <a class="b-bot" href="userhighlights">
+                <i class="fas fa-star" style="padding-right: 16px; width: 32px;"></i><span>My Highlights</span>
+              </a>
+            </li>
+          {% endif %}
+          <li class="navbtn"><a class="b-bot" href="/logout_view"><i class="fa-solid fa-right-from-bracket fa-rotate-180" style="padding-left: 16px; width: 32px;"></i><span>Logout</span></a></li>
+        </ul>
+      </div>
+    </nav>
+    <div class="nav-mob">
+      <nav class="res-mobile">
+        <div class="m-r-img">
+          <img src="{%static 'img/orca web logo.png'%}" alt="Logo" width="64px">
+          {% if users.usertype == 1 or users.usertype == 5%}
+          <p class="user-identifier" style="margin-top: 16px; margin-left: 32px; border-left: 2px solid #888;"><span>CLIENT</span></p> 
+          {% elif users.usertype == 2 %}
+          <p class="user-identifier" style="margin-top: 16px; margin-left: 32px; border-left: 2px solid #888;"><span>APPLYING FOR VOLUNTEER</span></p> 
+          {% elif users.usertype == 4 %}
+          <p class="user-identifier" style="margin-top: 16px; margin-left: 32px; border-left: 2px solid #888;"><span>VOLUNTEER</span></p> 
+          {% elif users.usertype == 6 %}
+          <p class="user-identifier" style="margin-top: 16px; margin-left: 32px; border-left: 2px solid #888;"><span>CLIENT and VOLUNTEER</span></p> 
+          {% endif %}
+        </div>
+        <div onclick="handleToggle()">
+          <i class="fa fa-bars" style="font-size:32px; color: #f8f8f8;"></i>
+        </div>
+      </nav>
+    <div class="mobile-menu">
+      <ul>
+        <li class=""><a class="" href="userhome"><i class="fas fa-home" style="padding-right: 16px; width: 32px;"></i><span>Home</span></a></li>
+        <li class=""><a class="" href="userprofile"><i class="fas fa-user" style="padding-right: 16px; width: 32px;"></i><span>User Profile</span></a></li>
+        <li class=""><a class="" href="userappointments"><i class="far fa-calendar-alt" style="padding-right: 16px; width: 32px;"></i><span>Appointments</span></a></li>
+        <li class=""><a class="" href="userpets"><i class="fas fa-paw" style="padding-right: 16px; width: 32px;"></i><span>My Pets</span></a></li>
+        {% if users.usertype == 1 or users.usertype == 5 or users.usertype == 2 %}
+          <li class="">
+            <a class="b-bot disabled-link" href="#">
+              <i class="fas fa-lock" style="padding-right: 16px; width: 32px;"></i><span>My Highlights</span>
+            </a>
+          </li>
+        {% else %}
+          <li class="">
+            <a class="b-bot" href="userhighlights">
+              <i class="fas fa-star" style="padding-right: 16px; width: 32px;"></i><span>My Highlights</span>
+            </a>
+          </li>
+        {% endif %}
+        <li class=""><a class="b-bot" href="/logout_view"><i class="fa-solid fa-right-from-bracket fa-rotate-180" style="padding-left: 16px; width: 32px;"></i><span>Logout</span></a></li>
+      </ul>
+    </div>
+  </div>
+    
+  </div>
+  <div class="dashboard">
+</body>
+<script>
+  function handleToggle(){
+      var menu = document.querySelector(".mobile-menu");
+      var computedStyle = window.getComputedStyle(menu);
+
+      var display = computedStyle.getPropertyValue("display");
+
+      if(display === "none"){
+        menu.style.display = "grid";
+      }else{
+        menu.style.display = "none";
+      }
+    }
+</script>
+</html>

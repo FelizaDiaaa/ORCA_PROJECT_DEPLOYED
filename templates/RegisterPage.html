@@ -1,0 +1,804 @@
+<!DOCTYPE html>
+<html lang="en">
+  {% load static %}
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <link rel="icon" type="image/x-icon" href="{% static 'img/orca web logo.png' %}">
+  <link rel="stylesheet" type="text/css" href="{% static 'css/registerpage.css' %}">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
+  <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css">
+  <script src="https://unpkg.com/sweetalert/dist/sweetalert.min.js"></script>
+  <script src="https://cdn.emailjs.com/dist/email.min.js"></script>
+  <style>
+    /* Heading 1 */
+    @import url('https://fonts.googleapis.com/css2?family=Arvo:wght@700&display=swap');
+    /* Subheaders */
+    @import url('https://fonts.googleapis.com/css2?family=Nunito:wght@500&display=swap');
+    /* body base text */
+    @import url('https://fonts.googleapis.com/css2?family=Hind+Guntur&display=swap');
+    h1 {
+      font-size: 2.986rem;
+    }
+    .Subheaders {
+      font-family: 'Nunito';
+      font-size: 1.875rem;
+      font-weight: bold;
+      color: #174786;
+    }
+    .Subheaders > span {
+      font-size: 2.986rem;
+    }
+    body {
+      all: initial;
+      background-color: #FFCC9D;
+      font-family: 'Hind Guntur';
+      font-size: 1rem;
+    }
+    .container {
+      padding: 16px;
+      width: 100vw;
+      height: fit-content;
+      min-height: 100vh;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+    }
+    .client-container {
+      padding: 32px;
+      display: flex;
+      background-color: #f8f8f8;
+      border-radius: 5px;
+      width: fit-content;
+      min-width: 30vw;
+      height: auto;
+      flex-direction: column;
+      filter: drop-shadow(2px 2px 3px);
+    }
+    
+    .reg-as-container {
+      width: 100%;
+      padding: 32px 0;
+      display: grid;
+      grid-template-columns: auto auto;
+      justify-content: start;
+      flex-direction: row;
+      align-items: center;
+    }
+    .opt-field {
+      margin: 16px 0 0 8px;
+      height: 35px;
+      width: fit-content;  
+      cursor: pointer;
+      background-color: #fff;
+      border: 1px solid #ced4da;
+      border-radius: 0.25rem;
+    }
+    .hrs-container {
+      all: initial;
+      display: flex;
+      flex-direction: column;
+      gap: 24px;
+      padding: 32px 0;
+    }
+    .day-container {
+      display: grid;
+      place-items: center;
+      grid-template-columns: auto auto;
+      border-bottom: 2px solid #0000002c;
+      /* filter: drop-shadow(1px 0 1px); */
+    }
+    
+    .time-container {
+      display: flex;
+      flex-direction: row;
+      justify-content: space-evenly;
+      align-items: center;
+      grid-gap: 32px;
+      width: 100%;
+      height: 100%;
+    }
+    .switch-label {
+        display: grid;
+        place-items: center;
+        align-items: start;
+        width: 80%;
+    }
+    .am, .pm{
+      height: fit-content;
+      display: grid;
+      grid-template-columns: auto auto;
+      justify-content: space-between;
+      gap: 16px;
+    }
+    .switch {
+        position: relative;
+        display: inline-block;
+        width: 60px;
+        height: 34px;
+    }
+    .col-md-6 {
+      display: grid;
+      grid-template-columns: auto;
+      place-items: center ;
+      width: 100px;
+      padding: 0;
+    }
+    .switch>input {
+        opacity: 0;
+        width: 0;
+        height: 0;
+    }
+
+    .slider {
+        position: absolute;
+        cursor: pointer;
+        top: 0;
+        left: 0;
+        right: 0;
+        bottom: 0;
+        background-color: #ccc;
+        -webkit-transition: .4s;
+        transition: .4s;
+        border-radius: 34px;
+    }
+
+    .slider:before {
+        position: absolute;
+        content: "";
+        height: 26px;
+        width: 26px;
+        left: 4px;
+        bottom: 4px;
+        background-color: white;
+        -webkit-transition: .4s;
+        transition: .4s;
+        border-radius: 50%;
+    }
+
+    .switch input:checked + .slider {
+        background-color: #2196F3;
+    }
+
+    .switch input:focus + .slider {
+        box-shadow: 0 0 1px #2196F3;
+    }
+
+    .switch input:checked + .slider:before {
+        -webkit-transform: translateX(26px);
+        -ms-transform: translateX(26px);
+        transform: translateX(26px);
+    }
+
+    .time-input {
+        width: 120px;
+        padding:2px 8px;
+    }
+    .org-container {
+      padding: 32px;
+      display: flex;
+      background-color: #f8f8f8;
+      width: 70vw;
+      height: 100%;
+      flex-direction: column;
+      align-items: center;
+      border-radius: 5px;
+    }
+    .r-box {
+      padding: 0;
+      margin: 0;
+      width: 100%;
+      display: grid;
+      place-items: center;
+    }
+    .input-b {
+      all: initial;
+      width: 100%;
+    }
+    .row{
+      display: flex;
+      flex-direction: column;
+      width: 100%;
+      height: 80px;
+    }
+    .row > input, .g-back, .login-btn {
+        padding: 12px 16px;
+        font-size: 1.10rem;
+        border-radius: 5px;
+      }
+
+    .below{
+      width: 100%;
+      display: grid;
+      grid-template-columns: auto auto;
+      justify-content: space-between;
+      cursor:pointer;
+      padding-top: 32px;
+    }
+
+    .reg-btn, .g-back {
+      border: none;
+      padding: 12px 16px;
+      font-size: 1.10rem;
+      border-radius: 5px;
+    }
+    .g-back:hover {
+      background-color: #5e7e9a59;
+      color: #000 ;
+      transition: .9s;
+    }
+    .g-back {
+      text-decoration: none;
+      background-color: #5e7e9a0d;
+      color: #1e262d;
+    }
+    .reg-btn {
+      background-color: #ff8200;
+      color: #f8f8f8;
+    }
+    .reg-btn:active {
+      background-color: #174786;
+    }
+    .center {
+      height: auto;
+      width: 100%;
+    }
+    .row {
+      all: initial;
+    }  
+    .col-custom {
+      all: initial;
+      width: 100%;
+      display: flex;
+      gap:16px;
+      padding: 0;
+      margin:0;
+    }
+    .org-col-custom {
+      all: initial;
+      width: 100%;
+      display: flex;
+      gap:16px;
+      padding: 0;
+      margin:0;
+      
+    }
+    .qr-for-donation {
+      display: flex;
+      flex-direction: column;
+      gap: 16px;
+    }
+    .clinic-name, .contact-num, .clinic-address {
+      all: initial;
+      width: 100%;
+    }
+    .fname, .lname, .gender, .cont-num, .c-address, .c-email, .c-password, .c-password2 {
+      all: initial;
+      width: 300px;
+    }
+    .col-custom {
+      font-family: 'Hind Guntur';
+      padding-bottom: 16px;
+      font-size: 1rem;
+    }
+
+    @media screen and (min-width: 360px) and (max-width: 768px) {
+      .client-container {
+        height: auto;
+        width: fit-content;
+      }
+      .col-custom {
+        all: initial;
+        width: 100%;
+        padding: 0;
+        margin: 0;
+        display: flex;
+        flex-direction: column;
+        justify-content: center;
+        gap: 16px;
+        font-family: 'Hind Guntur';
+        padding-bottom: 16px;
+        font-size: 1rem;
+      }
+      .org-col-custom {
+        all: initial;
+        width: 100%;
+        padding: 0;
+        margin: 0;
+        display: flex;
+        flex-direction: column;
+        justify-content: center;
+        gap: 16px;
+        font-family: 'Hind Guntur';
+        padding-bottom: 16px;
+        font-size: 1rem;
+      }
+      .fname, .lname, .gender, .cont-num, .c-address, .c-email, .c-password, .c-password2{
+        all: initial;
+      }
+      .time-container {
+        display: grid;
+        grid-gap: 16px;
+        padding: 8px;
+        grid-template-columns: auto;
+        height: fit-content;
+      }
+      .day-container {
+        display: flex;
+        flex-direction: column;
+      }
+      .am, .pm {
+        height: 100%;
+      }
+    }
+  </style>
+  <title>User Registration</title>
+</head>
+<body>
+  <div class="container">
+    <div class="client-container" id="containerChange">
+      <div class="w-100 d-flex justify-content-center">
+        <h2 class="Subheaders">USER REGISTRATION</h2>
+      </div>
+      <div class="reg-as-container">
+        <span class="form-label mr-2">Register As:</span>
+        <select name="r-type" id="registrationType" onchange="toggleFields()" class="opt-field">
+          <option value="client">CLIENT</option>
+          <option value="organization">ORGANIZATION</option>
+        </select>
+      </div>
+      <div class="r-box">
+        <div class="input-b">
+        <!-- Client Fields of Registration -->
+        <!-- Fields for CLIENT registration -->
+        <div id="clientFields">
+          <form id="clientForm" method="POST"> 
+            {% csrf_token %}
+            <div class="center">
+              <div class="form-section row col-custom">
+                <div class="col-md-9 fname">
+                  <label for="firstName" class="form-label">First Name <span style="color: rgb(202, 6, 6)">*</span></label>
+                  <input type="text" name="firstname" class="form-control" id="firstName" required>
+                </div>
+                <div class="col-md-9 lname">
+                  <label for="lastName" class="form-label">Last Name <span style="color: rgb(202, 6, 6)">*</span></label>
+                  <input type="text" name="lastname" class="form-control" id="lastName" required>
+                </div>
+              </div>
+              <div class="form-section row col-custom">
+                <div class="col-md-9 d-flex flex-column gender" style="padding-top: 3px;">
+                  <label for="sex" class="form-label">Sex <span style="color: rgb(202, 6, 6)">*</span></label>
+                  <select class="form-control " name="sex" id="sex" required>
+                    <option value="" disabled selected></option>
+                    <option value="female">Female</option>
+                    <option value="male">Male</option>
+                  </select>
+                </div>
+                <div class="col-md-9 cont-num">
+                  <label for="clientContactNumber" class="form-label">Contact Number <span style="color: rgb(202, 6, 6)">*</span></label>
+                  <input type="tel" name="contactnumber" class="form-control" id="clientContactNumber" required>
+                </div>
+              </div>
+              <div class="form-section row col-custom">
+                <div class="col-md-9 c-address">
+                  <label for="address" class="form-label">Address <span style="color: rgb(202, 6, 6)">*</span></label>
+                  <input type="text" name="address" class="form-control" id="address" required>
+                </div>
+                <div class="col-md-9 c-email">
+                  <label for="email" class="form-label">Email <span style="color: rgb(202, 6, 6)">*</span></label>
+                  <input type="email" name="email" class="form-control" id="email" required>
+                </div>
+              </div>
+              <div class="form-section row col-custom">
+                <div class="col-md-9 c-password">
+                  <label for="password" class="form-label">Password <span style="color: rgb(202, 6, 6)">*</span></label>
+                  <div style="display:flex; align-items: center">
+                    <input type="password" name="password" class="form-control" id="password" required minlength="6">
+                    <i class="toggle-password fas fa-eye" onclick="togglePassword('password')"></i>
+                  </div>
+                </div>
+                <div class="col-md-9 c-password2">
+                  <label for="password2" class="form-label">Confirm Password <span style="color: rgb(202, 6, 6)">*</span></label>
+                  <div style="display:flex; align-items: center">
+                    <input type="password" name="password2" class="form-control" id="password2" required minlength="6">
+                    <i class="toggle-password fas fa-eye" onclick="togglePassword('password2')"></i>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </form>
+        </div>
+        <!-- Organization Fields of Registration -->
+        <div id="organizationFields" style="display: none;">
+          <form id= "organizationForm" method="POST" enctype="multipart/form-data" >
+            {% csrf_token %}
+            <div class="org-center">
+              <div class="form-section row org-col-custom" >
+                <div class="col-md-6 clinic-name">
+                  <label for="clinicName" class="form-label">Clinic Name <span style="color: rgb(202, 6, 6)">*</span></label>
+                  <input type="text" name="organization_name" class="form-control" id="clinicName">
+                </div>
+                <div class="col-md-6 contact-num">
+                  <label for="orgContactNumber" class="form-label">Contact Number <span style="color: rgb(202, 6, 6)">*</span></label>
+                  <input type="tel" name="contact_number" class="form-control" id="orgContactNumber">
+                </div>
+                <div class="col-md-6 clinic-address">
+                  <label for="clinicLocation" class="form-label">Clinic Location <span style="color: rgb(202, 6, 6)">*</span></label>
+                  <input type="text" name="clinic_location" class="form-control" id="clinicLocation">
+                </div>
+              </div>
+              <div class="hrs-container">
+                <div class="day-container">
+                  <div class="switch-label">
+                    <div class="col-md-6"> 
+                        <label for="sun" class="switch-input">Sunday</label>
+                        <label class="switch">
+                            <input type="checkbox" id="sun" name="days[]" value="sun">
+                            <span class="slider"></span>
+                        </label>
+                    </div>
+                  </div>
+                  <div class="time-container">
+                    <div class="am">
+                      <span>From:</span>
+                      <input type="time" class="time-input" name="time_in_sun" value="08:00"> 
+                    </div>
+                    <div class="pm">
+                      <span>To:</span>
+                      <input type="time" class="time-input" name="time_out_sun" value="17:00">
+                    </div>
+                  </div>
+                </div>
+                <div class="day-container">
+                    <div class="switch-label">
+                      <div class="col-md-6">
+                        <label for="mon" class="switch-input">Monday</label>
+                        <label class="switch">
+                            <input type="checkbox" id="mon" name="days[]" value="mon" checked>
+                            <span class="slider"></span>
+                        </label>
+                      </div>
+                    </div>
+                    <div class="time-container">
+                      <div class="am">
+                        <span>From:</span>
+                        <input type="time" class="time-input" name="time_in_mon" value="08:00"> 
+                      </div>
+                      <div class="pm">
+                        <span>To:</span>
+                        <input type="time" class="time-input" name="time_out_mon" value="17:00">
+                      </div>
+                    </div>
+                  </div>
+                  <div class="day-container">
+                    <div class="switch-label">
+                      <div class="col-md-6">
+                        <label for="tue" class="switch-input">Tuesday</label>
+                        <label class="switch">
+                            <input type="checkbox" id="tue" name="days[]" value="tue" checked>
+                            <span class="slider"></span>
+                        </label>
+                      </div>
+                    </div>
+                    <div class="time-container">
+                      <div class="am">
+                        <span>From:</span>
+                        <input type="time" class="time-input" name="time_in_tue" value="08:00">
+                      </div> 
+                      <div class="pm">
+                        <span>To:</span>
+                        <input type="time" class="time-input" name="time_out_tue" value="17:00">
+                      </div>
+                    </div>
+                  </div>
+              
+                  <div class="day-container">
+                    <div class="switch-label">
+                      <div class="col-md-6">
+                        <label for="wed" class="switch-input">Wednesday</label>
+                        <label class="switch">
+                            <input type="checkbox" id="wed" name="days[]" value="wed" checked>
+                            <span class="slider"></span>
+                        </label>
+                      </div>
+                    </div>
+                    <div class="time-container">
+                      <div class="am">
+                        <span>From:</span>
+                        <input type="time" class="time-input" name="time_in_wed" value="08:00">
+                      </div>
+                      <div class="pm">
+                        <span>To:</span>
+                        <input type="time" class="time-input" name="time_out_wed" value="17:00">
+                      </div>
+                    </div>
+                  </div>
+                  <div class="day-container">
+                    <div class="switch-label">
+                      <div class="col-md-6">
+                        <label for="thu" class="switch-input">Thursday</label>
+                        <label class="switch">
+                            <input type="checkbox" id="thu" name="days[]" value="thu" checked>
+                            <span class="slider"></span>
+                        </label>
+                      </div>
+                    </div>
+                    <div class="time-container">
+                      <div class="am">
+                        <span>From:</span>
+                        <input type="time" class="time-input" name="time_in_thu" value="08:00"> 
+                      </div>
+                      <div class="pm">
+                        <span>To:</span>
+                        <input type="time" class="time-input" name="time_out_thu" value="17:00">
+                      </div>
+                    </div>
+                  </div>
+                  <div class="day-container">
+                    <div class="switch-label">
+                      <div class="col-md-6">
+                        <label for="fri" class="switch-input">Friday</label>
+                        <label class="switch">
+                            <input type="checkbox" id="fri" name="days[]" value="fri" checked>
+                            <span class="slider"></span>
+                        </label>
+                      </div>
+                    </div>
+                    <div class="time-container">
+                      <div class="am">
+                        <span>From:</span>
+                        <input type="time" class="time-input" name="time_in_fri" value="08:00">
+                      </div>
+                      <div class="pm">
+                        <span>To:</span>
+                        <input type="time" class="time-input" name="time_out_fri" value="17:00">
+                      </div>
+                    </div>
+                  </div>
+                  <div class="day-container">
+                      <div class="switch-label">
+                        <div class="col-md-6">
+                          <label for="sat" class="switch-input">Saturday</label>
+                          <label class="switch">
+                              <input type="checkbox" id="sat" name="days[]" value="sat" checked>
+                              <span class="slider"></span>
+                          </label>
+                        </div>
+                      </div>
+                      <div class="time-container">
+                        <div class="am">
+                          <span>From:</span>
+                          <input type="time" class="time-input" name="time_in_sat" value="08:00">
+                        </div>
+                        <div class="pm">
+                          <span>To:</span>
+                          <input type="time" class="time-input" name="time_out_sat" value="17:00">
+                        </div>
+                      </div>
+                  </div>
+              </div>
+              <div class="form-section row">
+                <div class="col-md-6 fname">
+                  <label for="orgEmail" class="form-label">Email <span style="color: rgb(202, 6, 6)">*</span></label>
+                  <input type="email" name="clinic_email" class="form-control" id="orgEmail" required>
+                </div>
+                <br>
+                <div class="col-md-6 fname">
+                  <label for="orgPassword" class="form-label">Password <span style="color: rgb(202, 6, 6)">*</span></label>
+                  <div style="display:flex; align-items: center">
+                    <input type="password" name="clinic_password" class="form-control" id="orgPassword" required>
+                    <i class="toggle-password fas fa-eye" onclick="togglePassword('orgPassword')"></i>
+                  </div>
+                </div>
+                <br>
+                <div class="col-md-6 fname">
+                  <label for="orgPassword1" class="form-label">Repeat Password <span style="color: rgb(202, 6, 6)">*</span></label>
+                  <div style="display:flex; align-items: center">
+                    <input type="password" name="clinic_password2" class="form-control" id="orgPassword1" required>
+                    <i class="toggle-password fas fa-eye" onclick="togglePassword('orgPassword1')"></i>
+                  </div>
+                </div>
+              </div>
+              <br>
+              <div class="form-section row">
+                <div class="col-md-9 fname">
+                  <label for="orgLogo" class="form-label">Upload Logo <span style="color: rgb(202, 6, 6)">*</span></label>
+                  <input type="file" name="cliniclogo" class="form-control" id="orgLogo" accept="image/*" required />
+                </div>
+                <br>
+                <div class="col-md-9 fname">
+                  <label for="certificate" class="form-label">Certificate of Accreditation <span style="color: rgb(202, 6, 6)">*</span></label>
+                  <input type="file" class="form-control" id="certificate" accept=".pdf" name="certificate_of_accreditation" required/>
+                </div>
+              </div>
+              <br>
+              <div class="form-section row">
+              <div class="col-md-9 fname">
+                <label for="qrCode" class="form-label">Upload QR Code for Donation <span style="color: rgb(202, 6, 6)">*</span></label>
+                  <div class="qr-for-donation">
+                    <input type="file" class="form-control" id="qrCode1" accept="image/*" name="qrcodebuymeacoffee"/>
+                    <input type="file" class="form-control" id="qrCode2" accept="image/*" name="qrcodegcash"/> 
+                    <input type="file" class="form-control" id="qrCode3" accept="image/*" name="qrcodepaypal"/>
+                  </div>
+              </div>
+              </div>
+            </div>
+          </form>
+        </div>
+      </div>
+    </div>
+
+      <div class="below">
+        <a href="main" class="g-back" style="text-decoration: none;">Go Back</a>
+        <button onclick= "registerButton()" class="reg-btn">REGISTER</button>
+      </div>
+    </div>
+  </div>
+  
+  <script>
+    var registrationType = document.getElementById("registrationType");
+    function toggleFields() {
+      var clientFields = document.getElementById("clientFields");
+      var organizationFields = document.getElementById("organizationFields");
+      var container = document.getElementById('containerChange');
+      if (registrationType.value === "client") {
+        container.classList.add('client-container');
+        container.classList.remove('org-container');
+        clientFields.style.display = "block";
+        organizationFields.style.display = "none";
+      } else if (registrationType.value === "organization") {
+        container.classList.add('org-container');
+        container.classList.remove('client-container');
+        clientFields.style.display = "none";
+        organizationFields.style.display = "block";
+      }
+    }
+    function registerButton() {
+      var clientFields = document.getElementById("clientFields");
+      var organizationFields = document.getElementById("organizationFields");
+
+      if (registrationType.value === "client") {
+        event.preventDefault()
+        var myForm = document.querySelector('#clientForm');
+        var formData = new FormData(myForm);
+        if (!validateForm(myForm)) {
+          sweetAlert(false, "Error!", "Please fill out all input fields")
+          return
+        }
+        formData.append("usertype", registrationType.value)
+        fetch('/register', {
+            method: 'POST',
+            body: formData
+        })
+        .then(response => response.json())
+        .then(data => { 
+          if(data.noData == true){
+            sweetAlert(true, "Successfully Registered!", "Reload the page to login!")
+          } else {
+            sweetAlert(false, "Error!", data.error)
+          }
+      })
+      .catch(error => {
+         // window.location.href="Registration Success!!!"
+      })
+      } else if( registrationType.value === "organization") {
+        event.preventDefault()
+        var myForm = document.querySelector('#organizationForm');
+        var formData = new FormData(myForm);
+        if (!validateForm(myForm)) {
+          sweetAlert(false, "Error!", "Please fill out all input fields")
+          return;
+        }
+        formData.append("usertype", registrationType.value)
+        fetch('/register', {
+            method: 'POST',
+            body: formData
+        })
+        .then(response => response.json())
+        .then(data => { 
+          if(data.noData == true){
+              emailjs.init("eKqrvGOkVxL0RzYV2")
+              const templateId = "template_txsvixf"; 
+              const emailParams = {
+                  to_email: "orcaproject123@gmail.com",
+                  message: `${data.org} registered in your system. Please confirm the registration.`
+              };
+  
+              emailjs.send("service_dmb2o5u", templateId, emailParams)
+                  .then(function(response) {
+                      console.log("Email sent successfully!", response);
+                      sweetAlert(true, "Successfully Registered!", "Reload the page to login!")
+                  }, function(error) {
+                      console.error("Email could not be sent:", error);
+                  }); 
+          } else {
+            sweetAlert(false, "Error!", data.error)
+          }
+        })
+      .catch(error => {
+       console.log(error)
+      });
+      }
+    }
+    function validateForm(form) {
+      var isValid = true;
+    
+      // Reset previous error messages
+      form.querySelectorAll('.error').forEach(function (error) {
+        error.textContent = '';
+      });
+    
+      // Check each required field
+      form.querySelectorAll('[required]').forEach(function (input) {
+        if (!input.value.trim()) {
+        
+          isValid = false;
+        }
+      });
+    
+      // Additional custom validation if needed
+      // ...
+    
+      return isValid;
+    }
+    
+    function sweetAlert(isTrue, title, text) {
+      if (isTrue) {
+        swal({
+          title: title,
+          text: text,
+          icon: "success",
+          buttons: {
+            login: {
+              text: "Ok",
+              value: "login",
+              className: "btn btn-primary",
+            }
+          }
+        }).then((value) => {
+          if (value === "login") {
+            window.location.href = '/login';
+          }
+        });
+      } 
+      else{
+        swal({
+          title: title,
+          text: text,
+          icon: "error",
+          buttons: {
+            login: {
+              text: "Ok",
+              value: "login",
+              className: "btn btn-danger",
+            }
+          }
+        }).then((value) => {
+          if (value === "login") {
+            swal.close()
+          }
+        });
+      }
+
+    }
+
+    // Initial call to set the initial state
+    toggleFields();
+    function togglePassword(inputId) {
+      const passwordInput = document.getElementById(inputId);
+      const icon = document.querySelector(`#${inputId} + .toggle-password`);
+
+      if (passwordInput.type === 'password') {
+        passwordInput.type = 'text';
+        icon.classList.remove('fa-eye');
+        icon.classList.add('fa-eye-slash');
+      } else {
+        passwordInput.type = 'password';
+        icon.classList.remove('fa-eye-slash');
+        icon.classList.add('fa-eye');
+      }
+    }
+
+  </script>
+</body>
+</html>

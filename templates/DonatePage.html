@@ -1,0 +1,577 @@
+<!DOCTYPE html>
+<html lang="en">
+    {% load static %}
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <link rel="stylesheet" type="text/css" href="{% static 'css/styles.css' %}">
+  <link rel="icon" type="image/x-icon" href="{% static 'img/orca web logo.png' %}">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
+  <title>ORCA: Donate to Animal Clinics</title>
+  <style>/* Heading 1 */
+    @import url('https://fonts.googleapis.com/css2?family=Arvo:wght@700&display=swap');
+    /* Subheaders */
+    @import url('https://fonts.googleapis.com/css2?family=Nunito:wght@500&display=swap');
+    /* body base text */
+    @import url('https://fonts.googleapis.com/css2?family=Hind+Guntur&display=swap');
+    h1 {
+      font-size: 2.986rem;
+    }
+    .Subheaders {
+      font-family: 'Nunito';
+      font-size: 1.728rem;
+    }
+    .Subheaders > span {
+      font-size: 2.986rem;
+    }
+    body {
+      all: initial;
+      font-family: 'Hind Guntur';
+      font-size: 1rem;
+    }
+    h3 {
+      line-height: 1.6;
+    }
+    .lg-screen{
+      height: 100%;
+      margin: 0 32px 0 0;
+    }
+    .l-nav{
+      height: 100%;
+      display: flex;
+    }
+    .nav-item{
+      height: 100%;
+      list-style: none;
+    }
+    .l-custom{
+      height: 100%;
+      display: flex;
+      justify-items: center;
+      align-items: center;
+      padding: 0 32px 0 32px;
+    }
+    .l-custom:hover{
+      background-color: #A9A9A9;
+      transition: .9s;
+    }
+    .bg-special-btn{
+      background-color:#FF5B22;
+    }
+    .bg-special-btn1{
+      background-color:#D71313;
+    }
+    .mobile-menu {
+      display: none;
+    }
+    li.active a {
+      background-color: #A9A9A9; /* Change this to your desired active background color */
+      color: #1e262d !important;
+    }
+    .hamburger-btn {
+      display: none;
+    }
+    /* content styling */
+    .content {
+      max-width:100vw;
+      height: 100vh;
+      padding: 80px 16px 0 16px;
+    }
+    .container {
+      width: 100%;
+      height: auto;
+    }
+    .title {
+      width: 100%;
+      height: 20%;
+      display: flex;
+      align-items: center;
+    }
+    .clinics {
+      width: 100%;
+      height: fit-content; 
+      display:grid;
+      grid-template-columns: repeat(auto-fit, minmax(600px, auto));
+      justify-content: space-evenly;
+      grid-gap: 32px;
+      padding: 32px 0 32px 0;
+    }
+    .card {
+      height: fit-content;
+      width: auto;
+      display: grid;
+      grid-template-columns: auto auto auto;
+      gap: 16px;
+      padding: 16px;
+      background-color: #2F4858;
+      filter: drop-shadow(#000 0 3px 3px);
+      justify-content: space-between;
+      align-items: center ;
+    }
+    .ngo-icon {
+      width: 150px;
+      height: 150px;
+      overflow: hidden;
+      padding: 4px;
+      background-color: #fff;
+      border-radius: 100%;
+      filter: drop-shadow(#000 2px 0 3px);
+    }
+    .ngo-icon img {
+      width: 100%;
+      height: 100%;
+      border-radius: 100%;
+      object-fit: contain;
+      overflow: hidden;
+    }
+    .ngo-desc  {
+      width: fit-content;
+      height: 200px;
+      display: flex;
+      flex-direction: column;
+      justify-content: center;
+      color: white;
+    }
+    .ngo-desc ul {
+      list-style-type: none;
+    }
+    .btn-container {
+      display: flex;
+      justify-items:end;
+      align-items: center;  
+      height: 60px; 
+      width: fit-content;
+      padding: 0 0 0 32px;
+      filter: drop-shadow(#000 1px 3px 1px);
+    }
+    .dnt-btn {
+      background-color: #FF6200;
+      border: 0;
+      border-radius: 10px;
+      font-size: 16px;
+      color: white;
+      cursor: pointer;
+      height: 100%;
+      width: 100%;
+    }
+    .zm-wrd {
+      padding: 16px 30px;
+    }
+    .zm-wrd:hover {
+      transform: scale(1.1);
+      transition: .5s;
+    }
+    .dnt-btn:hover {
+      background-color: #ff6200ec;
+      transition: .3s;
+    }
+    .img-modal {
+      display: none;
+      position: fixed;
+      width: max-content;
+      width: 100vw;
+      height: 100vh;
+      background-color: #00000087;
+      left: 0;
+      top: 0;
+      justify-content: center;
+      align-items: center;
+      z-index: 1001;
+      cursor: pointer;
+    }
+    .mod-content {
+      width: 60%;
+      padding: 16px;
+      height: fit-content;
+      display: flex;
+      flex-direction: column;
+      justify-content: center;
+      align-items: center;
+      background-color: #fff;
+      gap: 32px;
+      border-radius: 5px;
+    }
+    .cls-btn-container {
+      width: 100%;
+      height: fit-content ;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+    }
+    .close-btn {
+      width: fit-content;
+      height: fit-content;
+      padding: 8px 16px;
+      border-radius: 5px;
+      filter: drop-shadow(#000 1px 2px .5px);
+      border: 0;
+    }
+    .close-btn:hover {
+      cursor: pointer;
+      background-color:gray;
+    }
+    .close-btn:focus {
+      filter: drop-shadow(#000 1px 3px 1px);
+    }
+    .img-container {
+      width: 100%;
+      display: flex;
+      justify-content: space-evenly;
+    }
+    .buymeacoffee-container, .gcash-container, .paypal-container {
+      width: 240px;
+      height: 240px;
+      padding: 16px;
+      object-fit:contain;
+    }
+    .img-container > div > img {
+      height: 100%;
+      width: 100%;
+    }
+    .mobile-card {
+      display: none;
+    }
+    @media screen and (max-width: 1080px){
+      .lg-screen {
+        display: none;
+      }
+      .mobile-card {
+        display: none;
+      }
+      .hamburger-btn {
+        position: absolute;
+        display: block;
+        right: 50px;
+      }
+      .header {
+        display: flex;
+        justify-content: space-between;
+      }
+      .img-modal {
+        all: initial;
+        display: none;
+        position: fixed;
+        width: 100vw;
+        height: 100vh;
+        left: 50%;
+        top: 50%;
+        right: 0;
+        bottom: 0;
+        justify-content: center;
+        align-items: center;
+        z-index: 1001;
+        margin: 0;
+        padding: 0;
+        transform: translate(-50%,-50%);
+      }
+      .mod-content {
+        width: 100%;
+        height: fit-content;
+        display: flex;
+        filter: drop-shadow(#000 0 3px 30px);
+      }
+      .cls-btn-container {
+        display: flex;
+        flex-direction: row;
+        justify-content: space-around;
+      }
+      .img-container {
+        width: 100%;
+        height: 280px;
+        display: flex;
+        overflow: auto;
+        align-items: center;
+        flex-direction: column;
+        justify-content: space-evenly;
+        gap: 32px;
+      }
+      .buymeacoffee-container {
+        padding-top: 600px;
+      }
+    }
+    @media screen and (min-width: 360px) and (max-width: 767px){
+      .lg-screen{
+        display: none;
+      }
+      .mod-content {
+        margin: 0 16px 0 16px;
+      }
+      .hamburger-btn {
+        position: absolute;
+        display: block;
+      }
+      .card {
+        display: none;
+      }
+      .clinics {
+        all: initial;
+        display: grid;
+        place-items: center;
+        grid-gap: 32px;
+        padding: 32px;
+        height: 100%;
+        width: fit-content;
+      }
+      .mobile-card {
+        position: relative;
+        width: 100%;
+        display: grid;
+        place-items: space-between;
+        align-items: center;
+        background-color: #2F4858;
+        font-family: "Hind Guntur";
+        gap: 12px;
+        padding: 16px;
+        border-radius: 3px;
+      }
+      .ngo-desc {
+        width: 100%;
+        height: 100%;
+      }
+      .ngo-icon {
+        width: 80px;
+        height: 80px;
+      }
+      .btn-container {
+        all: initial;      
+        display: flex;
+        justify-items:end;
+        align-items: center;  
+        height: 60px; 
+        width: 100%;
+        filter: drop-shadow(#000 1px 3px 1px);
+        padding: 16px 0 16px 0;
+      }
+      .mobile-menu {
+        position: absolute;
+        width: 100%;
+        height: 100vh;
+        place-items: center;
+        top: 0;
+        left: 0;
+        z-index: -2;
+        background-color: #1e262d;
+      }
+      .mobile-menu > ul, ul {
+        list-style: none;
+      }
+      .mobile-menu > ul > li > a, ul> ul > li > a {
+        text-decoration: none;
+        color: white;
+      }
+      .menu {
+        width: 100%;
+        height: fit-content;
+        display: grid;
+        place-items: center;
+      }
+      .dnt-cont {
+        width: 100%;
+        height: 60px;
+        display: flex;
+        justify-items: center;
+        align-items: center;
+      }
+      .mbl-btn1, .mbl-btn2, .user-form {
+        width: 100%;
+        height: 64px;
+        margin-left: -10px;
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        font-size: 1.2em;
+      }
+      .mbl-btn1 {
+        background-color: #FF5B22;
+      }
+      .mbl-btn2 {
+        background-color: #D71313;
+      }
+      .user-form {
+        padding: 16px 0;
+        display: grid;
+        grid-template-columns: auto auto;
+        place-items: center;
+        gap: 1em;
+        justify-content: space-evenly;
+      }
+      .nav-item {
+        padding: 14px 32px;
+        margin-left: -25px;
+      }
+      .c-2 {
+        background-color: #174786;
+      }
+      .c-1 {
+        background-color: #93939324;
+      }
+    }
+  </style>
+</head>
+
+<body>
+  <div class="header" style="z-index: 1000;">
+    <div class="brand-name">
+      <div class="logo-container" style="background-color: #1e262d!important;">
+        <a class="navbar-brand d-flex " href="main" style="display: grid; place-items: center;">
+          <img src = "{% static 'img/orca web logo.png' %}" style="max-height: 60px;" alt="Logo">
+        </a>
+      </div>
+      <div class="outer-lo">
+        <div class="org-name">
+          <div>NGO</div>
+          <div>VETERINARY</div>
+          <div>CLINICS</div>
+        </div>
+      </div>
+    </div>
+    <div class="hamburger-btn" onclick="handleToggle()">
+      <i class="fa fa-bars" style="font-size:32px; color: #f8f8f8;"></i>
+    </div>
+    <nav class="mobile-menu">
+      <ul class="menu">
+        <li class="dnt-cont">
+          <a class="mbl-btn1" href="donate"><span>Donate</span></a>
+        </li>
+        <li class="dnt-cont">
+          <a class="mbl-btn2" href="volunteerorg">Volunteer</a>
+        </li>
+        <ul class="user-form">
+          <li>  
+            <a class="nav-item c-1" href="register">Register</a>
+          </li>
+          <li>  
+            <a class="nav-item c-2" href="login">Login</a>
+          </li>
+        </ul>
+      </ul>
+    </nav>
+    <nav class="lg-screen">
+      <ul class="l-nav">
+        <li class="active nav-item bg-special-btn">
+          <a class="l-custom" href="donate" style="text-decoration: none; color: #f8f8f8;">Donate</a>
+        </li>
+        <li class="nav-item bg-special-btn1">
+          <a class="l-custom" href="volunteerorg" style="text-decoration: none; color: #f8f8f8;">Volunteer</a>
+        </li>
+        <li class="nav-item">
+          <a class="l-custom" href="register" style="text-decoration: none; color: #f8f8f8;">Register</a>
+        </li>
+        <li class="nav-item">
+          <a class="l-custom" href="login" style="text-decoration: none; color: #f8f8f8;">Login</a>
+        </li>
+      </ul>
+    </nav>
+  </div>
+  <div class="content">
+    <div class="title" style="display: flex;">
+      <h2 class="Subheaders">CHOOSE CLINICS YOU WANT TO DONATE</h2>
+    </div>
+    <div class="container">
+      
+      <div class="clinics">
+        {% for organization in organizations %}
+        <div class="card">
+          <div class="ngo-icon">
+            <img src={{organization.cliniclogo}}  alt="clinic image 1" style="height: 150px;">
+          </div>
+          <div class="ngo-desc">
+            <h3>{{organization.organization_name}}</h3>
+            
+            <ul class="clinic-info">
+              <li><strong>Address: </strong>{{organization.user.address}}</li>
+              <li><strong>Contact Number: </strong> {{organization.user.contactnumber}}</li>
+              <li><strong>Business Hours: </strong> Mon-Sat: 9:00 AM - 5:00 PM</li>
+            </ul>
+          </div>
+          <div class="btn-container">
+            <button type="button" class="dnt-btn" onclick="showMoreInfo('{{organization.id}}')"><div class="zm-wrd">Donate</div></button>
+          </div>
+        </div>
+        <div class="mobile-card">
+          <div class="ico-container">
+            <div class="ngo-icon">
+              <img src={{organization.cliniclogo}}  alt="clinic image 1" style="height: 80px;">
+            </div>
+          </div>
+          <div class="ngo-desc">
+            <h3>{{organization.organization_name}}</h3>
+            
+            <ul class="clinic-info">
+              <li><strong>Address: </strong>{{organization.user.address}}</li>
+              <li><strong>Contact Number: </strong> {{organization.user.contactnumber}}</li>
+              <li><strong>Business Hours: </strong> <br/>Mon-Sat: 9:00 AM - 5:00 PM</li>
+            </ul>
+            <div class="btn-container">
+              <button type="button" class="dnt-btn" onclick="showMoreInfo('{{organization.id}}')"><div class="zm-wrd">Donate</div></button>
+            </div>
+          </div>
+        </div>
+        {% endfor %}
+      </div>
+    </div>
+    <div class="img-modal">
+      <div class="mod-content">
+        <div class="cls-btn-container">
+          <h2 id="name" class="Subheaders"></h2>
+          <button class="close-btn" onclick="showMoreInfo()">
+            <i class="fa fa-times" aria-hidden="true" style="font-size: large;"></i>
+          </button>
+        </div>
+        <div class="img-container">
+          <div class="buymeacoffee-container">
+            <div></div>
+            <img src="" alt="buy me a coffee image" id="bmc">
+          </div>
+          <div class="gcash-container">
+            <img src="" alt="gcash-qr" id="gcash">
+          </div>
+          <div class="paypal-container">
+            <img src="" alt="papypal-qr" id="ppal">
+          </div>
+        </div>
+        <p>Scan me to donate!</p>
+      </div>
+    </div>
+  </div>
+  <script>  
+    function showMoreInfo(orgID) {
+      const xb = Number(orgID);
+      var oname = document.getElementById('name');
+      var bmc = document.getElementById('bmc');
+      var gcash = document.getElementById('gcash');
+      var ppal = document.getElementById('ppal');
+      {% for org in organizations %}
+        var orgsId = Number('{{org.id}}');
+        if(xb == orgsId){
+          oname.textContent = '{{org.organization_name}}';
+          bmc.src = '{{org.qrcodebuymeacoffee}}';
+          gcash.src = '{{org.qrcodegcash}}';
+          ppal.src = '{{org.qrcodepaypal}}';
+        }
+      {% endfor %}
+      // Get the img-toggle element associated with the clicked button
+      var imgToggle = document.querySelector('.img-modal');
+      // Toggle the display property
+      if (imgToggle.style.display === 'none') {
+        imgToggle.style.display = 'flex';
+      } else {
+        imgToggle.style.display = 'none';
+      }
+      
+    }
+    function handleToggle(){
+      var menu = document.querySelector(".mobile-menu");
+      var computedStyle = window.getComputedStyle(menu);
+
+      var display = computedStyle.getPropertyValue("display");
+
+      if(display === "none"){
+        menu.style.display = "grid";
+      }else{
+        menu.style.display = "none";
+      }
+    }
+  </script>
+</body>
+</html>

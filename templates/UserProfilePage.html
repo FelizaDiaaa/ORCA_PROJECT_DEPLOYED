@@ -1,0 +1,314 @@
+<!DOCTYPE html>
+<html lang="en">
+    {% load static %}
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
+  <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.min.js"></script>
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
+  <link rel="icon" type="image/x-icon" href="{% static 'img/orca web logo.png' %}">
+  <title>User Profile Page</title>
+
+  <style>
+     /* Main content area */
+     .flex-grow-1{
+      height: auto;
+      min-height: 100vh;
+      display: flex;
+      background-color: #FFEED9;
+    }
+    
+    .profile-info strong {
+      font-size: 25px;
+      font-weight: bold;
+      color: #737982;
+    }
+
+    .profile-info span {
+      margin-left: 20px;
+      color: black;
+    }
+
+    .profile-box{
+      width: 600px;
+      height: 100%;
+      padding: 15px;
+      position: relative; 
+      background-color: white;
+      border-radius: 10px;
+    }
+
+    .profile-box img{
+      width: 150px;
+      height: 150px;
+      overflow: hidden;
+      padding: 4px;
+      background-color: #fff;
+      border-radius: 100%;
+      filter: drop-shadow(#000 2px 0 3px);
+      object-fit: contain;
+    }
+
+    /* Clinic and Volunteer box descriptions */
+    .profile-box p{
+        margin-bottom: 5px;
+        font-size: 25px;
+        font-weight: bold;
+
+    }
+
+    .profile-info-item {
+      margin-bottom: 10px;
+      display: flex;
+      align-items: baseline; /* Align items to baseline for vertical alignment */
+    }
+
+    .profile-info-item strong {
+      flex: 1; /* Make the label take up 50% of the row */
+      font-size: 20px;
+      font-weight: bold;
+      color: #212529;
+    }
+
+    .profile-info-item span {
+      flex: 1; /* Make the value take up 50% of the row */
+      font-size: 19px;
+      color: #343a40;
+    }
+
+    .btn-primary {
+      position: absolute;
+      top: 10px;
+      right: 10px;
+      padding: 10px;
+      background-color: transparent !important;
+      border: none;
+      transition: background-color 0.3s;
+    }
+    .btn-primary i {
+      color: #333; /* Icon color */
+      font-size: 30px;
+      background-color: transparent;
+    }
+
+    .buttons{
+      background-color: transparent;
+    }
+
+    @media (max-width: 768px){
+      .sidebar-text {
+        display: none;
+      }
+      nav{
+        width: 100%;
+      }
+
+      .side-logo{
+        width: 40px;
+        margin-left: -10px;
+      }
+      
+      .profile-info{
+        max-width: 100%;
+        flex-direction: column;
+        align-items: center;
+      }
+
+      /* Adjust padding for main content on mobile */
+      .flex-grow-1 {
+        padding: 1rem;
+      }
+
+      /* Adjust profile box size on mobile */
+      .profile-box {
+        width: 100%;
+        height: auto;
+        padding: 10px;
+      }
+
+      /* Center profile image on mobile */
+      .profile-box img {
+        width: 50%;
+        margin: 0 auto;
+      }
+      
+      /* Make profile info text smaller on mobile */
+      .profile-info strong {
+        font-size: 18px;
+      }
+
+      .profile-info span {
+        font-size: 17px;
+      }
+      /* Adjust the modal width for mobile */
+      .modal-dialog {
+        max-width: 90%;
+      }
+    }
+    /* Hide the default file input text */
+    input[type="file"] {
+        opacity: 0;
+        position: absolute;
+        z-index: -1;
+    }
+    .input-group {
+      position: relative;
+      width: 30% !important;
+    }
+
+    /* Style the input group text (icon) */
+    .input-group-text {
+        cursor: pointer;
+        background-color: #007bff;
+        color: #fff;
+        border-color: #007bff;
+    }
+
+    /* Style the input group text on hover */
+    .input-group-text:hover {
+        background-color: #0056b3;
+        color: #fff;
+        border-color: #0056b3;
+    }
+    .edit_img{
+      width: 150px;
+      height: 150px;
+      overflow: hidden;
+      padding: 4px;
+      background-color: #fff;
+      border-radius: 100%;
+      filter: drop-shadow(#000 2px 0 3px);
+    }
+  </style>
+</head>
+
+<body>
+  <div class="d-flex">
+    {% include 'UserDashboard.html' %}
+    <!--USER PROFILE INFORMATION-->
+    <div class="flex-grow-1 p-5">
+      <div class="row">
+        {% csrf_token %}
+        <div class="col-md-6">
+          <h3 class="mb-3">USER INFORMATION</h3>
+          <div class="row">
+            <div class="col-12 mb-3">
+              <div class="profile-box">
+                <img id="profileImage" src={{users.userphoto}} alt="profile photo">
+                <button class="btn-primary buttons" data-bs-toggle="modal" data-bs-target="#editProfileModal">
+                  <i class="fas fa-edit"></i>
+                </button>                
+                <hr> 
+                <div class="profile-info">
+                  <div class="profile-info-item">
+                    <strong>First Name: </strong><span id="profileFirstName">{{user.firstname}}</span>
+                  </div>
+                  <div class="profile-info-item">
+                    <strong>Last Name: </strong><span id="profileLastName">{{user.lastname}}</span>
+                  </div>
+                  <div class="profile-info-item">
+                    <strong>Contact Number: </strong><span id="profileContact">{{user.contactnumber}}</span>
+                  </div>
+                  <div class="profile-info-item">
+                    <strong>Email: </strong><span id="profileEmail">{{user.email}}</span>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+
+  <!-- Modal for Edit Profile -->
+  <div class="modal fade" id="editProfileModal" tabindex="-1" aria-labelledby="editProfileModalLabel" aria-hidden="true">
+    <div class="modal-dialog">
+      <div class="modal-content">
+        <div class="modal-header">
+          <h5 class="modal-title" id="editProfileModalLabel">Edit Profile</h5>
+          <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+        </div>
+        <div class="modal-body">
+          <form id="userProfileEditFields" method="POST" enctype="multipart/form-data">
+            <input type="hidden" name="id" id="id" value = "{{user.id}}">
+            {% csrf_token %}
+            <div class="mb-3">
+                <label for="changePhoto" class="form-label">Profile Photo </label>
+                
+                <!-- Display current organization logo -->
+                <div class="current-logo-container">
+                    <img id="currentLogo" class="edit_img" src="{{users.userphoto}}" alt="Current Photo" class="current-logo">
+                </div>
+                
+                <!-- Input for changing organization logo -->
+                <div class="input-group">
+                    <input type="file" name="profile" class="form-control" id="changePhoto" accept="image/*" onchange="displaySelectedProfile()">
+                    <label class="input-group-text" for="changePhoto">
+                        <!-- Icon for the input -->
+                        <i class="fas fa-upload"></i>
+                    </label>
+                </div>
+            </div>
+            
+            <div class="mb-3">
+              <label for="editName" class="form-label">First Name</label>
+              <input type="text" name="firstname" value = "{{user.firstname}}" class="form-control" id="editFirstName" placeholder="Enter your name">
+            </div>
+            <div class="mb-3">
+              <label for="editName" class="form-label">Last Name</label>
+              <input type="text" name="lastname" value = "{{user.lastname}}" class="form-control" id="editLastName" placeholder="Enter your name">
+            </div>
+            <div class="mb-3">
+              <label for="editContact" class="form-label">Contact Number</label>
+              <input type="tel" name="contactnumber" value = "{{user.contactnumber}}" class="form-control" id="editContact" placeholder="Enter your contact number">
+            </div>
+            <div class="mb-3">
+              <label for="editEmail" class="form-label">Email</label>
+              <input type="email" name="email" value = "{{user.email}}" class="form-control" id="editEmail" placeholder="Enter your email" disabled>
+              <input type="email1" name="email1" value = "{{user.email}}" class="form-control" id="editEmail1" placeholder="Enter your email" hidden>
+            </div>
+          </form>
+        </div>
+        <div class="modal-footer">
+          <button type="submit" onclick="updateUserForm({{user.id}})" class="btn btn-success" id="saveChangesBtn">Save Changes</button>
+        </div>
+      </div>
+    </div>
+  </div>
+</body>
+<script>
+    function updateUserForm(useredit){
+        var myForm = document.querySelector('#userProfileEditFields');
+        var formData = new FormData(myForm);
+        formData.append("userid", useredit)
+        fetch('/userprofile', {
+            method: 'POST',
+            body: formData
+        }) .then(response => response.json())
+        .then(data => { 
+          if (data.accepted)
+            location.reload();
+        })
+    }
+    function displaySelectedProfile() {
+      var input = document.getElementById('changePhoto');
+      var currentLogo = document.getElementById('currentLogo');
+      
+      if (input.files && input.files[0]) {
+          var reader = new FileReader();
+          
+          reader.onload = function (e) {
+              currentLogo.src = e.target.result;
+          };
+          
+          reader.readAsDataURL(input.files[0]);
+      }
+  }
+</script>
+</html>
+
+
+

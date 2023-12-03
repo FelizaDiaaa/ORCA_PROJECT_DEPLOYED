@@ -1,0 +1,1007 @@
+<!DOCTYPE html>
+<html lang="en">
+{% load static %}
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/bootstrap/5.3.0/css/bootstrap.min.css">
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/bootstrap/5.3.0/js/bootstrap.bundle.min.js"></script>
+    <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.3/css/all.min.css">
+    <link rel="icon" type="image/x-icon" href="{% static 'img/orca web logo.png' %}">
+    <link rel="stylesheet" type="text/css" href="{% static 'css/orghomepage.css' %}">
+    <script src="https://cdn.emailjs.com/dist/email.min.js"></script>
+    <title>ORGANIZATION HOME PAGE</title>
+    <style>
+      @import url('https://fonts.googleapis.com/css2?family=Arvo:wght@700&display=swap');
+      /* Subheaders */
+      @import url('https://fonts.googleapis.com/css2?family=Nunito:wght@500&display=swap');
+      /* body base text */
+      @import url('https://fonts.googleapis.com/css2?family=Hind+Guntur&display=swap');
+      h1 {
+        font-size: 2.986rem;
+        font-family: 'Arvo';
+      }
+      .Subheaders {
+        font-family: 'Nunito';
+        font-size: 1.728rem;
+      }
+      .Subheaders > span {
+        font-size: 2.986rem;
+        font-weight: 700;
+      }
+      body {
+        all: initial;
+        font-family: 'Hind Guntur';
+        font-size: 1rem;
+      }
+      .calendar {
+        display: grid;
+        grid-template-columns: repeat(7, 1fr);
+        border: 1px solid #ccc;
+        width: 100%;
+        height: 100vh;
+        padding: 0;
+        margin: 0;
+      }
+      .popup {
+        width: 1000px !important; /* Adjust this value */
+      }
+      .calendar-header {
+        text-align: center;
+        border: 1px solid #000;
+        color: #fff;
+        display: grid;
+        place-items: center;
+        background-image: linear-gradient(to bottom, #343a40, #8c9299);
+        font-weight: bold;
+      }
+      .calendar-day {
+        border: 1px solid #ccc;
+        padding: 10px;
+        cursor: pointer;
+        transition: background-color 0.3s ease-in-out;
+      }
+      .calendar-day:hover {
+        background-color: #f0f0f0;
+      }
+      .appointment-count {
+        position: absolute;
+        top: 5px;
+        right: 5px;
+        background-color: #FF5733;
+        color: white;
+        padding: 2px 5px;
+        border-radius: 50%;
+      }
+      .new-popup {
+        position: fixed;
+        top: 50%;
+        left: 50%;
+        transform: translate(-50%, -50%);
+        background-color: white;
+        padding: 20px;
+        box-shadow: 0 0 10px rgba(0, 0, 0, 0.5);
+        z-index: 1000; /* Set a higher z-index value */
+        display: none;
+      }
+      .button-appointment {
+        background-color: #ff8200; 
+        width: 110px;
+        height: 80px;
+        padding: 0 8px;
+        margin-left: 16px;
+        border-radius: 10px;
+        border: none;
+        text-align: center;
+        position: relative;
+        color: #FFF;
+        box-shadow: 0 2px 5px rgba(0,0,0,0.4);
+      }
+      .button-appointment:before {
+        content: attr(data-count);
+        width: 18px;
+        height: 18px;
+        line-height: 18px;
+        text-align: center;
+        display: block;
+        border-radius: 50%;
+        background: red;
+        border: 1px solid #FFF;
+        box-shadow: 0 1px 3px rgba(0,0,0,0.4);
+        color: #FFF;
+        position: absolute;
+        top: -7px;
+        left: -7px;
+      }
+      button.badge-top-right:before {
+        left: auto;
+        right: -7px;
+      }
+      button.badge-bottom-right:before {
+        left: auto;
+        top: auto;
+        right: -7px;
+        bottom: -7px;
+      }
+      button.badge-bottom-left:before {
+        top: auto;
+        bottom: -7px;
+      }
+      .new-popup button {
+        margin-top: 10px;
+      }
+      .screen{
+        width: 100vw;
+        height: 100vh;
+        background-color: grey;
+        opacity: .5;
+        align-items: center;
+        justify-content: center;
+        color: white;
+        display: flex !important;
+      }
+      .warning{
+        font-size: 50px;
+        text-align: center;
+      }
+      .logout{
+        width: 90px !important;
+        height: 50px;
+        border-radius: 5px;
+        border-color: #ff8200;
+        background-color: #ff8200;
+        border: none;
+        color: white;
+      }
+      .services-header {
+        margin-top: 32px;
+        height: 36px;
+      }
+      .title-header {
+        display: flex;
+        flex-direction: row;
+        gap: 16px;
+        height: 100%;
+        width: fit-content;
+        background-color: #fff;
+      }
+      .table {
+        width: 100%s;
+      }
+
+      .profile-container{
+        margin-top: 12px;
+        display: grid;
+        grid-template-columns: repeat(4, 1fr) ;
+      }
+      .profile-box {
+        text-align: center;
+        background-color: white;
+        filter: drop-shadow(1px 1px 1px black);
+        padding: 0;
+        margin: 0;
+        width: 250px;
+        cursor: pointer;
+      }
+      .img-dr-profile {
+        width: 250px;
+        height: 250px;
+        overflow: hidden;
+      }
+      .profile-box:hover {
+          transform: translateY(-5px);
+          box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
+      }
+
+      .profile-image {
+          width: 250px;
+          height: auto;
+          object-fit: cover;
+          box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+      }
+
+      .profile-name {
+          margin-top: 8px;
+          font-weight: bold;
+          font-size: 18px;
+          color: #333;
+      }
+
+      .profile-description {
+        border-top: 2px solid gray;
+        padding: 0;
+        width: 75%;
+        margin-top: -8px;
+        font-size: 16px;
+        color: #666;
+      }
+      .vet-edit {
+        width: 100%;
+        height: fit-content;
+        display: grid;
+        place-items: center;
+        grid-template-columns: auto auto;
+        padding: 0 56px;
+      }
+      .desc-container {
+        height: auto;
+        padding:16px 0 0 0;
+        width: 100%;
+        display: grid;
+        place-items: center;
+      }
+
+      .edit-button {
+        background: transparent;
+        top: 10px;
+        right: 10px;
+        padding: 10px;
+        background-color: white;
+        border: none;
+        cursor: pointer;
+        transition: background-color 0.3s;
+      }
+
+      .edit-button i {
+        color: #333; /* Icon color */
+        font-size: 30px;
+      }
+
+      .edit-button:hover {
+        background-color: white;
+      }
+
+      .delete-button {
+        background: transparent;
+        top: 10px;
+        right: 10px;
+        padding: 10px;
+        background-color: white;
+        border: none;
+        cursor: pointer;
+        transition: background-color 0.3s;
+      }
+
+      .delete-button i {
+        color: #333; /* Icon color */
+        font-size: 30px;
+      }
+
+      .delete-button:hover {
+        background-color: white;
+      }
+
+      @media screen and (min-width: 375px) and (max-width: 768px) {
+        #calendarContainer {
+          overflow: scroll;
+          position: relative;
+          cursor: grab;
+        }
+        .profile-container{
+          display: grid;
+          grid-template-columns: repeat(1, 1fr) ;
+          place-items: center;
+        }
+        .profile-box {
+          width: 100%;
+          display: grid;
+          place-items: center;
+        }
+        .calendar {
+          width: 100vw;
+          display: grid;
+          grid-template-columns: 150px 150px 150px 150px 150px 150px 150px;
+        }
+      }
+    </style>
+</head>
+{% if org.organizationstatus == 1 %}
+<body>
+  <div class="screen">
+    <div class="row" style="align-items: center; justify-content: center;">
+      <p class="warning"><span style="font-style: italic;">Cannot access this page!</span> <br> WAIT FOR SYSTEM ADMIN'S CONFIRMATION</p>
+      <button class="logout" onclick="logoutbutton()">LOGOUT</button>
+    </div>
+  </div>
+</body>
+{% else %}
+<body>
+    <div class="d-flex">
+    {% include 'OrgDashboard.html' %}
+    <div class="flex-grow-1 p-4">
+      <div class="container p-0 m-0">
+        <div>
+          <form id="calendar" method="POST">
+          {% csrf_token %}
+          </form>
+          <form id="duration" method="POST">
+            {% csrf_token %}
+          </form>
+          <div class="row">
+            <div class="form-group col-md-3">
+              <label for="year">Year:</label>
+              <input type="number" id="year" class="form-control" min="1900" max="2099" onchange="generateCalendar()">
+            </div>
+            <div class="form-group col-md-3">
+              <label for="month">Month:</label>
+              <input type="number" id="month" class="form-control" min="1" max="12" onchange="generateCalendar()">
+            </div>
+        </div>
+        <div id="calendarContainer"></div> 
+      </div>
+      <br/>
+      <div class="services-header">
+        <h2 class="Subheaders title-header">
+          <span style="font-size: 1.5rem; font-weight: 700;">SERVICES</span>
+          <button class="add-btn" data-bs-toggle="modal" data-bs-target="#addServiceModal">
+            <i class="fa-regular fa-plus-square add-icon"></i>
+          </button>
+        </h2>
+      </div>
+      <form id="servicesOfferedFields" method="POST">
+      {% csrf_token %}
+        <table class="table table-bordered">
+          <thead>
+            <tr>
+              <th style="background-color: #797878; color: white;">TYPE OF SERVICES</th>
+              <th style="background-color: #797878; color: white; text-align: center;">Enable/Disable Service</th>
+              <th style="background-color: #797878; color: white; text-align: center;">Duration</th>
+              <th style="background-color: #797878; color: white; text-align: center;">Delete Service</th>
+            </tr>
+          </thead>
+        <tbody>
+        {% for service in services %}
+          <tr>
+            <td>{{service.service_offered}}</td>
+            <td class="text-center align-middle">
+              <label class="switch">
+                <input type="checkbox" id="serviceSwitch{{ service.id }}" {% if service.is_active %}checked{% endif %}>
+                <span class="slider"></span>
+              </label>            
+            </td>
+            <td style="align-items: center; text-align: center;">
+                <div style="display: flex; margin: auto; justify-content: center;
+                align-items: center;">
+                    <input type="number" max="60" name="duration" class="form-control" value="{{service.duration}}" required id="duration{{ service.id }}" style="width: 70px;" onchange="handleChange(this, {{ service.id }})">
+                    <p style="margin-left: 5px;">mins.</p> 
+                </div>
+            </td>                  
+            <td class="text-center align-middle">
+              <label class="delete-btn">
+                <span class="fas fa-trash" onclick="deleteServiceFunction({{service.id}})"></span>
+              </label>
+            </td>
+          </tr>
+        {% endfor %}
+        </tbody>
+      </table>
+    </form>   
+    </div>
+    <br/>
+  <div class="services-header">
+    <h2 class="Subheaders title-header">
+      <span style="font-size: 1.5rem; font-weight: 700;">VETERINARY DOCTORS</span>
+      <button class="add-btn" data-bs-toggle="modal" data-bs-target="#addDoctorModal">
+        <i class="fa-regular fa-plus-square add-icon"></i>
+      </button>
+    </h2>
+  </div>
+     <!-- Profile Boxes -->
+    <div class="profile-container">
+        {% for veterinarian in veterinarians %}
+        <a href="#" class="profile-box" style="text-decoration:none;" data-bs-toggle="modal" data-bs-target="#vetModal{{ veterinarian.id }}">
+          <div class="img-dr-profile">
+            <img class="profile-image" src="{{ veterinarian.profilepicture }}" alt="Doctor 1">
+          </div>
+          <div class="desc-container">
+            <div class="profile-name">{{ veterinarian.vetname }}</div>
+            <div class="profile-description">{{ veterinarian.vetdescription }}</div>
+            <div class="vet-edit">
+              <button class="edit-button" data-bs-toggle="modal" data-bs-target="#editProfileModal">
+                <i class="fas fa-edit"></i>
+              </button>
+              <button class="delete-button" data-bs-toggle="modal" data-bs-target="#editProfileModal">
+                <i class="fas fa-trash"></i>
+              </button>
+            </div>
+          </div>
+        </a>
+        {% endfor %}
+    </div>
+	</div>
+  <div class="modal" id="appointmentModal" tabindex="-1" aria-labelledby="appointmentModalLabel" aria-hidden="true" data-bs-backdrop="false">
+      <div class="modal-dialog modal-dialog-centered custom-modal-dialog">
+          <div class="modal-content" id="modalContent">
+          </div>
+      </div>
+  </div>
+	</div>
+      <!-- Add Service Modal -->
+      <div class="modal fade" id="addServiceModal" tabindex="-1" aria-labelledby="addServiceModalLabel" aria-hidden="true" data-bs-backdrop="false">
+          <div class="modal-dialog modal-dialog-centered custom-modal-dialog">
+              <div class="modal-content">
+                  <div class="modal-header">
+                      <h5 class="modal-title" id="addServiceModalLabel">Add Service</h5>
+                      <button type="submit" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                  </div>
+                  <div class="modal-body">
+                      <!-- Service Form -->
+                      <form id="serviceFields" method="POST">
+                          {% csrf_token %}
+                          <div class="mb-3">
+                              <label for="serviceName" class="form-label">Service Name:</label>
+                              <input type="text" name="service_offered" class="form-control" id="serviceName" required>
+                          </div>
+                          <div class="mb-3">
+                            <label for="serviceDuration" class="form-label">Duration:</label>
+                            <input type="number" name="service_duration" class="form-control" id="serviceDuration" max="60" required>
+                        </div>
+                          <div class="modal-footer">
+                              <button type="submit" class="btn btn-primary" data-bs-dismiss="#addServiceModal">Add</button>
+                          </div>
+                      </form>
+                  </div>
+              </div>
+          </div>
+        </div>
+
+        <br/>
+
+        <!-- Modal for adding a veterinary doctor -->
+        <div class="modal fade" id="addDoctorModal" tabindex="-1" aria-labelledby="addDoctorModalLabel"  data-bs-backdrop="false" aria-hidden="true">
+            <div class="modal-dialog modal-dialog-centered custom-modal-dialog">
+                <div class="modal-content">
+                    <div class="modal-header">
+                        <h5 class="modal-title" id="addDoctorModalLabel">Add Veterinary Doctor</h5>
+                        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                    </div>
+                    <div class="modal-body">
+                        <form id = "veterinarianFields" method = "POST" enctype="multipart/form-data">
+                            {% csrf_token %}
+                            <div class="mb-3">
+                                <label for="doctorName" class="form-label">Doctor Name:</label>
+                                <input type="text" name= "vetname" class="form-control" id="doctorName" required>
+                            </div>
+                            <div class="mb-3">
+                                <label for="doctorSpecialist" class="form-label">Description:</label>
+                                <input type="text" name= "vetdescription" class="form-control" id="doctorSpecialist" required>
+                            </div>
+                            <div class="mb-3">
+                                <label for="doctorPhoto" class="form-label">Doctor Photo:</label>
+                                <input type="file" name= "profilepicture" class="form-control" id="doctorPhoto" accept="image/*" required>
+                            </div>
+                            <button type="submit" class="btn btn-primary" data-bs-dismiss="#addDoctorModal">Add Doctor</button>
+                        </form>
+                    </div>
+                </div>
+            </div>
+        </div>
+</body>
+{% endif %}
+
+<script>
+  
+    const currentDate = new Date();
+
+    // Get the current year and month (adding 1 to month since it's zero-based)
+    const year = currentDate.getFullYear();
+    const month = currentDate.getMonth() + 1;
+
+    // Update the input values
+    document.getElementById('year').value = year;
+    document.getElementById('month').value = month;
+    function generateCalendar() {
+        const year = parseInt(document.getElementById('year').value);
+        const month = parseInt(document.getElementById('month').value);
+        const daysInMonth = new Date(year, month, 0).getDate();
+
+        
+        const calendarContainer = document.getElementById('calendarContainer');
+        calendarContainer.innerHTML = '';
+        calendarContainer.class = 'w-100';
+
+        const calendarDays = document.createElement('div');
+        calendarDays.classList.add('calendar');
+        
+        const daysOfWeek = ['Sun', 'Mon', 'Tue', 'Wed', 'Thu', 'Fri', 'Sat'];
+
+        for (let dayOfWeek of daysOfWeek) {
+            const dayHeader = document.createElement('div');
+            dayHeader.classList.add('calendar-header');
+            dayHeader.textContent = dayOfWeek;
+            calendarDays.appendChild(dayHeader);
+        }
+
+        let dayCounter = 1;
+        for (let week = 0; week < 6; week++) {
+            for (let dayOfWeek = 0; dayOfWeek < 7; dayOfWeek++) {
+                const day = document.createElement('div');
+                day.classList.add('calendar-day');
+                if (week === 0 && dayOfWeek < new Date(year, month - 1, 1).getDay()) {
+                    day.textContent = ""
+                } else if (dayCounter <= daysInMonth) {
+                    
+                    day.id = dayCounter; // Set a unique id based on dayCounter
+                    day.textContent = dayCounter;
+                    dayCounter++;
+                }
+                
+                calendarDays.appendChild(day);
+            }
+        }
+        fetchAppointments(year, month);
+        calendarContainer.appendChild(calendarDays);
+    }
+
+
+    function openPopup(year, month, day) {
+
+
+        getAppointmentsForDay(year, month, day);
+    }
+    
+        generateCalendar(); // Generate calendar on page load
+
+        function fetchAppointments(year, month) {
+            fetch('/orghome')
+                .then(data => {
+                    distinctDates = {{ appointment_dates|safe }};
+                    // Iterate over the distinct dates and format them
+                    distinctDates.forEach(function(date) {
+                        
+                        const appointmentDate = new Date(date.date)
+                        const appointmentMonth = appointmentDate.getMonth() + 1; // Correct for zero-based month
+                        const appointmentDay = appointmentDate.getDate();
+                        const appointmentYear = appointmentDate.getFullYear();
+                        const calendarDays = document.querySelectorAll('.calendar-day');
+                       
+                        if (appointmentMonth === month && appointmentYear === year) {
+                            // Find the corresponding calendar-day element
+                            var dayElement = calendarDays[appointmentDay - 1]; // Adjust for zero-based index
+                            if (dayElement.id !== appointmentDay) {
+                                dayElement = document.getElementById(appointmentDay)
+                                console.log(dayElement)
+                                var viewButton = document.createElement('button');
+                              
+                                viewButton.classList.add('badge-top-right');
+                                viewButton.classList.add('button-appointment')
+
+                               
+                                // Find appointments for the current date
+                                var appointmentsForDate = {{ appointments|safe }}.filter(appointment => {
+                                    const appointmentDate = new Date(appointment.date);
+                                    return (
+                                        appointmentDate.getFullYear() === appointmentYear &&
+                                        appointmentDate.getMonth() + 1 === appointmentMonth &&
+                                        appointmentDate.getDate() === appointmentDay
+                                    );
+                                });
+
+                                // Count pending appointments for the current date
+                                var pendingCount = appointmentsForDate.filter(appointment => appointment.status === 'pending').length;
+                                viewButton.textContent = 'View Appointment';
+                                if (pendingCount > 0) {
+                                    viewButton.setAttribute('data-count', pendingCount);
+                                }
+                                viewButton.addEventListener('click', function() {
+                                    var parentDiv = this.parentNode;
+                                    var parentDivId = parentDiv.id;
+                                    openPopup(year, month, parentDivId);
+                                });
+                            
+                                // Append the view button to the day element
+                                dayElement.appendChild(viewButton);
+                            }
+                        }
+                    });
+                })
+                .catch(error => console.error("Error fetching appointments:", error));
+        }
+        
+        function getAppointmentsForDay(year, month, day) {
+            const modal = document.getElementById('appointmentModal');
+            const modalContent = document.getElementById('modalContent');
+            modalContent.innerHTML = ''
+            const myForm = document.querySelector('#calendar');
+            const formData = new FormData(myForm);
+            formData.append("isButtonClicked", true)
+            formData.append("year", year)
+            formData.append("month", month)
+            formData.append("day", day)
+        
+            fetch('/orghome', {
+                method: 'POST',
+                body: formData
+            })
+            .then(response => response.json())
+            .then(data => { 
+                const appointmentListContainer = document.createElement('div');
+                appointmentListContainer.classList.add('appointment-list');
+                // Create a table for appointments
+                const appointmentTable = document.createElement('table');
+                appointmentTable.classList.add('appointment-table', 'single-appointment');
+            
+                // Create a table header row
+                const headerRow = appointmentTable.createTHead().insertRow();
+                const headers = ['Time', 'Name', 'Pet', 'Service', 'Status'];
+            
+                // Create header cells
+                headers.forEach(headerText => {
+                    const headerCell = document.createElement('th');
+                    headerCell.textContent = headerText;
+                    headerRow.appendChild(headerCell);
+                });
+                data.appointments_time.forEach(appointment => {
+                    const appointmentTime = appointment.appointment_time.substring(0, 5) + ":00";
+                    const appointments = {{ appointments|safe }};
+                    const formattedDay = String(day).padStart(2, '0');
+                    const formattedMonth = String(month).padStart(2, '0');
+                    const matchingAppointments = appointments.filter(appt => {
+                        return appt.date === `${year}-${formattedMonth }-${formattedDay}` && appt.time === appointmentTime;
+                    });
+                 
+                    // Create a new div for each appointment
+                    const appointmentDiv = document.createElement('div');
+                    appointmentDiv.classList.add('appointment');
+                  
+                    if (matchingAppointments.length > 1) {
+                        // Create a row for each appointment in the outer table
+                        const outerAppointmentRow = appointmentTable.insertRow();
+                    
+                        // Create a cell for the "Time" detail
+                        const timeCell = outerAppointmentRow.insertCell();
+                        timeCell.textContent = appointmentTime;
+                    
+                        // Create a single cell for the "View" button and set its colspan attribute
+                        const viewButtonCell = outerAppointmentRow.insertCell();
+                        viewButtonCell.setAttribute('colspan', '4');
+                        viewButtonCell.classList.add('text-center');
+                    
+                        // Create the "View" button
+                        const viewButton = document.createElement('button');
+                        viewButton.type = 'button';
+                        viewButton.classList.add('view-button', 'btn', 'btn-info');
+                        viewButton.textContent = 'View';
+                        viewButton.style.width = '100%';
+                    
+                        // Append the "View" button to the viewButtonCell
+                        viewButtonCell.appendChild(viewButton);
+                    
+                        // Event listener for the "View" button
+                        viewButton.addEventListener('click', function (event) {
+                            event.preventDefault();
+                            event.stopPropagation();
+                            const mainModal = document.getElementById('appointmentModal')
+                            mainModal.style.display = 'none'
+                    
+                            const innerModal = document.createElement('div');
+                            innerModal.classList.add('modal', 'inner-modal');
+                            const text = document.createElement('h3');
+                            text.innerHTML = appointmentTime;
+                            innerModal.appendChild(text)
+                               // Create a table for appointments
+                            const innerAppointmentTable = document.createElement('table');
+                            innerAppointmentTable.classList.add('appointment-table', 'inner-appointment');
+                            innerAppointmentTable.id = 'appointment-table'
+                        
+                            // Create a table header row
+                            const headerRow = innerAppointmentTable.createTHead().insertRow();
+                            const headers = ['Name', 'Pet', 'Service', 'Status'];
+                        
+                            // Create header cells
+                            headers.forEach(headerText => {
+                                const headerCell = document.createElement('th');
+                                headerCell.textContent = headerText;
+                                headerRow.appendChild(headerCell);
+                            });
+                            // Iterate over matching appointments and create elements for each
+                            matchingAppointments.forEach(appointment => {
+                                // Create a table for appointments in the inner modal
+                                
+                        
+                                // Create a new row for each appointment in the inner table
+                                const innerAppointmentRow = innerAppointmentTable.insertRow();
+                        
+                                // Create cells for each appointment detail (Name, Pet, Service)
+                                const nameCell = innerAppointmentRow.insertCell();
+                                const petCell = innerAppointmentRow.insertCell();
+                                const serviceCell = innerAppointmentRow.insertCell();
+                        
+                                // Display the name, pet, and service details
+                                nameCell.textContent = `${capitalizeFirstLetter(appointment.name)}`;
+                                petCell.textContent = `${capitalizeFirstLetter(appointment.pet)}`;
+                                serviceCell.textContent = appointment.service;
+                        
+                                if (appointment.status !== 'accepted') {
+                                    // Create cells for the buttons
+                                    const acceptCell = innerAppointmentRow.insertCell();
+                                    const declineCell = innerAppointmentRow.insertCell();
+                        
+                                    // Create buttons for accepting and declining
+                                    const checkButton = createButton('accept-button', 'btn', 'btn-success');
+                                    checkButton.textContent = 'Accept';
+                                    checkButton.setAttribute('data-appointment-id', appointment.id);
+                        
+                                    const xButton = createButton('decline-button', 'btn', 'btn-danger');
+                                    xButton.textContent = 'Decline';
+                                    xButton.setAttribute('data-appointment-id', `x${appointment.id}`);
+                        
+                                    // Append buttons to the table cells
+                                    acceptCell.appendChild(checkButton);
+                                    declineCell.appendChild(xButton);
+                        
+                                    // Add event listeners for the buttons
+                                    addCheckButtonListener(checkButton);
+                                    addXButtonListener(xButton);
+                                }
+                                else {
+                                    const acceptedCell = innerAppointmentRow.insertCell();
+                                    acceptedCell.textContent = 'Accepted';
+                                    acceptedCell.style.color = '#008000';
+                                }  
+                        
+                                // Append the table to the inner modal
+                                innerModal.appendChild(innerAppointmentTable);
+                            });
+                        
+                            // Close button for the inner modal
+                            const innerCloseButton = createButton('close-button', 'btn', 'btn-secondary');
+                            innerCloseButton.textContent = 'Close Popup';
+                            innerCloseButton.addEventListener('click', function (event) {
+                                event.stopPropagation();
+                                innerModal.style.display = 'none';
+                            });
+                        
+                            // Append close button to the inner modal
+                            innerModal.appendChild(innerCloseButton);
+                        
+                            // Append the inner modal to the body
+                            document.body.appendChild(innerModal);
+                            innerModal.style.display = 'block';
+                            innerModal.style.width = '500px'; 
+                            innerModal.style.height = '500px'; 
+                            innerModal.style.display = 'block';
+                            innerModal.style.top = '50%';
+                            innerModal.style.left = '50%';
+                            innerModal.style.transform = 'translate(-50%, -50%)';
+                            innerModal.style.background = "white";
+                            innerModal.style.border = "solid";
+                            innerModal.style.borderRadius = "10px";
+                            innerModal.style.borderWidth = "thin";
+                        });
+                    }
+                    
+                     else if (matchingAppointments.length !== 0) {
+                        // Iterate through matchingAppointments and create a row for each appointment
+                        matchingAppointments.forEach(appointment => {
+                            const appointmentRow = appointmentTable.insertRow();
+                    
+                            // Create cells for each appointment detail (Time, Name, Pet, Service, Status)
+                            const timeCell = appointmentRow.insertCell();
+                            const nameCell = appointmentRow.insertCell();
+                            const petCell = appointmentRow.insertCell();
+                            const serviceCell = appointmentRow.insertCell();
+                            const statusCell = appointmentRow.insertCell();
+                    
+                            // Set the text content with the appointment details
+                            timeCell.textContent = appointmentTime;
+                            nameCell.textContent = appointment.name;
+                            petCell.textContent = appointment.pet;
+                            serviceCell.textContent = appointment.service;
+                            if (appointment.status === 'accepted') {
+                                statusCell.textContent = 'Accepted';
+                                statusCell.style.color = '#008000';
+                            } else {
+                                // Create buttons for accepting and declining
+                                const checkButton = createButton('accept-button', 'btn', 'btn-success');
+                                checkButton.textContent = 'Accept';
+                                checkButton.setAttribute('data-appointment-id', appointment.id);
+                    
+                                const xButton = createButton('decline-button', 'btn', 'btn-danger');
+                                xButton.textContent = 'Decline';
+                                xButton.setAttribute('data-appointment-id', `x${appointment.id}`);
+                    
+                                // Append buttons to the status cell
+                                statusCell.appendChild(checkButton);
+                                statusCell.appendChild(xButton);
+                    
+                                // Add event listeners for the buttons
+                                addCheckButtonListener(checkButton);
+                                addXButtonListener(xButton);
+                            }
+                        });
+                    
+                        // Append the table to the main appointment list container
+                        appointmentListContainer.appendChild(appointmentTable);
+                    } else {
+                        const appointmentRow = appointmentTable.insertRow();
+                    
+                        // Create cells for each appointment detail (Time, Name, Pet, Service, Status)
+                        const timeCell = appointmentRow.insertCell();
+                        const nameCell = appointmentRow.insertCell();
+                        const petCell = appointmentRow.insertCell();
+                        const serviceCell = appointmentRow.insertCell();
+                        const statusCell = appointmentRow.insertCell();
+                        timeCell.textContent = appointmentTime;
+                        nameCell.textContent = "";
+                        petCell.textContent = "";
+                        serviceCell.textContent = ""
+                        statusCell.textContent = ""
+                        appointmentListContainer.appendChild(appointmentTable);
+                    }
+                });
+        
+                modalContent.appendChild(appointmentListContainer);
+                modal.style.width = '100vw'; 
+                modal.style.display = 'block';
+                modal.style.top = '50%';
+                modal.style.left = '50%';
+                modal.style.transform = 'translate(-50%, -50%)';
+            })  
+        }
+        
+        // Helper function to create buttons
+        function createButton(...classNames) {
+            const button = document.createElement('button');
+            button.type = 'button';
+            button.classList.add(...classNames);
+            return button;
+        }
+
+        // Helper function to add event listener for check button
+         function addCheckButtonListener(button) {
+            button.addEventListener('click', function () {
+                event.preventDefault();
+                const appointmentId = button.getAttribute('data-appointment-id');
+                const myForm = document.querySelector('#calendar');
+                const formData = new FormData(myForm);
+                formData.append('appointmentId', appointmentId)
+                formData.append('button', 'check')
+                fetch('/orghome', {
+                    method: 'POST',
+                    body: formData
+                })
+                .then(response => response.json())
+                .then(data => { 
+                    if (data.accepted) {
+                        const acceptCell = button.parentNode;
+                        acceptCell.innerHTML = 'Accepted';
+                        acceptCell.style.color = '#008000';
+                        const declineCell = acceptCell.nextElementSibling;
+                        if (declineCell) {
+                            declineCell.remove();
+                        }
+                        emailjs.init("eKqrvGOkVxL0RzYV2")
+                        const templateId = "template_txsvixf"; 
+                        const emailParams = {
+                            to_email: data.email,
+                            message: `${data.org} accepted your appointment at ${data.date}, ${data.time}`
+                        };
+            
+                        emailjs.send("service_dmb2o5u", templateId, emailParams)
+                            .then(function(response) {
+                                console.log("Email sent successfully!", response);
+                            }, function(error) {
+                                console.error("Email could not be sent:", error);
+                            }); 
+                        } 
+                });
+            });
+        }
+     
+        // Helper function to add event listener for x button
+        function addXButtonListener(button) {
+            button.addEventListener('click', function () {
+                event.preventDefault();
+                const appointmentId = button.getAttribute('data-appointment-id');
+                const myForm = document.querySelector('#calendar');
+                const formData = new FormData(myForm);
+                formData.append('appointmentId', appointmentId)
+                formData.append('button', 'x')
+                fetch('/orghome', {
+                    method: 'POST',
+                    body: formData
+                })
+                .then(response => response.json())
+                .then(data => { 
+                    emailjs.init("eKqrvGOkVxL0RzYV2")
+                    const templateId = "template_txsvixf"; 
+                    const emailParams = {
+                        to_email: data.email,
+                        message: `${data.org} cancelled your appointment at ${data.date}`
+                    };
+        
+                    emailjs.send("service_dmb2o5u", templateId, emailParams)
+                        .then(function(response) {
+                            console.log("Email sent successfully!", response);
+                        }, function(error) {
+                            console.error("Email could not be sent:", error);
+                        }); 
+                    const row = button.closest('tr');
+                    if (row) {
+                        row.remove();
+                    }  
+            });
+        })  
+        }
+    
+    function capitalizeFirstLetter(string) {
+        return string.charAt(0).toUpperCase() + string.slice(1);
+    }
+    
+    function compareTimes(time1, time2) {
+        const [hours1, minutes1] = time1.split(':');
+        const [hours2, minutes2] = time2.split(':');
+    
+        const time1InMinutes = parseInt(hours1) * 60 + parseInt(minutes1);
+        const time2InMinutes = parseInt(hours2) * 60 + parseInt(minutes2);
+    
+        return time1InMinutes === time2InMinutes;
+    }
+    
+    function deleteServiceFunction(id) {
+        var myForm = document.querySelector('#servicesOfferedFields');
+        var formData = new FormData(myForm);
+        formData.append("service_id", id)
+        fetch('/orghome', {
+            method: 'POST',
+            body: formData
+        })
+        const trashIcon = event.target;
+        const tr = trashIcon.closest('tr');
+        if (tr) {
+            tr.remove();
+        }
+    }
+    function handleChange(input, id) {
+        if (input.value > 60) {
+            input.value = 60
+            return;
+        }        
+        var myForm = document.querySelector('#duration');
+        var formData = new FormData(myForm);
+        formData.append("service_id_duration", id)
+        formData.append("duration", input.value)
+        fetch('/orghome', {
+            method: 'POST',
+            body: formData
+        })
+    }
+    document.addEventListener('DOMContentLoaded', function() {
+        // Add an event listener to the checkbox
+        var checkboxes = document.querySelectorAll('input[type="checkbox"]');
+
+        checkboxes.forEach(function(checkbox) {
+            checkbox.addEventListener('change', function() {
+                // Get the ID of the checkbox when its state changes
+                var checkboxId = this.id;
+                switchStateChanged(checkboxId);
+            });
+        });
+
+        // Example function that gets called when the switch state changes
+        function switchStateChanged(checkboxId) {
+            let resultString = checkboxId.replace(/^serviceSwitch/, "");
+            var myForm = document.querySelector('#servicesOfferedFields');
+            var formData = new FormData(myForm);
+            formData.append("service_id_switch", parseInt(resultString))
+            fetch('/orghome', {
+                method: 'POST',
+                body: formData
+            })
+        }
+    });
+
+    function logoutbutton(){
+        window.location.href="/logout_view"
+    }
+    document.addEventListener('click', function (e) {
+        var modal = document.getElementById('appointmentModal');
+        if (e.target.className === 'modal') {
+            modal.style.display = "none"
+        }
+    });
+</script>
+<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
+</html>

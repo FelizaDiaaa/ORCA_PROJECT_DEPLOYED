@@ -1,0 +1,335 @@
+<!DOCTYPE html>
+<html lang="en">
+  {% load static %}
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>ORCA: Donate to Animal Clinics</title>
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/twitter-bootstrap/5.3.0/css/bootstrap.min.css">
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/2.10.2/umd/popper.min.js"></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/twitter-bootstrap/5.3.0/js/bootstrap.min.js"></script>
+  <script src="https://cdn.emailjs.com/dist/email.min.js"></script>
+  <link rel="icon" type="image/x-icon" href="{% static 'img/orca web logo.png' %}">
+  <title>SYSTEM ADMIN HOME</title>
+
+  <style>
+    @import url('https://fonts.googleapis.com/css2?family=Arvo:wght@700&display=swap');
+    /* Subheaders */
+    @import url('https://fonts.googleapis.com/css2?family=Nunito:wght@500&display=swap');
+    /* body base text */
+    @import url('https://fonts.googleapis.com/css2?family=Hind+Guntur&display=swap');
+    h1 {
+      font-size: 2.986rem;
+      font-family: 'Arvo';
+    }
+    .Subheaders {
+      font-family: 'Nunito';
+      font-size: 1.728rem;
+    }
+    .Subheaders > span {
+      font-size: 2.986rem;
+      font-weight: 700;
+    }
+    body {
+      all: initial;
+      font-family: 'Hind Guntur';
+      font-size: 1rem;
+    }
+
+
+  .mt-5 {
+    margin-top: 3rem;
+  }
+
+  .clinic-card {
+    border: 1px solid #ccc;
+    width: auto;
+    height: auto;
+    min-width: 300px;
+    position: static;
+    border-radius: 5px;
+    padding: 15px;
+    display: grid;
+    place-items: center;
+    text-align: center;
+    background-color: #fff;
+    box-shadow: 0 2px 6px rgba(0, 0, 0, 0.1);
+  }
+
+  .clinic-image {
+    width: auto;
+    height: 150px;
+    border-radius: 12px;
+
+  }
+  .clinic-name {
+    font-size: 20px;
+    font-weight: bold;
+    margin-top: 10px;
+    color: #007bff;
+  }
+
+  .clinic-info {
+    font-size: 14px;
+    color: #555;
+    margin-top: 10px;
+    text-align: left;
+  }
+
+  .btn-clinic {
+    font-size: 16px;
+    padding: 10px 20px;
+    border-radius: 5px;
+    background-color: #ea7603;
+    border-color: #ffffff;
+    color: #fff4f4;
+    width: 100%;
+    margin-top: 10px;
+  }
+
+  .btn-clinic:hover {
+    background-color: #0056b3;
+    border-color: #ffffff;
+  }
+  .container {
+    width: 100%;
+    height: 100%;
+    min-height: 100vh;
+    background-color: blanchedalmond;
+  }
+  .clinics-ls{
+    width: 100%;
+    height: fit-content; 
+    display:grid;
+    grid-template-columns: repeat(auto-fit, minmax(300px, auto));
+    justify-content: space-evenly;
+    grid-gap: 32px;
+  }
+  .clinic-card {
+    width: 100%;
+  }
+  .clinic-card > ul {
+    height: auto;
+    padding: 0;
+    width: 100%;
+    list-style: none;
+  }
+  .clinic-info > li{
+    display: flex;
+    width: 100%;
+    justify-content: start;
+    align-items: start;
+  }
+  @media screen and (min-width: 375px) and (max-width: 768px) {
+    .container {
+      width: 100%;
+      min-width: 100vw;
+      height: auto;
+      min-height: 100vh;
+    }
+  }
+  </style>
+</head>
+
+<body>
+{% include 'SystemAdminDashboard.html' %}
+  <div class="container p-4">
+    <h2 class="Subheaders pb-4">ORGANIZATIONS/CLINICS REGISTER</h2>
+        <!-- Clinic 1 -->
+        
+          <form id="systemadminhomeFields" method="POST" enctype="multipart/form-data">
+            {% csrf_token %}
+          </form>
+          <div class="clinics-ls">
+          {% for organization in organizations %}
+            <div class="clinic-card">
+              <img src={{organization.cliniclogo}} alt="Clinic 1" class="clinic-image">
+              <div class="clinic-name">{{organization.organization_name}}</div>
+                <ul class="clinic-info">
+                    <li><strong>Address: </strong>{{organization.user.address}}</li>
+                    <li><strong>Contact Number: </strong> {{organization.user.contactnumber}}</li>
+                    <!-- <li><strong>Business Hours: </strong> {{organization.clinichours}}</li> -->
+                </ul>
+                <button class="btn-clinic" onclick="getOrgDetailsID({{organization.id}})" data-bs-toggle="modal" data-bs-target="#clinicModal">See More Info</button>
+            </div>
+          {% endfor %}
+          <!-- Modal for Clinic Details-->
+          <div class="modal fade" id="clinicModal" data-bs-backdrop="false" tabindex="-1" aria-labelledby="clinicModalLabel" aria-hidden="true">
+            <div class="modal-dialog modal-lg">
+                <div class="modal-content">
+                  <form id="modalSeeMoreFields" method="POST" enctype="multipart/form-data">
+                    {% csrf_token %}
+                    <div class="modal-header">
+                        <h5 class="modal-title" id="clinicModalLabel">Clinic Details</h5>
+                        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                    </div>
+                      <div class="modal-body" id="orgDetails">
+                      </div>
+                      <div class="modal-footer">
+                      </div>
+                  </form>
+                </div>
+                  <div class="modal-body" id="orgDetails">
+                  </div>
+                  <div class="modal-footer">
+                  </div>
+              </form>
+            </div>
+        </div>
+      </div>
+      </div>
+</body>
+<script>
+
+function getOrgDetailsID(id) {
+  event.preventDefault()
+  var myForm = document.querySelector('#systemadminhomeFields')
+  var formData = new FormData(myForm)
+  formData.append("orgID", id)
+  fetch('/systemadminhome',{
+    method: 'POST',
+    body: formData
+  }) .then(response => response.json())
+  .then(data => { 
+  
+    const organization = data.organization;
+
+    // Select the modal body element
+    var modalBody = document.querySelector('.modal-body');
+    var modalFooter = document.querySelector('.modal-footer');
+
+    // Clear all content inside modal body
+    modalBody.innerHTML = '';
+    modalFooter.innerHTML = '';
+        // Create Decline button
+    var declineButton = document.createElement('button');
+    declineButton.type = 'button';
+    declineButton.className = 'btn btn-danger';
+    declineButton.textContent = 'Decline';
+    declineButton.onclick = function () {
+      declineOrg(organization.id);
+    };
+
+    // Create Accept button
+    var acceptButton = document.createElement('button');
+    acceptButton.type = 'button';
+    acceptButton.className = 'btn btn-success';
+    acceptButton.textContent = 'Accept';
+    acceptButton.onclick = function () {
+      acceptOrg(organization.id);
+    };
+
+    // Append buttons to modal footer
+    modalFooter.appendChild(declineButton);
+    modalFooter.appendChild(acceptButton);
+
+    // Address
+    var addressParagraph = document.createElement('p');
+    addressParagraph.innerHTML = '<strong>Address: </strong>' + organization.address;
+    modalBody.appendChild(addressParagraph);
+
+    // Contact Number
+    var contactNumberParagraph = document.createElement('p');
+    contactNumberParagraph.innerHTML = '<strong>Contact Number: </strong>' + organization.contactnumber;
+    modalBody.appendChild(contactNumberParagraph);
+
+    // Certificate of Accreditation
+    var accreditationParagraph = document.createElement('p');
+    var accreditationLink = document.createElement('a');
+    accreditationLink.href = organization.certificate_of_accreditation;
+    accreditationLink.textContent = organization.certificate_of_accreditation;
+    accreditationLink.innerHTML = 'View Certification';
+    accreditationParagraph.innerHTML = '<strong>Certificate of Accreditation: </strong>';
+    accreditationLink.target = '_blank';
+    accreditationParagraph.appendChild(accreditationLink);
+    modalBody.appendChild(accreditationParagraph);
+
+    // QR Codes
+    var qrCodesParagraph = document.createElement('p');
+    qrCodesParagraph.innerHTML = '<strong>QR codes for donation:</strong>';
+    modalBody.appendChild(qrCodesParagraph);
+
+    var qrCodesRow = document.createElement('div');
+    qrCodesRow.className = 'row mt-3';
+
+    ['qrcodebuymeacoffee', 'qrcodegcash', 'qrcodepaypal'].forEach(function (qrCode) {
+      var qrCodeCol = document.createElement('div');
+      qrCodeCol.className = 'col-md-4 d-flex justify-content-center';
+
+      var qrCodeImg = document.createElement('img');
+      qrCodeImg.src = organization[qrCode];
+      qrCodeImg.alt = 'QR Code';
+      qrCodeImg.className = 'img-fluid';
+
+      qrCodeCol.appendChild(qrCodeImg);
+      qrCodesRow.appendChild(qrCodeCol);
+    });
+
+    modalBody.appendChild(qrCodesRow);
+  })
+}
+
+function acceptOrg(id) {
+  var myForm = document.querySelector('#modalSeeMoreFields')
+  var formData = new FormData(myForm)
+  formData.append("acceptID", id)
+  fetch('/systemadminhome',{
+    method: 'POST',
+    body: formData
+  }) .then(response => response.json())
+  .then(data => { 
+    if (data.accepted) {
+    emailjs.init("eKqrvGOkVxL0RzYV2")
+    const templateId = "template_txsvixf"; 
+    const emailParams = {
+        to_email: data.email,
+        message: "ORCA accepted your registration"
+    };
+
+    emailjs.send("service_dmb2o5u", templateId, emailParams)
+        .then(function(response) {
+            console.log("Email sent successfully!", response);
+            location.reload();
+        }, function(error) {
+            console.error("Email could not be sent:", error);
+        }); 
+      }
+  })
+}
+
+function declineOrg(id) {
+  var myForm = document.querySelector('#modalSeeMoreFields')
+  var formData = new FormData(myForm)
+  formData.append("declineID", id)
+  fetch('/systemadminhome',{
+    method: 'POST',
+    body: formData
+  }) .then(response => response.json())
+  .then(data => { 
+    if (data.declined) {
+    emailjs.init("eKqrvGOkVxL0RzYV2")
+    const templateId = "template_txsvixf"; 
+    const emailParams = {
+        to_email: data.email,
+        message: "ORCA declined your registration"
+    };
+
+    emailjs.send("service_dmb2o5u", templateId, emailParams)
+        .then(function(response) {
+            console.log("Email sent successfully!", response);
+            location.reload();
+        }, function(error) {
+            console.error("Email could not be sent:", error);
+        }); 
+    }
+  })
+}
+
+// function createOrganizationDetailsModal(organizationData) {
+//   var orgDetails = document.getElementById('orgDetails');
+// }
+
+
+
+</script>
+</html>

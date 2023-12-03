@@ -1,0 +1,122 @@
+body {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  height: 100vh;
+  margin: 0;
+}   
+
+.container {
+  max-width: 500px;
+  width: 100%;
+  padding: 0 1rem;
+  box-sizing: border-box;
+}
+
+.form {
+  padding: 3.125em;
+  align-items: center;
+  border-radius: 20px;
+  background: linear-gradient(145deg, #194c8f, #154079);
+  box-shadow: 5px 5px 15px -1px #143c72, -5px -5px 15px -1px #1a529a;
+  flex: 1;
+  padding: 10px;
+}
+
+.form_button {
+  display: flex; 
+  flex-direction: column; 
+  align-items: center;
+  justify-content: center;
+}
+
+.flex {
+  display: flex;
+  width: 100%;
+  gap: 6px;
+}
+
+.btn-primary{
+  color: #fff;
+  background-color: #0069d9;
+  border-color: #ff8200;  
+}
+
+.btn,
+.btn-primary,
+.register_button{
+  width: 50%;
+  padding: 0.625em;
+  border-radius: 5px;
+  color: white;
+  background-color: #ff8200;
+}
+
+.btn-secondary,
+.back_button{
+  width: 25%;
+  padding: 10px;
+  border-radius: 5px;
+  color: white;
+  background-color: #009DDC;
+}
+
+.form-group{
+  margin-bottom: 20px;
+}
+
+.form-control{
+  border: 1px solid black;
+  outline: none;
+  border-radius: 5px;
+  width: 100%;
+  align-items: center;
+}
+
+.form-label {
+  text-align: left;
+  font-weight: bold;
+  font-family: 'Canva Sans', Arial;
+  color: white;
+}
+
+.form-check-label {
+  font-weight: normal;
+  color: white;
+}
+
+.valid-id {
+  color: white;
+  font-style: italic;
+  font-family: 'Canva Sans', Arial;
+  font-size: small;
+}
+
+/* Media queries for responsiveness */
+@media screen and (max-width: 600px) {
+.container {
+  max-width: 100%;
+  padding: 0.625em;
+}
+
+.form {
+  padding: 1.25em;
+}
+
+.form-group {
+  margin-bottom: 1rem;
+}
+
+.form-logo img {
+  height: 100px;
+  margin-right: 0;
+}
+
+.btn,
+.btn-primary,
+.register_button,
+.btn-secondary,
+.back_button {
+  width: 100%;
+}
+}

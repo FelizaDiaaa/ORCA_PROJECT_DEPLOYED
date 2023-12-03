@@ -1,0 +1,437 @@
+<!DOCTYPE html>
+<html lang="en">
+{% load static %}
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@4.6.2/dist/css/bootstrap.min.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
+    <script src="https://cdn.emailjs.com/dist/email.min.js"></script>
+    <!-- jQuery Slim -->
+    <script src="https://cdn.jsdelivr.net/npm/jquery@3.6.4/dist/jquery.slim.min.js"></script>
+    <script src="https://unpkg.com/sweetalert/dist/sweetalert.min.js"></script>
+    <!-- Popper.js -->
+    <script src="https://cdn.jsdelivr.net/npm/popper.js@1.16.1/dist/umd/popper.min.js"></script>
+
+    <!-- Bootstrap JS -->
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@4.6.2/dist/js/bootstrap.min.js"></script>
+    <link rel="icon" type="image/x-icon" href="{% static 'img/orca web logo.png' %}">
+    <title>Org Volunteers Page</title>
+    <style>
+        .card-img-top {
+            height: 20rem;
+        }
+        .modal-body img.small-image {
+            width: 100px; /* Adjust the maximum width as needed */
+            height: 100px;
+            cursor: pointer;
+        }
+
+        .modal-backdrop {
+            display: none;
+            z-index: 1040 !important;
+        }
+        
+        .modal-content {
+            margin: 2px auto;
+            z-index: 1100 !important;
+        }
+        .zoomed-image {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background-color: rgba(0, 0, 0, 0.7);
+            z-index: 1200; /* Update the z-index value to be higher than the modal backdrop */
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            overflow: auto;
+        }
+        
+        .zoomed-image img {
+            width: 500px;
+            height: 500px;
+        }
+    </style>
+</head>
+
+<body>
+    <div class="d-flex">
+        {% include 'OrgDashboard.html' %}
+    <div class="flex-grow-1 p-4">
+        <form method="POST" id="showVolunteer">
+            {% csrf_token %} 
+        </form>
+        <form method="POST" id="showAcceptedVolunteer">
+            {% csrf_token %} 
+        </form>
+        <div class="row">
+            <div class="col-md-6">
+                <h2>Volunteer Applicants</h2>
+            </div>
+            <div class="col-md-6 text-right show-table">
+                <button type="button" class="btn btn-primary toggle-button" onclick="showAcceptedVolunteers()" data-toggle="modal" data-target="#volunteerListModal">Show Volunteers</button>
+            </div>
+        </div>
+        <br />
+        <table class="table">
+            <thead>
+                <tr>
+                    <th>Name</th>
+                    <th>Contact</th>
+                    <th>Address</th>
+                    <th>Email</th>
+                    <th>Action</th>
+                </tr>
+            </thead>
+            <tbody>
+                {% for volunteer in volunteers %}
+                <tr>
+                    <td>{{volunteer.user.firstname}} {{volunteer.user.lastname}}</td>
+                    <td>{{volunteer.user.contactnumber}}</td>
+                    <td>{{volunteer.user.address}}</td>
+                    <td>{{volunteer.user.email}}</td>
+                    <td>
+                        <button type="button" class="btn btn-primary" onclick="viewProfile({{volunteer.id}})">See Profile</button>
+                    </td>
+                </tr>
+                {% endfor %}
+            </tbody>
+        </table>
+    </div>
+	</div>
+    
+    <!--Modal for Volunteer List-->
+      <div class="modal fade" id="volunteerListModal" role="dialog" aria-labelledby="volunteerListModalLabel" aria-hidden="true" data-bs-backdrop="false">
+        <div class="modal-dialog modal-lg" role="document">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title" id="volunteerListModalLabel">Volunteer List</h5>
+                    <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                        <span aria-hidden="true">&times;</span>
+                    </button>
+                </div>
+                <div class="modal-body">
+                    <table class="table">
+                        <thead>
+                            <tr>
+                                <th>Name</th>
+                                <th>Contact</th>
+                                <th>Address</th>
+                                <th>Email</th>
+                                <th>Valid ID Front</th>
+                                <th>Valid ID Back</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+        </div>
+    </div>
+</body>
+
+<script>
+    function viewProfile(id) {
+        var myForm = document.querySelector("#showVolunteer");
+        var formData = new FormData(myForm);
+        formData.append("volunteer_id", id);
+    
+        fetch('/orgvolunteers', {
+            method: 'POST',
+            body: formData
+        })
+        .then(response => response.json())
+        .then(data => {
+            if (data.volunteer) {
+                // Create modal elements
+                var modal = document.createElement('div');
+                modal.classList.add('modal', 'fade');
+                modal.id = 'johnDoeModal';
+                modal.tabIndex = -1;
+                modal.role = 'dialog';
+                modal.setAttribute('aria-labelledby', 'johnDoeModalLabel');
+                modal.setAttribute('aria-hidden', 'true');
+    
+                var modalDialog = document.createElement('div');
+                modalDialog.classList.add('modal-dialog');
+                modalDialog.role = 'document';
+    
+                var modalContent = document.createElement('div');
+                modalContent.classList.add('modal-content');
+    
+                // Modal header
+                var modalHeader = document.createElement('div');
+                modalHeader.classList.add('modal-header');
+    
+                var modalTitle = document.createElement('h5');
+                modalTitle.classList.add('modal-title');
+                modalTitle.id = 'johnDoeModalLabel';
+                modalTitle.textContent = 'Volunteer Profile';
+    
+                var modalCloseButton = document.createElement('button');
+                modalCloseButton.type = 'button';
+                modalCloseButton.classList.add('close');
+                modalCloseButton.setAttribute('data-dismiss', 'modal');
+                modalCloseButton.setAttribute('aria-label', 'Close');
+    
+                var closeIcon = document.createElement('span');
+                closeIcon.setAttribute('aria-hidden', 'true');
+                closeIcon.textContent = '×';
+    
+                modalCloseButton.appendChild(closeIcon);
+                modalHeader.appendChild(modalTitle);
+                modalHeader.appendChild(modalCloseButton);
+    
+                // Modal body
+                var modalBody = document.createElement('div');
+                modalBody.classList.add('modal-body');
+    
+                // Populate modal body with data received from the server
+                modalBody.innerHTML = `
+                    <p><strong>Name:</strong> ${data.volunteer.firstname} ${data.volunteer.lastname}</p>
+                    <p><strong>Contact Number:</strong> ${data.volunteer.contactnumber}</p>
+                    <p><strong>Address:</strong> ${data.volunteer.address}</p>
+                    <p><strong>Email Address:</strong> ${data.volunteer.email}</p>
+                    <p><strong>Valid ID:</strong></p>
+                    <img id="validID" src="${data.volunteer.idpicture}" alt="Valid ID" onclick="enlargeImage('${data.volunteer.idpicture}')" data-valid-id-image class="img-fluid small-image">
+                    <img id="validID1" src="${data.volunteer.idpictureback}" onclick="enlargeImage('${data.volunteer.idpictureback}')" alt="Valid ID" data-valid-id-image class="img-fluid small-image">
+                `;
+
+                // Modal footer
+                var modalFooter = document.createElement('div');
+                modalFooter.classList.add('modal-footer');
+    
+                var declineButton = document.createElement('button');
+                declineButton.type = 'button';
+                declineButton.classList.add('btn', 'btn-danger');
+                declineButton.textContent = 'Decline';
+    
+                var acceptButton = document.createElement('button');
+                acceptButton.type = 'button';
+                acceptButton.classList.add('btn', 'btn-success');
+                acceptButton.textContent = 'Accept';
+                
+                modalFooter.appendChild(declineButton);
+                modalFooter.appendChild(acceptButton);
+
+                acceptButton.addEventListener('click', async function () {
+                    formData.append("isAccepted", true);
+                    alert("called")
+                
+                    try {
+                        const response = await fetch('/orgvolunteers', {
+                            method: 'POST',
+                            body: formData
+                        });
+                
+                        const data = await response.json();
+                
+                        if (data.done) {
+                            emailjs.init("eKqrvGOkVxL0RzYV2");
+                            const templateId = "template_txsvixf";
+                            const emailParams = {
+                                to_email: data.email,
+                                message: `${data.org} accepted your application as a volunteer!`
+                            };
+                
+                            const emailResponse = await emailjs.send("service_dmb2o5u", templateId, emailParams);
+                
+                            swal({
+                                title: "Accepted!",
+                                text: "The User Accepted Successfully",
+                                icon: "success",
+                                buttons: {
+                                    login: {
+                                        text: "Ok",
+                                        value: "login",
+                                        className: "btn btn-success",
+                                    }
+                                }
+                            }).then((value) => {
+                                if (value === "login") {
+                                    location.reload();
+                                }
+                            });
+                        }
+                    } catch (error) {
+                        console.error('Error:', error);
+                    }
+                });
+                
+
+                
+                declineButton.addEventListener('click', function () {
+                    formData.append("isDeclined", true)
+                    fetch('/orgvolunteers', {
+                        method: 'POST',
+                        body: formData
+                    }).then(response => response.json())
+                    .then(data => { 
+                        if (data.done) {
+                        emailjs.init("eKqrvGOkVxL0RzYV2")
+                        const templateId = "template_txsvixf"; 
+                        const emailParams = {
+                            to_email: data.email,
+                            message: `${data.org} declined your application as volunteer!`
+                        };
+            
+                        emailjs.send("service_dmb2o5u", templateId, emailParams)
+                            .then(function(response) {
+                                console.log("Email sent successfully!", response);
+                                swal({
+                                    title: "Declined!",
+                                    text: "The User Declined Successfully",
+                                    icon: "success",
+                                    buttons: {
+                                      login: {
+                                        text: "Ok",
+                                        value: "login",
+                                        className: "btn btn-success",
+                                      }
+                                    }
+                                  }).then((value) => {
+                                    if (value === "login") {
+                                      location.reload()
+                                    }
+                                  });
+                            }, function(error) {
+                                console.error("Email could not be sent:", error);
+                            }); 
+                        }
+                    });
+                });
+
+                // Append modal elements to the DOM
+                modalContent.appendChild(modalHeader);
+                modalContent.appendChild(modalBody);
+                modalContent.appendChild(modalFooter);
+                modalDialog.appendChild(modalContent);
+                modal.appendChild(modalDialog);
+                document.body.appendChild(modal);
+    
+                // Show the modal
+                $(modal).modal('show');
+
+    
+            } else {
+               
+                swal({
+                    title: "Oooppppsss!",
+                    text: "No volunteer data found.",
+                    icon: "error",
+                    buttons: {
+                      login: {
+                        text: "Ok",
+                        value: "login",
+                        className: "btn btn-danger",
+                      }
+                    }
+                  }).then((value) => {
+                    if (value === "login") {
+                      swal.close()
+                    }
+                  });
+            }
+        })
+        .catch(error => {
+            console.error('Error:', error);
+        });
+    }
+
+    function showAcceptedVolunteers() {
+        var myForm = document.querySelector("#showAcceptedVolunteer");
+        var formData = new FormData(myForm);
+        formData.append("showAccepted", true);
+        
+        fetch('/orgvolunteers', {
+            method: 'POST',
+            body: formData
+        })
+        .then(response => response.json())
+        .then(data => {
+            // Assuming data is an array of volunteer objects
+            var modalBody = document.querySelector('.modal-body');
+            var tableBody = modalBody.querySelector('tbody');
+            // Clear existing table rows
+            tableBody.innerHTML = '';
+            volunteers = data.volunteers
+            volunteers.forEach(volunteer => {
+                var row = document.createElement('tr');
+                var nameCell = document.createElement('td');
+                var contactCell = document.createElement('td');
+                var addressCell = document.createElement('td');
+                var emailCell = document.createElement('td');
+                var validIDCell = document.createElement('td');
+                var validID1Cell = document.createElement('td');
+        
+                // Fill in the cell data with volunteer information
+                nameCell.textContent = volunteer.firstname + ' ' + volunteer.lastname;
+                contactCell.textContent = volunteer.contactnumber;
+                addressCell.textContent = volunteer.address;
+                emailCell.textContent = volunteer.email;
+        
+                // Create an image element for the Valid ID
+                var validIDImage = createImageElement(volunteer.idpicture, 'Valid ID Front');
+                var validIDImage1 = createImageElement(volunteer.idpictureback, 'Valid ID Back');
+        
+                // Add click event listener to the image
+                validIDImage.addEventListener('click', function() {
+                    enlargeImage(volunteer.idpicture); // Pass the image URL to the enlargeImage function
+                });
+
+                validIDImage1.addEventListener('click', function() {
+                    enlargeImage(volunteer.idpictureback); // Pass the image URL to the enlargeImage function
+                });
+        
+        
+                // Append the image to the validIDCell
+                validIDCell.appendChild(validIDImage);
+                validID1Cell.appendChild(validIDImage1);
+        
+                // Append all cells to the row
+                row.appendChild(nameCell);
+                row.appendChild(contactCell);
+                row.appendChild(addressCell);
+                row.appendChild(emailCell);
+                row.appendChild(validIDCell);
+                row.appendChild(validID1Cell);
+        
+                // Append the row to the table body
+                tableBody.appendChild(row);
+            });
+        }).catch(error => {
+            console.error('Error:', error);
+        });   
+    }
+      // Function to create an image element
+    function createImageElement(src, alt) {
+        var image = document.createElement('img');
+        image.src = src;
+        image.alt = alt || 'Image';
+        image.classList.add('img-fluid', 'small-image');
+        return image;
+    }
+
+    function enlargeImage(imageSrc) {
+      
+        var zoomedContainer = document.createElement('div');
+        var zoomedImage = document.createElement('img');
+      
+        zoomedImage.src = imageSrc;
+      
+        zoomedContainer.classList.add('zoomed-image');
+        zoomedContainer.onclick = function () {
+          zoomedContainer.remove();
+        };
+        zoomedContainer.appendChild(zoomedImage);
+        document.body.appendChild(zoomedContainer);
+      }
+    
+</script>
+
+</html>

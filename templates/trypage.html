@@ -1,0 +1,100 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@4.6.2/dist/css/bootstrap.min.css">
+  <script src="https://cdn.jsdelivr.net/npm/jquery@3.6.4/dist/jquery.slim.min.js"></script>
+  <script src="https://cdn.jsdelivr.net/npm/popper.js@1.16.1/dist/umd/popper.min.js"></script>
+  <script src="https://cdn.jsdelivr.net/npm/bootstrap@4.6.2/dist/js/bootstrap.bundle.min.js"></script>
+  <title>LANDING PAGE</title>
+</head>
+<style>
+   body {
+      margin: 0;
+      padding: 0;
+      background: white;
+      font-family: Arial;
+  }
+
+  .navbar {
+      background-color: #343a40;
+  }
+
+  .navbar ul {
+      list-style: none;
+      margin: 0;
+      padding: 0;
+      display: flex;
+      align-items: center;
+  }
+
+  .navbar li {
+      margin-left: 15px;
+  }
+
+  .navbar a {
+      color: #fff;
+      text-decoration: none;
+      font-weight: bold;
+      font-size: 14px;
+  }
+
+  .navbar a:hover {
+      background: #3c3c3c;
+  }
+
+  .navbar-brand {
+      color: #fff;
+      font-size: 24px;
+      text-decoration: none;
+  }
+
+  /* Added styles for the responsive navigation toggle button */
+  .navbar-toggler {
+      border: none;
+      background-color: transparent;
+  }
+
+  .navbar-toggler-icon {
+      background-color: #fff;
+  }
+
+  /* Added custom margin for top spacing of the container */
+  .container {
+      margin-top: 30px;
+  }
+</style>
+<body>
+<nav class="navbar navbar-expand-lg">
+  <!-- Brand/logo -->
+  <a class="navbar-brand" href="#">Logo</a>
+
+  <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarNav" aria-controls="navbarNav" aria-expanded="false" aria-label="Toggle navigation">
+    <span class="navbar-toggler-icon"></span>
+  </button>
+
+  <div class="collapse navbar-collapse" id="navbarNav">
+    <ul class="navbar-nav ml-auto">
+      <li class="nav-item">
+        <a class="nav-link" href="#">DONATE</a>
+      </li>
+      <li class="nav-item">
+        <a class="nav-link" href="#">VOLUNTEER</a>
+      </li>
+      <li class="nav-item">
+        <a class="nav-link" href="#">REGISTER</a>
+      </li>
+      <li class="nav-item">
+          <a class="nav-link" href="#">LOGIN</a>
+      </li>
+    </ul>
+  </div>
+</nav>
+
+<div class="container mt-5">
+  <h3>ORCA</h3>
+  <p>The .navbar-brand class is used to highlight the brand/logo/project name of your page.</p>
+</div>
+</body>
+</html>
