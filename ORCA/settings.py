@@ -10,7 +10,6 @@ For the full list of settings and their values, see
 https://docs.djangoproject.com/en/4.2/ref/settings/
 """
 import os
-
 from pathlib import Path
 
 # Build paths inside the project like this: BASE_DIR / 'subdir'.
@@ -23,13 +22,9 @@ BASE_DIR = Path(__file__).resolve().parent.parent
 # SECURITY WARNING: keep the secret key used in production secret!
 SECRET_KEY = 'django-insecure-89go)=6b5cbh96si+^kg(@s6=&1j#58nt^l(lb06x9ct+dnw^m'
 
-# SECURITY WARNING: don't run with debug turned on in production!
-DEBUG = True
 
-ALLOWED_HOSTS = ['127.0.0.1', 'localhost']
+ALLOWED_HOSTS = ['127.0.0.1', 'localhost', 'orcaproject.pythonanywhere.com']
 
-
-# Application definition
 
 INSTALLED_APPS = [
     'django.contrib.admin',
@@ -45,8 +40,9 @@ AUTHENTICATION_BACKENDS = [ 'django.contrib.auth.backends.ModelBackend', 'pages.
 AUTH_USER_MODEL = 'pages.User'
 LOGIN_URL = '/login'
 SESSION_ENGINE = 'django.contrib.sessions.backends.db'
-MEDIA_URL = ''
-MEDIA_ROOT = os.path.join(BASE_DIR, 'images')
+MEDIA_URL = '/media/'
+MEDIA_ROOT = os.path.join(BASE_DIR, 'media')
+
 
 MIDDLEWARE = [
     'django.middleware.security.SecurityMiddleware',
@@ -85,10 +81,10 @@ WSGI_APPLICATION = 'ORCA.wsgi.application'
 DATABASES = {
     'default': {
         'ENGINE': 'django.db.backends.mysql',
-        'NAME': 'orca',
-        'USER': 'root',
-        'PASSWORD': '',
-        'HOST': '127.0.0.1',
+        'NAME': 'orcaproject$orca',
+        'USER': 'orcaproject',
+        'PASSWORD': 'orcaorca123',
+        'HOST': 'orcaproject.mysql.pythonanywhere-services.com',
         'PORT': '3306',
         'OPTIONS': {
             'init_command': "SET sql_mode='STRICT_TRANS_TABLES'"

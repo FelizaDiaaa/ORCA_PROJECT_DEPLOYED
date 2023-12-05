@@ -12,26 +12,51 @@
     <title>Appointment Records</title>
     <style>
         /* Custom CSS for styling */
-        .custom-container {
-            padding: 20px;
-            background-color: #f8f9fa;
+        .flex-grow-1 {
+          width: 100%;
+          height: fit-content;
         }
         .custom-nav-tabs {
             margin-top: 20px;
         }
         .search-bar {
-            float: right; /* Align the search bar to the right */
-            margin-top: 10px;
+            position: absolute;
+            right: 16px;
+        }
+        .form-inline {
+          height: 72px;
+          display: flex;
+          align-items: center;
+        }
+        .btn {
+          position: absolute;
+          right: 8px;
+          border-radius: 100%;
+        }
+        @media screen and (min-width: 375px) and (max-width: 768px) {
+          .search-bar {
+            width: 150px;
+          }
+          .flex-grow-1 {
+          width: 100%;
+          height: fit-content;
+          min-height: 100vh;
+        }
+          .appoint-responsive {
+            width: 100%;
+            overflow: scroll;
+          }
         }
     </style>
 </head>
 <body>
-  {% include 'OrgDashboard.html' %}
-    <div class="container custom-container">
+  <div class="d-flex">
+    {% include 'OrgDashboard.html' %}
+    <div class="flex-grow-1">
       <div class="search-bar">
         <form class="form-inline">
-          <input class="form-control mr-sm-2" type="search" placeholder="Search" aria-label="Search">
-          <button class="btn btn-outline-success my-2 my-sm-0" type="submit">
+          <input class="form-control" type="search" placeholder="Search" aria-label="Search">
+          <button class="btn" type="submit">
               <i class="fas fa-search"></i>
           </button>
         </form>
@@ -48,11 +73,12 @@
                 <button class="nav-link" id="contact-tab" data-bs-toggle="tab" data-bs-target="#contact" type="button" role="tab" aria-controls="contact" aria-selected="false">2021</button>
             </li>
         </ul>
-        <div class="tab-content" id="myTabContent">
+        <div class="appoint-responsive">
+          <div class="tab-content" id="myTabContent">
             <div class="tab-pane fade show active" id="2023" role="tabpanel" aria-labelledby="2023-tab">
               <table class="table">
                 <thead class="thead-light">
-                  <tr>
+                  <tr style="white-space: nowrap;">
                     <th scope="col">#</th>
                     <th scope="col">Client Name</th>
                     <th scope="col">Pet Name</th>
@@ -62,7 +88,7 @@
                   </tr>
                 </thead>
                 <tbody>
-                  <tr>
+                  <tr style="white-space: nowrap;">
                     <th scope="row">1</th>
                     <td>Bianca Pano</td>
                     <td>Winter</td>
@@ -70,7 +96,7 @@
                     <td>August 31, 2023</td>
                     <td>Dr. Jennie Kim</td>
                   </tr>
-                  <tr>
+                  <tr style="white-space: nowrap;">
                     <th scope="row">2</th>
                     <td>Jogie Otic</td>
                     <td>Jogyo</td>
@@ -78,7 +104,7 @@
                     <td>August 25, 2023</td>
                     <td>Dr. Jisoo Kim</td>
                   </tr>
-                  <tr>
+                  <tr style="white-space: nowrap;">
                     <th scope="row">3</th>
                     <td>Feliza Dia</td>
                     <td>Snowie</td>
@@ -92,7 +118,9 @@
             <div class="tab-pane fade" id="2022" role="tabpanel" aria-labelledby="2022-tab"></div>
             <div class="tab-pane fade" id="2021" role="tabpanel" aria-labelledby="2021-tab"></div>
         </div>
+        </div>
     </div>
+  </div>
     
     <!-- Include Bootstrap JS scripts (popper.js and Bootstrap JS) -->
     <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.16.0/umd/popper.min.js"></script>

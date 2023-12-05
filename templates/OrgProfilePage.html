@@ -14,8 +14,10 @@
     .profile-box{
       height: auto;
       padding: 15px;
-      box-shadow: 5px 5px 15px -1px #1f1f20, -5px -5px 15px -1px #737982;
-      position: relative; 
+      filter: drop-shadow(1px 2px 2px);
+      background-color: #fff;
+        border-radius: 10px;
+        position: relative;
     }
 
     .profile-box img{
@@ -41,7 +43,7 @@
         justify-content: center;
         overflow: auto;
     }
-    
+
     .zoomed-image img {
         width: 500px;
         height: 500px;
@@ -146,7 +148,7 @@
         width: 90px;
         height: 75px;
       }
-        
+
       /* Make profile info text smaller on mobile */
       .profile-info strong {
         font-size: 14px;
@@ -208,7 +210,7 @@
       padding-bottom: 16px;
       /* filter: drop-shadow(1px 0 1px); */
     }
-    
+
     .time-container {
       display: flex;
       flex-direction: row;
@@ -302,6 +304,9 @@
           justify-content:center;
           align-items: center;
         }
+        .profile-box {
+          all: initial;
+        }
         .day-container {
           display: flex;
           flex-direction: column;
@@ -317,6 +322,9 @@
       .am, .pm {
         height: 100%;
       }
+      .col {
+          width: 100%;
+        }
 
     }
   </style>
@@ -339,31 +347,31 @@
                     <i class="fas fa-edit"></i>
                   </button>
 
-                  <img id="profileImage" src={{organization.cliniclogo}} alt="profile photo">
+                  <img id="profileImage" src={{organization.cliniclogo.url}} alt="profile photo" style="width: 150px;">
                   <hr>
                   <div class="profile-info">
                     <strong>ORGANIZATION NAME </strong><br />{{organization.organization_name}}<br>
                     <strong>CONTACT NUMBER </strong><br />{{organization.user.contactnumber}}<br>
                     <strong>CLINIC LOCATION </strong><br />{{organization.user.address}}<br>
                     <strong>EMAIL </strong><br />{{organization.user.email}}</span><br>
-                    <strong>CERTIFICATE OF ACCREDITATION </strong><br /><a href="{{organization.certificate_of_accreditation}}" target="_blank">{{organization.certificate_of_accreditation}}</a>
+                    <strong>CERTIFICATE OF ACCREDITATION </strong><br /><a href="{{organization.certificate_of_accreditation.url}}" target="_blank">View Certificate</a>
                   </div>
                   <!-- QR Codes for Donations -->
                   <h4 class="mb-3">QR Codes for Donations</h4>
                   <div class="qr-code-images">
-                    <img src="{{organization.qrcodebuymeacoffee}}" onclick="enlargeImage('{{organization.qrcodebuymeacoffee}}')" alt="QR Code 1">
-                    <img src="{{organization.qrcodegcash}}" onclick="enlargeImage('{{organization.qrcodegcash}}')" alt="QR Code 2">
-                    <img src="{{organization.qrcodepaypal}}" onclick="enlargeImage('{{organization.qrcodepaypal}}')" alt="QR Code 3">                    
+                    <img src="{{organization.qrcodebuymeacoffee.url}}" onclick="enlargeImage('{{organization.qrcodebuymeacoffee.url}}')" alt="QR Code 1">
+                    <img src="{{organization.qrcodegcash.url}}" onclick="enlargeImage('{{organization.qrcodegcash.url}}')" alt="QR Code 2">
+                    <img src="{{organization.qrcodepaypal.url}}" onclick="enlargeImage('{{organization.qrcodepaypal.url}}')" alt="QR Code 3">
                   </div>
                 </div>
             </div>
-          
+
           <div class="profile-box col">
             <h3> Business Hours </h3>
             <div class="hrs-container">
               <div class="day-container">
                 <div class="switch-label">
-                  <div class="col-md-6"> 
+                  <div class="col-md-6">
                       <label for="sun" class="switch-input">Sunday</label>
                       <label class="switch">
                           <input type="checkbox" id="sun" name="days[]" value="sun">
@@ -374,7 +382,7 @@
                 <div class="time-container">
                   <div class="am">
                     <span>From:</span>
-                    <input type="time" class="time-input" name="time_in_sun" value="08:00"> 
+                    <input type="time" class="time-input" name="time_in_sun" value="08:00">
                   </div>
                   <div class="pm">
                     <span>To:</span>
@@ -395,7 +403,7 @@
                   <div class="time-container">
                     <div class="am">
                       <span>From:</span>
-                      <input type="time" class="time-input" name="time_in_mon" value="08:00"> 
+                      <input type="time" class="time-input" name="time_in_mon" value="08:00">
                     </div>
                     <div class="pm">
                       <span>To:</span>
@@ -417,14 +425,14 @@
                     <div class="am">
                       <span>From:</span>
                       <input type="time" class="time-input" name="time_in_tue" value="08:00">
-                    </div> 
+                    </div>
                     <div class="pm">
                       <span>To:</span>
                       <input type="time" class="time-input" name="time_out_tue" value="17:00">
                     </div>
                   </div>
                 </div>
-            
+
                 <div class="day-container">
                   <div class="switch-label">
                     <div class="col-md-6">
@@ -459,7 +467,7 @@
                   <div class="time-container">
                     <div class="am">
                       <span>From:</span>
-                      <input type="time" class="time-input" name="time_in_thu" value="08:00"> 
+                      <input type="time" class="time-input" name="time_in_thu" value="08:00">
                     </div>
                     <div class="pm">
                       <span>To:</span>
@@ -515,7 +523,7 @@
       </div>
     </div>
   </div>
-  
+
 
   <!-- Edit Profile Modal -->
   <div class="modal fade" id="editProfileModal" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
@@ -535,12 +543,12 @@
             {% csrf_token %}
             <div class="mb-3">
               <label for="changeOrgPhoto" class="form-label">Org Photo</label>
-              
+
               <!-- Display current organization logo -->
               <div class="current-logo-container">
-                  <img id="currentLogo" class="edit_img" src="{{ organization.cliniclogo }}" alt="Current Logo" class="current-logo">
+                  <img id="currentLogo" class="edit_img" src="{{ organization.cliniclogo.url }}" alt="Current Logo" class="current-logo">
               </div>
-              
+
               <!-- Input for changing organization logo -->
               <div class="input-group">
                   <input type="file" class="form-control" id="changeOrgPhoto" accept="image/*" name="profileorg" onchange="displaySelectedProfile()">
@@ -550,7 +558,7 @@
                   </label>
               </div>
           </div>
-          
+
             <!-- Organization Name -->
             <div class="mb-3">
               <label for="orgNameInput" class="form-label">Organization Name</label>
@@ -572,13 +580,13 @@
               <input type="email" class="form-control" value="{{organization.user.email}}" id="emailInput" name="email" disabled>
               <input type="email" class="form-control" value="{{organization.user.email}}" id="emailInput1" name="email1" hidden>
             </div>
-          
+
             <!-- Certificate of Accreditation -->
             <div class="mb-3">
               <label for="certAccreditation" class="form-label">
                   Certificate of Accreditation
               </label>
-          
+
               <!-- Display the PDF link if a file is selected -->
               <div id="pdfLinkContainer">
                   {% if organization.certificate_of_accreditation %}
@@ -589,14 +597,14 @@
                       <i class="fas fa-upload upload-icon" onclick="triggerFileInput('certAccreditation')"></i>
                   {% endif %}
               </div>
-          
+
               <!-- Input for changing Certificate of Accreditation -->
               <div class="input-group mt-3">
                   <input id="certAccreditation" type="file" class="form-control" name="accreditationcertificate" accept=".pdf">
               </div>
             </div>
-          
-          
+
+
            <!-- QR Code for Donations -->
            <div class="row">
               <div class="col-md-4">
@@ -604,51 +612,51 @@
                       <label for="qrCodeInput1" class="form-label">
                           QR Code 1 for Donations
                       </label>
-          
+
                       <!-- Display the QR Code 1 image -->
                       <div class="qr-code-images">
-                          <img id="qrCodeImage1" src="{{organization.qrcodebuymeacoffee}}" alt="QR Code 1" class="img-fluid">
+                          <img id="qrCodeImage1" src="{{organization.qrcodebuymeacoffee.url}}" alt="QR Code 1" class="img-fluid">
                           <i class="fas fa-upload upload-icon" onclick="triggerFileInput('qrCodeInput1')"></i>
                       </div>
-          
+
                       <!-- Input for changing QR Code 1 -->
                       <div class="input-group">
                           <input type="file" class="form-control" id="qrCodeInput1" name="buymeacoffee" accept="image/*" onchange="displaySelectedImage('qrCodeInput1', 'qrCodeImage1')">
                       </div>
                   </div>
               </div>
-          
+
               <div class="col-md-4">
                   <div class="mb-3">
                       <label for="qrCodeInput2" class="form-label">
                           QR Code 2 for Donations
                       </label>
-          
+
                       <!-- Display the QR Code 2 image -->
                       <div class="qr-code-images">
-                          <img id="qrCodeImage2" src="{{organization.qrcodegcash}}" alt="QR Code 2" class="img-fluid">
+                          <img id="qrCodeImage2" src="{{organization.qrcodegcash.url}}" alt="QR Code 2" class="img-fluid">
                           <i class="fas fa-upload upload-icon" onclick="triggerFileInput('qrCodeInput2')"></i>
                       </div>
-          
+
                       <!-- Input for changing QR Code 2 -->
                       <div class="input-group">
                           <input type="file" class="form-control" id="qrCodeInput2" name="gcash" accept="image/*" onchange="displaySelectedImage('qrCodeInput2', 'qrCodeImage2')">
                       </div>
                   </div>
               </div>
-          
+
               <div class="col-md-4">
                   <div class="mb-3">
                       <label for="qrCodeInput3" class="form-label">
                           QR Code 3 for Donations
                       </label>
-          
+
                       <!-- Display the QR Code 3 image -->
                       <div class="qr-code-images">
-                          <img id="qrCodeImage3" src="{{organization.qrcodepaypal}}" alt="QR Code 3" class="img-fluid">
+                          <img id="qrCodeImage3" src="{{organization.qrcodepaypal.url}}" alt="QR Code 3" class="img-fluid">
                           <i class="fas fa-upload upload-icon" onclick="triggerFileInput('qrCodeInput3')"></i>
                       </div>
-          
+
                       <!-- Input for changing QR Code 3 -->
                       <div class="input-group">
                           <input type="file" class="form-control" id="qrCodeInput3" name="paypal" accept="image/*" onchange="displaySelectedImage('qrCodeInput3', 'qrCodeImage3')">
@@ -656,11 +664,11 @@
                   </div>
               </div>
           </div>
-          
+
 
             <button type="submit" onclick="updateOrgForm({{organization.id}})" class="btn btn-primary">Save Changes</button>
           </form>
-        </div>  
+        </div>
       </div>
     </div>
   </div>
@@ -676,7 +684,7 @@
             method: 'POST',
             body: formData
         }) .then(response => response.json())
-        .then(data => { 
+        .then(data => {
           if (data.accepted)
             location.reload();
         })
@@ -684,14 +692,14 @@
     function displaySelectedProfile() {
       var input = document.getElementById('changeOrgPhoto');
       var currentLogo = document.getElementById('currentLogo');
-      
+
       if (input.files && input.files[0]) {
           var reader = new FileReader();
-          
+
           reader.onload = function (e) {
               currentLogo.src = e.target.result;
           };
-          
+
           reader.readAsDataURL(input.files[0]);
       }
   }
@@ -726,7 +734,7 @@
           newPdfLink.href = URL.createObjectURL(fileInput.files[0]);
           newPdfLink.target = '_blank';
           newPdfLink.textContent = fileInput.files[0].name;
-          
+
           var newPdfIcon = document.createElement('i');
           var newPdfIcon1 = document.createElement('i');
           newPdfIcon.className = 'fas fa-external-link-alt';
@@ -742,12 +750,12 @@
       }
   });
   function enlargeImage(imageSrc) {
-      
+
     var zoomedContainer = document.createElement('div');
     var zoomedImage = document.createElement('img');
-  
+
     zoomedImage.src = imageSrc;
-  
+
     zoomedContainer.classList.add('zoomed-image');
     zoomedContainer.onclick = function () {
       zoomedContainer.remove();
@@ -790,14 +798,14 @@
             handleSwitchChange(day, switchElement.checked);
           });
           timeInElement.addEventListener('change', function () {
-            if (!switchElement.checked) 
+            if (!switchElement.checked)
                 return
             else
                 handleSwitchChange(day, switchElement.checked);
           });
 
           timeOutElement.addEventListener('change', function () {
-            if (!switchElement.checked) 
+            if (!switchElement.checked)
                 return
             else
                 handleSwitchChange(day, switchElement.checked);
@@ -815,7 +823,7 @@
       }
       return `${hour}:${minute}`;
   }
-  
+
 
   function handleSwitchChange(day, isChecked) {
     const timeInElement = document.querySelector(`[name="time_in_${day}"]`);
@@ -834,7 +842,7 @@
         method: 'POST',
         body: formData
     }) .then(response => response.json())
-    .then(data => { 
+    .then(data => {
       if (data.switched)
         console.log("Succes!")
     })

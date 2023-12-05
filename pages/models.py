@@ -19,23 +19,25 @@ class MyUserManager(BaseUserManager):
 
 # Create your models here.
 
-class User(AbstractBaseUser, PermissionsMixin): 
+class User(AbstractBaseUser, PermissionsMixin):
     userphoto = models.ImageField(upload_to='images/userprofiles', default = "",  null=True, blank=True)
-    firstname = models.CharField(max_length=50, verbose_name="firstname") 
+    firstname = models.CharField(max_length=50, verbose_name="firstname")
     lastname = models.CharField(max_length=50, verbose_name="lastname")
     contactnumber = models.CharField(max_length=11, unique=True, verbose_name="contactnumber")
     address = models.CharField(max_length=100, verbose_name="address")
     email = models.CharField(max_length=100, unique=True, verbose_name="email")
     usertype = models.IntegerField(default = 1, verbose_name="usertype")
+    is_staff = models.BooleanField(default=False)
+    is_superuser = models.BooleanField(default=False)
     objects = MyUserManager()
-    
+
     USERNAME_FIELD = 'email'
-    
-    class Meta: 
+
+    class Meta:
         db_table = "users"
 
 class Organization(models.Model):
-    organization_name = models.CharField(max_length=100) 
+    organization_name = models.CharField(max_length=100)
     user = models.ForeignKey(User, on_delete = models.CASCADE)
     cliniclogo = models.ImageField(upload_to='images/logo')
     qrcodebuymeacoffee = models.ImageField(upload_to='images/qrcodesbuymeacoffee')
@@ -43,7 +45,7 @@ class Organization(models.Model):
     qrcodepaypal = models.ImageField(upload_to='images/qrcodespaypal')
     certificate_of_accreditation = models.FileField(upload_to='pdfs/certificates')
     organizationstatus = models.IntegerField(default = 1)
-    class Meta: 
+    class Meta:
        db_table = "organization"
 
 class BusinessHours(models.Model):
@@ -84,7 +86,7 @@ class Volunteer(models.Model):
     user = models.ForeignKey(User, on_delete = models.CASCADE)
     idpicture = models.ImageField(upload_to='images/volunteerpictures')
     idpictureback = models.ImageField(upload_to='images/volunteerpicturesback')
-    class Meta: 
+    class Meta:
         db_table = "volunteers"
 
 class Highlights(models.Model):
@@ -113,18 +115,18 @@ class Pets(models.Model):
     pet_age = models.CharField(max_length=50)
     pet_gender = models.CharField(max_length=10)
     class Meta:
-       db_table = "pets"   
+       db_table = "pets"
 
 class PetBreed(models.Model):
-    pet_breed = models.CharField(unique=True, max_length=150) 
+    pet_breed = models.CharField(unique=True, max_length=150)
     pet_type = models.CharField(max_length=5)
-    class Meta: 
+    class Meta:
         db_table = "petbreed"
 
 class PetMedicalRecord(models.Model):
     medicinename = models.CharField(max_length=150)
     note = models.CharField(max_length=150, default="", null=True, blank=True)
-    class Meta: 
+    class Meta:
        db_table = "petmedicalrecord"
 
 class Appointment(models.Model):
@@ -137,7 +139,7 @@ class Appointment(models.Model):
     veterinarian = models.ForeignKey(Veterinarian, on_delete = models.CASCADE, default="", null=True, blank=True,)
     appointmentstatus = models.CharField(max_length=10, default="pending")
     appointed_by = models.ForeignKey(User, on_delete = models.CASCADE)
-    class Meta: 
+    class Meta:
        db_table = "appointment"
 
 class VolunteerRecord(models.Model):
@@ -145,11 +147,11 @@ class VolunteerRecord(models.Model):
     volunteerstatus = models.IntegerField(default = 1)
     volunteer = models.ForeignKey(Volunteer, on_delete=models.CASCADE)
     org = models.ForeignKey(Organization, on_delete=models.CASCADE)
-    class Meta: 
+    class Meta:
        db_table = "volunteerrecord"
 
 class AppointmentRecord(models.Model):
     dateapproved = models.DateTimeField()
     appointmentstatus = models.IntegerField(default = 1)
-    class Meta: 
+    class Meta:
        db_table = "appointmentrecord"

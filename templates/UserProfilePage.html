@@ -11,6 +11,28 @@
   <title>User Profile Page</title>
 
   <style>
+    @import url('https://fonts.googleapis.com/css2?family=Arvo:wght@700&display=swap');
+    /* Subheaders */
+    @import url('https://fonts.googleapis.com/css2?family=Nunito:wght@500&display=swap');
+    /* body base text */
+    @import url('https://fonts.googleapis.com/css2?family=Hind+Guntur&display=swap');
+    h1 {
+      font-size: 2.986rem;
+      font-family: 'Arvo';
+    }
+    .Subheaders {
+      font-family: 'Nunito';
+      font-size: 1.728rem;
+    }
+    .Subheaders > span {
+      font-size: 2.986rem;
+      font-weight: 700;
+    }
+    body {
+      all: initial;
+      font-family: 'Hind Guntur';
+      font-size: 1rem;
+    }
      /* Main content area */
      .flex-grow-1{
       height: auto;
@@ -18,7 +40,7 @@
       display: flex;
       background-color: #FFEED9;
     }
-    
+
     .profile-info strong {
       font-size: 25px;
       font-weight: bold;
@@ -31,31 +53,35 @@
     }
 
     .profile-box{
-      width: 600px;
-      height: 100%;
+      content: ;
+      width: 100%;
+      height: fit-content;
       padding: 15px;
-      position: relative; 
-      background-color: white;
+      position: relative;
+      background-color: #fff;
       border-radius: 10px;
     }
+    .center {
+        display: flex;
+        justify-content: space-between;
+        width:95%;
+    }
 
-    .profile-box img{
-      width: 150px;
-      height: 150px;
+    .img-container {
+      width: 180px;
+      height: 180px;
       overflow: hidden;
       padding: 4px;
       background-color: #fff;
       border-radius: 100%;
       filter: drop-shadow(#000 2px 0 3px);
-      object-fit: contain;
+      object-fit: cover;
     }
 
     /* Clinic and Volunteer box descriptions */
-    .profile-box p{
-        margin-bottom: 5px;
-        font-size: 25px;
-        font-weight: bold;
-
+    .profile-box {
+      display: flex;
+      flex-direction: column;
     }
 
     .profile-info-item {
@@ -76,15 +102,23 @@
       font-size: 19px;
       color: #343a40;
     }
-
+    .sec-container {
+      display: flex;
+      flex-direction: row;
+      width: 100%;
+      min-width: fit-content;
+      padding: 32px ;
+      text-align:center;
+      align-items:center;
+      justify-content: center;
+    }
     .btn-primary {
-      position: absolute;
-      top: 10px;
-      right: 10px;
-      padding: 10px;
       background-color: transparent !important;
       border: none;
-      transition: background-color 0.3s;
+      position: absolute;
+    }
+    .btn-primary:active {
+      scale: 1.1;
     }
     .btn-primary i {
       color: #333; /* Icon color */
@@ -94,6 +128,16 @@
 
     .buttons{
       background-color: transparent;
+    }
+    @media (max-width: 425px) {
+    /* Your styles for small screens go here */
+    .center {
+        display: flex;
+        justify-content: space-between;
+        width:90%;
+    }
+
+    /* Add more styles as needed */
     }
 
     @media (max-width: 768px){
@@ -108,12 +152,7 @@
         width: 40px;
         margin-left: -10px;
       }
-      
-      .profile-info{
-        max-width: 100%;
-        flex-direction: column;
-        align-items: center;
-      }
+
 
       /* Adjust padding for main content on mobile */
       .flex-grow-1 {
@@ -132,7 +171,7 @@
         width: 50%;
         margin: 0 auto;
       }
-      
+
       /* Make profile info text smaller on mobile */
       .profile-info strong {
         font-size: 18px;
@@ -180,6 +219,13 @@
       border-radius: 100%;
       filter: drop-shadow(#000 2px 0 3px);
     }
+
+    .container {
+      width: 100%;
+      height: 100%;
+      min-height: 100vh;
+      background-color: blanchedalmond;
+    }
   </style>
 </head>
 
@@ -187,38 +233,45 @@
   <div class="d-flex">
     {% include 'UserDashboard.html' %}
     <!--USER PROFILE INFORMATION-->
-    <div class="flex-grow-1 p-5">
-      <div class="row">
+    <div class="container p-4">
         {% csrf_token %}
-        <div class="col-md-6">
-          <h3 class="mb-3">USER INFORMATION</h3>
-          <div class="row">
-            <div class="col-12 mb-3">
-              <div class="profile-box">
-                <img id="profileImage" src={{users.userphoto}} alt="profile photo">
+
+        <div class="profile-box">
+        <div class="center">
+             <h2 class="Subheaders pb-2">USER INFORMATION</h2>
+              <div class="btn-container">
                 <button class="btn-primary buttons" data-bs-toggle="modal" data-bs-target="#editProfileModal">
                   <i class="fas fa-edit"></i>
-                </button>                
-                <hr> 
-                <div class="profile-info">
-                  <div class="profile-info-item">
-                    <strong>First Name: </strong><span id="profileFirstName">{{user.firstname}}</span>
-                  </div>
-                  <div class="profile-info-item">
-                    <strong>Last Name: </strong><span id="profileLastName">{{user.lastname}}</span>
-                  </div>
-                  <div class="profile-info-item">
-                    <strong>Contact Number: </strong><span id="profileContact">{{user.contactnumber}}</span>
-                  </div>
-                  <div class="profile-info-item">
-                    <strong>Email: </strong><span id="profileEmail">{{user.email}}</span>
-                  </div>
-                </div>
+                </button>
+              </div>
+        </div>
+
+          <div class="p-2">
+            <div class="sec-container">
+              <div class="img-container">
+                <img id="profileImage" src={{users.userphoto.url}} alt="profile photo" style="position:absolute;
+                top: 50%;
+                left: 50%;
+                transform: translate(-50%, -50%); height: 180px; width: 180px;">
+              </div>
+            </div>
+
+            <div class="profile-info">
+              <div class="profile-info-item">
+                <strong>First Name: </strong><span id="profileFirstName">{{user.firstname}}</span>
+              </div>
+              <div class="profile-info-item">
+                <strong>Last Name: </strong><span id="profileLastName">{{user.lastname}}</span>
+              </div>
+              <div class="profile-info-item">
+                <strong>Contact Number: </strong><span id="profileContact">{{user.contactnumber}}</span>
+              </div>
+              <div class="profile-info-item">
+                <strong>Email: </strong><span id="profileEmail">{{user.email}}</span>
               </div>
             </div>
           </div>
         </div>
-      </div>
     </div>
   </div>
 
@@ -237,12 +290,12 @@
             {% csrf_token %}
             <div class="mb-3">
                 <label for="changePhoto" class="form-label">Profile Photo </label>
-                
+
                 <!-- Display current organization logo -->
                 <div class="current-logo-container">
-                    <img id="currentLogo" class="edit_img" src="{{users.userphoto}}" alt="Current Photo" class="current-logo">
+                    <img id="currentLogo" class="edit_img" src="{{users.userphoto.url}}" alt="Current Photo" class="current-logo">
                 </div>
-                
+
                 <!-- Input for changing organization logo -->
                 <div class="input-group">
                     <input type="file" name="profile" class="form-control" id="changePhoto" accept="image/*" onchange="displaySelectedProfile()">
@@ -252,7 +305,7 @@
                     </label>
                 </div>
             </div>
-            
+
             <div class="mb-3">
               <label for="editName" class="form-label">First Name</label>
               <input type="text" name="firstname" value = "{{user.firstname}}" class="form-control" id="editFirstName" placeholder="Enter your name">
@@ -288,7 +341,7 @@
             method: 'POST',
             body: formData
         }) .then(response => response.json())
-        .then(data => { 
+        .then(data => {
           if (data.accepted)
             location.reload();
         })
@@ -296,14 +349,14 @@
     function displaySelectedProfile() {
       var input = document.getElementById('changePhoto');
       var currentLogo = document.getElementById('currentLogo');
-      
+
       if (input.files && input.files[0]) {
           var reader = new FileReader();
-          
+
           reader.onload = function (e) {
               currentLogo.src = e.target.result;
           };
-          
+
           reader.readAsDataURL(input.files[0]);
       }
   }

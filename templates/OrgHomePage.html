@@ -86,7 +86,7 @@
         display: none;
       }
       .button-appointment {
-        background-color: #ff8200; 
+        background-color: #ff8200;
         width: 110px;
         height: 80px;
         padding: 0 8px;
@@ -272,8 +272,8 @@
         background-color: white;
       }
 
-      @media screen and (min-width: 375px) and (max-width: 768px) {
-        #calendarContainer {
+      @media screen and (min-width: 320px) and (max-width: 768px) {
+        #calendarContainer, #servicesOfferedFields {
           overflow: scroll;
           position: relative;
           cursor: grab;
@@ -296,7 +296,16 @@
       }
     </style>
 </head>
-{% if org.organizationstatus == 1 %}
+{% if error %}
+<body>
+  <div class="screen">
+    <div class="row" style="align-items: center; justify-content: center;">
+      <p class="warning"><span style="font-style: italic;">{{error}}</span> <br> </p>
+        <button class="logout" onclick="window.location.href='/main'">Go to Homepage</button>
+    </div>
+  </div>
+</body>
+{% elif org.organizationstatus == 1 %}
 <body>
   <div class="screen">
     <div class="row" style="align-items: center; justify-content: center;">
@@ -328,7 +337,7 @@
               <input type="number" id="month" class="form-control" min="1" max="12" onchange="generateCalendar()">
             </div>
         </div>
-        <div id="calendarContainer"></div> 
+        <div id="calendarContainer"></div>
       </div>
       <br/>
       <div class="services-header">
@@ -358,15 +367,15 @@
               <label class="switch">
                 <input type="checkbox" id="serviceSwitch{{ service.id }}" {% if service.is_active %}checked{% endif %}>
                 <span class="slider"></span>
-              </label>            
+              </label>
             </td>
             <td style="align-items: center; text-align: center;">
                 <div style="display: flex; margin: auto; justify-content: center;
                 align-items: center;">
                     <input type="number" max="60" name="duration" class="form-control" value="{{service.duration}}" required id="duration{{ service.id }}" style="width: 70px;" onchange="handleChange(this, {{ service.id }})">
-                    <p style="margin-left: 5px;">mins.</p> 
+                    <p style="margin-left: 5px;">mins.</p>
                 </div>
-            </td>                  
+            </td>
             <td class="text-center align-middle">
               <label class="delete-btn">
                 <span class="fas fa-trash" onclick="deleteServiceFunction({{service.id}})"></span>
@@ -376,7 +385,7 @@
         {% endfor %}
         </tbody>
       </table>
-    </form>   
+    </form>
     </div>
     <br/>
   <div class="services-header">
@@ -392,7 +401,7 @@
         {% for veterinarian in veterinarians %}
         <a href="#" class="profile-box" style="text-decoration:none;" data-bs-toggle="modal" data-bs-target="#vetModal{{ veterinarian.id }}">
           <div class="img-dr-profile">
-            <img class="profile-image" src="{{ veterinarian.profilepicture }}" alt="Doctor 1">
+            <img class="profile-image" src="{{ veterinarian.profilepicture.url }}" alt="Doctor 1">
           </div>
           <div class="desc-container">
             <div class="profile-name">{{ veterinarian.vetname }}</div>
@@ -481,7 +490,15 @@
 {% endif %}
 
 <script>
-  
+     function homePage() {
+        window.location.href = "/main";
+    }
+
+    function logoutbutton(){
+        window.location.href="/logout_view"
+    }
+
+
     const currentDate = new Date();
 
     // Get the current year and month (adding 1 to month since it's zero-based)
@@ -496,14 +513,14 @@
         const month = parseInt(document.getElementById('month').value);
         const daysInMonth = new Date(year, month, 0).getDate();
 
-        
+
         const calendarContainer = document.getElementById('calendarContainer');
         calendarContainer.innerHTML = '';
         calendarContainer.class = 'w-100';
 
         const calendarDays = document.createElement('div');
         calendarDays.classList.add('calendar');
-        
+
         const daysOfWeek = ['Sun', 'Mon', 'Tue', 'Wed', 'Thu', 'Fri', 'Sat'];
 
         for (let dayOfWeek of daysOfWeek) {
@@ -521,12 +538,12 @@
                 if (week === 0 && dayOfWeek < new Date(year, month - 1, 1).getDay()) {
                     day.textContent = ""
                 } else if (dayCounter <= daysInMonth) {
-                    
+
                     day.id = dayCounter; // Set a unique id based on dayCounter
                     day.textContent = dayCounter;
                     dayCounter++;
                 }
-                
+
                 calendarDays.appendChild(day);
             }
         }
@@ -540,7 +557,7 @@
 
         getAppointmentsForDay(year, month, day);
     }
-    
+
         generateCalendar(); // Generate calendar on page load
 
         function fetchAppointments(year, month) {
@@ -549,13 +566,13 @@
                     distinctDates = {{ appointment_dates|safe }};
                     // Iterate over the distinct dates and format them
                     distinctDates.forEach(function(date) {
-                        
+
                         const appointmentDate = new Date(date.date)
                         const appointmentMonth = appointmentDate.getMonth() + 1; // Correct for zero-based month
                         const appointmentDay = appointmentDate.getDate();
                         const appointmentYear = appointmentDate.getFullYear();
                         const calendarDays = document.querySelectorAll('.calendar-day');
-                       
+
                         if (appointmentMonth === month && appointmentYear === year) {
                             // Find the corresponding calendar-day element
                             var dayElement = calendarDays[appointmentDay - 1]; // Adjust for zero-based index
@@ -563,11 +580,11 @@
                                 dayElement = document.getElementById(appointmentDay)
                                 console.log(dayElement)
                                 var viewButton = document.createElement('button');
-                              
+
                                 viewButton.classList.add('badge-top-right');
                                 viewButton.classList.add('button-appointment')
 
-                               
+
                                 // Find appointments for the current date
                                 var appointmentsForDate = {{ appointments|safe }}.filter(appointment => {
                                     const appointmentDate = new Date(appointment.date);
@@ -589,7 +606,7 @@
                                     var parentDivId = parentDiv.id;
                                     openPopup(year, month, parentDivId);
                                 });
-                            
+
                                 // Append the view button to the day element
                                 dayElement.appendChild(viewButton);
                             }
@@ -598,7 +615,7 @@
                 })
                 .catch(error => console.error("Error fetching appointments:", error));
         }
-        
+
         function getAppointmentsForDay(year, month, day) {
             const modal = document.getElementById('appointmentModal');
             const modalContent = document.getElementById('modalContent');
@@ -609,23 +626,23 @@
             formData.append("year", year)
             formData.append("month", month)
             formData.append("day", day)
-        
+
             fetch('/orghome', {
                 method: 'POST',
                 body: formData
             })
             .then(response => response.json())
-            .then(data => { 
+            .then(data => {
                 const appointmentListContainer = document.createElement('div');
                 appointmentListContainer.classList.add('appointment-list');
                 // Create a table for appointments
                 const appointmentTable = document.createElement('table');
                 appointmentTable.classList.add('appointment-table', 'single-appointment');
-            
+
                 // Create a table header row
                 const headerRow = appointmentTable.createTHead().insertRow();
                 const headers = ['Time', 'Name', 'Pet', 'Service', 'Status'];
-            
+
                 // Create header cells
                 headers.forEach(headerText => {
                     const headerCell = document.createElement('th');
@@ -640,41 +657,41 @@
                     const matchingAppointments = appointments.filter(appt => {
                         return appt.date === `${year}-${formattedMonth }-${formattedDay}` && appt.time === appointmentTime;
                     });
-                 
+
                     // Create a new div for each appointment
                     const appointmentDiv = document.createElement('div');
                     appointmentDiv.classList.add('appointment');
-                  
+
                     if (matchingAppointments.length > 1) {
                         // Create a row for each appointment in the outer table
                         const outerAppointmentRow = appointmentTable.insertRow();
-                    
+
                         // Create a cell for the "Time" detail
                         const timeCell = outerAppointmentRow.insertCell();
                         timeCell.textContent = appointmentTime;
-                    
+
                         // Create a single cell for the "View" button and set its colspan attribute
                         const viewButtonCell = outerAppointmentRow.insertCell();
                         viewButtonCell.setAttribute('colspan', '4');
                         viewButtonCell.classList.add('text-center');
-                    
+
                         // Create the "View" button
                         const viewButton = document.createElement('button');
                         viewButton.type = 'button';
                         viewButton.classList.add('view-button', 'btn', 'btn-info');
                         viewButton.textContent = 'View';
                         viewButton.style.width = '100%';
-                    
+
                         // Append the "View" button to the viewButtonCell
                         viewButtonCell.appendChild(viewButton);
-                    
+
                         // Event listener for the "View" button
                         viewButton.addEventListener('click', function (event) {
                             event.preventDefault();
                             event.stopPropagation();
                             const mainModal = document.getElementById('appointmentModal')
                             mainModal.style.display = 'none'
-                    
+
                             const innerModal = document.createElement('div');
                             innerModal.classList.add('modal', 'inner-modal');
                             const text = document.createElement('h3');
@@ -684,11 +701,11 @@
                             const innerAppointmentTable = document.createElement('table');
                             innerAppointmentTable.classList.add('appointment-table', 'inner-appointment');
                             innerAppointmentTable.id = 'appointment-table'
-                        
+
                             // Create a table header row
                             const headerRow = innerAppointmentTable.createTHead().insertRow();
                             const headers = ['Name', 'Pet', 'Service', 'Status'];
-                        
+
                             // Create header cells
                             headers.forEach(headerText => {
                                 const headerCell = document.createElement('th');
@@ -698,39 +715,39 @@
                             // Iterate over matching appointments and create elements for each
                             matchingAppointments.forEach(appointment => {
                                 // Create a table for appointments in the inner modal
-                                
-                        
+
+
                                 // Create a new row for each appointment in the inner table
                                 const innerAppointmentRow = innerAppointmentTable.insertRow();
-                        
+
                                 // Create cells for each appointment detail (Name, Pet, Service)
                                 const nameCell = innerAppointmentRow.insertCell();
                                 const petCell = innerAppointmentRow.insertCell();
                                 const serviceCell = innerAppointmentRow.insertCell();
-                        
+
                                 // Display the name, pet, and service details
                                 nameCell.textContent = `${capitalizeFirstLetter(appointment.name)}`;
                                 petCell.textContent = `${capitalizeFirstLetter(appointment.pet)}`;
                                 serviceCell.textContent = appointment.service;
-                        
+
                                 if (appointment.status !== 'accepted') {
                                     // Create cells for the buttons
                                     const acceptCell = innerAppointmentRow.insertCell();
                                     const declineCell = innerAppointmentRow.insertCell();
-                        
+
                                     // Create buttons for accepting and declining
                                     const checkButton = createButton('accept-button', 'btn', 'btn-success');
                                     checkButton.textContent = 'Accept';
                                     checkButton.setAttribute('data-appointment-id', appointment.id);
-                        
+
                                     const xButton = createButton('decline-button', 'btn', 'btn-danger');
                                     xButton.textContent = 'Decline';
                                     xButton.setAttribute('data-appointment-id', `x${appointment.id}`);
-                        
+
                                     // Append buttons to the table cells
                                     acceptCell.appendChild(checkButton);
                                     declineCell.appendChild(xButton);
-                        
+
                                     // Add event listeners for the buttons
                                     addCheckButtonListener(checkButton);
                                     addXButtonListener(xButton);
@@ -739,28 +756,28 @@
                                     const acceptedCell = innerAppointmentRow.insertCell();
                                     acceptedCell.textContent = 'Accepted';
                                     acceptedCell.style.color = '#008000';
-                                }  
-                        
+                                }
+
                                 // Append the table to the inner modal
                                 innerModal.appendChild(innerAppointmentTable);
                             });
-                        
+
                             // Close button for the inner modal
                             const innerCloseButton = createButton('close-button', 'btn', 'btn-secondary');
-                            innerCloseButton.textContent = 'Close Popup';
+                            innerCloseButton.textContent = 'Close';
                             innerCloseButton.addEventListener('click', function (event) {
                                 event.stopPropagation();
                                 innerModal.style.display = 'none';
                             });
-                        
+
                             // Append close button to the inner modal
                             innerModal.appendChild(innerCloseButton);
-                        
+
                             // Append the inner modal to the body
                             document.body.appendChild(innerModal);
                             innerModal.style.display = 'block';
-                            innerModal.style.width = '500px'; 
-                            innerModal.style.height = '500px'; 
+                            innerModal.style.width = '500px';
+                            innerModal.style.height = '500px';
                             innerModal.style.display = 'block';
                             innerModal.style.top = '50%';
                             innerModal.style.left = '50%';
@@ -771,19 +788,19 @@
                             innerModal.style.borderWidth = "thin";
                         });
                     }
-                    
+
                      else if (matchingAppointments.length !== 0) {
                         // Iterate through matchingAppointments and create a row for each appointment
                         matchingAppointments.forEach(appointment => {
                             const appointmentRow = appointmentTable.insertRow();
-                    
+
                             // Create cells for each appointment detail (Time, Name, Pet, Service, Status)
                             const timeCell = appointmentRow.insertCell();
                             const nameCell = appointmentRow.insertCell();
                             const petCell = appointmentRow.insertCell();
                             const serviceCell = appointmentRow.insertCell();
                             const statusCell = appointmentRow.insertCell();
-                    
+
                             // Set the text content with the appointment details
                             timeCell.textContent = appointmentTime;
                             nameCell.textContent = appointment.name;
@@ -797,26 +814,26 @@
                                 const checkButton = createButton('accept-button', 'btn', 'btn-success');
                                 checkButton.textContent = 'Accept';
                                 checkButton.setAttribute('data-appointment-id', appointment.id);
-                    
+
                                 const xButton = createButton('decline-button', 'btn', 'btn-danger');
                                 xButton.textContent = 'Decline';
                                 xButton.setAttribute('data-appointment-id', `x${appointment.id}`);
-                    
+
                                 // Append buttons to the status cell
                                 statusCell.appendChild(checkButton);
                                 statusCell.appendChild(xButton);
-                    
+
                                 // Add event listeners for the buttons
                                 addCheckButtonListener(checkButton);
                                 addXButtonListener(xButton);
                             }
                         });
-                    
+
                         // Append the table to the main appointment list container
                         appointmentListContainer.appendChild(appointmentTable);
                     } else {
                         const appointmentRow = appointmentTable.insertRow();
-                    
+
                         // Create cells for each appointment detail (Time, Name, Pet, Service, Status)
                         const timeCell = appointmentRow.insertCell();
                         const nameCell = appointmentRow.insertCell();
@@ -831,16 +848,16 @@
                         appointmentListContainer.appendChild(appointmentTable);
                     }
                 });
-        
+
                 modalContent.appendChild(appointmentListContainer);
-                modal.style.width = '100vw'; 
+                modal.style.width = '100vw';
                 modal.style.display = 'block';
                 modal.style.top = '50%';
                 modal.style.left = '50%';
                 modal.style.transform = 'translate(-50%, -50%)';
-            })  
+            })
         }
-        
+
         // Helper function to create buttons
         function createButton(...classNames) {
             const button = document.createElement('button');
@@ -863,7 +880,7 @@
                     body: formData
                 })
                 .then(response => response.json())
-                .then(data => { 
+                .then(data => {
                     if (data.accepted) {
                         const acceptCell = button.parentNode;
                         acceptCell.innerHTML = 'Accepted';
@@ -873,23 +890,24 @@
                             declineCell.remove();
                         }
                         emailjs.init("eKqrvGOkVxL0RzYV2")
-                        const templateId = "template_txsvixf"; 
+                        const templateId = "template_txsvixf";
                         const emailParams = {
                             to_email: data.email,
                             message: `${data.org} accepted your appointment at ${data.date}, ${data.time}`
                         };
-            
+
                         emailjs.send("service_dmb2o5u", templateId, emailParams)
                             .then(function(response) {
                                 console.log("Email sent successfully!", response);
+                                generateCalendar()
                             }, function(error) {
                                 console.error("Email could not be sent:", error);
-                            }); 
-                        } 
+                            });
+                        }
                 });
             });
         }
-     
+
         // Helper function to add event listener for x button
         function addXButtonListener(button) {
             button.addEventListener('click', function () {
@@ -904,42 +922,42 @@
                     body: formData
                 })
                 .then(response => response.json())
-                .then(data => { 
+                .then(data => {
                     emailjs.init("eKqrvGOkVxL0RzYV2")
-                    const templateId = "template_txsvixf"; 
+                    const templateId = "template_txsvixf";
                     const emailParams = {
                         to_email: data.email,
                         message: `${data.org} cancelled your appointment at ${data.date}`
                     };
-        
+
                     emailjs.send("service_dmb2o5u", templateId, emailParams)
                         .then(function(response) {
                             console.log("Email sent successfully!", response);
                         }, function(error) {
                             console.error("Email could not be sent:", error);
-                        }); 
+                        });
                     const row = button.closest('tr');
                     if (row) {
                         row.remove();
-                    }  
+                    }
             });
-        })  
+        })
         }
-    
+
     function capitalizeFirstLetter(string) {
         return string.charAt(0).toUpperCase() + string.slice(1);
     }
-    
+
     function compareTimes(time1, time2) {
         const [hours1, minutes1] = time1.split(':');
         const [hours2, minutes2] = time2.split(':');
-    
+
         const time1InMinutes = parseInt(hours1) * 60 + parseInt(minutes1);
         const time2InMinutes = parseInt(hours2) * 60 + parseInt(minutes2);
-    
+
         return time1InMinutes === time2InMinutes;
     }
-    
+
     function deleteServiceFunction(id) {
         var myForm = document.querySelector('#servicesOfferedFields');
         var formData = new FormData(myForm);
@@ -958,7 +976,7 @@
         if (input.value > 60) {
             input.value = 60
             return;
-        }        
+        }
         var myForm = document.querySelector('#duration');
         var formData = new FormData(myForm);
         formData.append("service_id_duration", id)
@@ -993,15 +1011,14 @@
         }
     });
 
-    function logoutbutton(){
-        window.location.href="/logout_view"
-    }
+
     document.addEventListener('click', function (e) {
         var modal = document.getElementById('appointmentModal');
         if (e.target.className === 'modal') {
             modal.style.display = "none"
         }
     });
+
 </script>
 <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
 </html>

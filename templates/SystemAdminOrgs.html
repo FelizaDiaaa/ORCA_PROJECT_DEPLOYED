@@ -152,12 +152,12 @@
         <div class="orgs-ls">
           {% for organization in organizations %}
           <div class="clinic-card">
-              <img src={{organization.cliniclogo}} alt="Clinic 1" class="clinic-image">
+              <img src={{organization.cliniclogo.url}} alt="Clinic 1" class="clinic-image">
               <div class="clinic-name">{{organization.organization_name}}</div>
               <ul class="clinic-info">
-                  <li><strong>Address: </strong>{{organization.user.address}}</li>
-                  <li><strong>Contact Number: </strong> {{organization.user.contactnumber}}</li>
-                  <li><strong>Business Hours: </strong> {{organization.clinichours}}</li>
+                  <li><p style="line-height: 1.6; margin: 0;"><strong>Address: </strong>{{organization.user.address}}</p></li>
+                  <li><p style="line-height: 1.6; margin: 0;"><strong>Contact Number: </strong> {{organization.user.contactnumber}}</p></li>
+                  <!-- <li><p style="line-height: 1.6; margin: 0;"><strong>Business Hours: </strong> {{organization.clinichours}}</p></li> -->
               </ul>
               <button class="btn-clinic" data-bs-toggle="modal" data-bs-target="#clinicModal" onclick="seeOrg({{organization.id}})">See More Info</button>
               <button class="btn-clinic btn-delete" data-bs-toggle="modal" data-bs-target="#deleteModal" onclick="deleteOrg({{organization.id}})">Delete Account</button>

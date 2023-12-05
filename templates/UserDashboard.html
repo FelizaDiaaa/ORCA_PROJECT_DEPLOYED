@@ -12,8 +12,29 @@
   <title>MAIN USER SiDE NAVIGATION PANEL</title>
 </head>
 <style>
+  @import url('https://fonts.googleapis.com/css2?family=Arvo:wght@700&display=swap');
+    /* Subheaders */
+    @import url('https://fonts.googleapis.com/css2?family=Nunito:wght@500&display=swap');
+    /* body base text */
+    @import url('https://fonts.googleapis.com/css2?family=Hind+Guntur&display=swap');
+    h1 {
+      font-size: 2.986rem;
+      font-family: 'Arvo';
+    }
+    .Subheaders {
+      font-family: 'Nunito';
+      font-size: 1.728rem;
+    }
+    .Subheaders > span {
+      font-size: 2.986rem;
+      font-weight: 700;
+    }
+    body {
+      all: initial;
+      font-family: 'Hind Guntur';
+      font-size: 1rem;
+    }
   .dashboard {
-    position:static;
     height: 100vh;
     width: 100vw;
     margin-left: 240px;
@@ -84,11 +105,9 @@
     position: fixed;
     display: flex;
     height: 100vh;
+    z-index: 10;
   }
   .burg-button {
-    display: none;
-  }
-  .mobile-menu, .nav-mob {
     display: none;
   }
   ul {
@@ -96,6 +115,11 @@
   }
   a {
     text-decoration: none;
+  }
+  @media screen and (min-width: 1081px) {
+       .mobile-menu {
+    display:grid !important;
+    }
   }
   @media screen and (min-width: 768px) and (max-width: 1080px){
     .navbtn > a > span, .navbtn1 > a > span {
@@ -138,6 +162,9 @@
     .dashboard {
       margin-left : 64px;
     }
+    .mobile-menu {
+    display:grid !important;
+    }
   }
   @media screen and (max-width: 767px) {
     .navbar-container, .user-identifier {
@@ -157,7 +184,7 @@
       height: 100%;
       margin-right: 16px;
     }
-    
+
     .side-logo {
       all: initial;
       height: 100%;
@@ -176,6 +203,7 @@
       position: fixed;
       width: 100%;
       height: 80px;
+      z-index: 1000;
       display: flex;
       justify-content: space-between;
       align-items: center;
@@ -189,8 +217,9 @@
       right: 0;
       width: 50vw;
       height: 100vh;
-      z-index: -1;
       background-color: #1e262d;
+      font-family: "Hind Guntur";
+      z-index: -1;
     }
     .nav-menu {
       width: 100%;
@@ -201,41 +230,10 @@
       height: fit-content;
       padding: 100px 0 0 0;
     }
-    .res-mobile {
-      width: 100vw;
-      height: 80px;
-      background-color: #1e262d;
-      overflow: hidden;
-      display: grid;
-      grid-template-columns: auto auto;
-      padding: 0 24px;
-      place-items: center;
-      justify-content: space-between;
-    }
-    .mobile-menu {
-      position: absolute;
-      height: 100vh;
-      width: 100vw;
-      grid-template-columns: auto;
-      display: none;
-      background-color: #fff;
-    }
-    .nav-mob {
-      display: block;
-      z-index: -1;
-    }
-    .m-r-img {  
-      display: grid;
-      grid-template-columns: auto auto;
-      place-items: center;
-    }
-    .user-identifier > span {
-      padding-left: 10px;
-    }
   }
   .disabled-link {
     pointer-events: none;
-    color: #888; 
+    color: #888;
     cursor: not-allowed !important;
   }
 </style>
@@ -245,21 +243,23 @@
     <nav class="c-width" style="background-color: #1e262d;">
       <div class="side-logo" style="background-color: #1e262d!important;">
         <img src="{%static 'img/orca web logo.png'%}" alt="Logo">
-        {% if users.usertype == 1 or users.usertype == 5%}
-          <p style="padding: 16px 0 8px 0;" class="user-identifier">CLIENT</p> 
+        <div class="desktop mobile">
+          {% if users.usertype == 1 or users.usertype == 5%}
+          <p style="padding: 16px 0 8px 0;" class="user-identifier">CLIENT</p>
         {% elif users.usertype == 2 %}
-          <p style="padding: 16px 0 8px 0;" class="user-identifier">APPLYING FOR VOLUNTEER</p> 
+          <p style="padding: 16px 0 8px 0;" class="user-identifier">APPLYING FOR VOLUNTEER</p>
         {% elif users.usertype == 4 %}
-          <p style="padding: 16px 0 8px 0;" class="user-identifier">VOLUNTEER</p> 
+          <p style="padding: 16px 0 8px 0;" class="user-identifier">VOLUNTEER</p>
         {% elif users.usertype == 6 %}
-          <p style="padding: 16px 0 8px 0;" class="user-identifier">CLIENT and VOLUNTEER</p> 
+          <p style="padding: 16px 0 8px 0;" class="user-identifier">CLIENT and VOLUNTEER</p>
         {% endif %}
-        
+        </div>
+
       </div>
       <div class="burg-button">
-        <i class="fa fa-bars" style="font-size:32px; color: #f8f8f8;"></i>
+        <i class="fa fa-bars" style="font-size:32px; color: #f8f8f8;" onclick="handleToggle()"></i>
       </div>
-      <div class="navbar-container">
+      <div class="navbar-container mobile-menu">
         <ul class="nav-menu">
           <li class="navbtn"><a class="b-bot" href="userhome"><i class="fas fa-home" style="padding-right: 16px; width: 32px;"></i><span>Home</span></a></li>
           <li class="navbtn"><a class="b-bot" href="userprofile"><i class="fas fa-user" style="padding-right: 16px; width: 32px;"></i><span>User Profile</span></a></li>
@@ -282,48 +282,6 @@
         </ul>
       </div>
     </nav>
-    <div class="nav-mob">
-      <nav class="res-mobile">
-        <div class="m-r-img">
-          <img src="{%static 'img/orca web logo.png'%}" alt="Logo" width="64px">
-          {% if users.usertype == 1 or users.usertype == 5%}
-          <p class="user-identifier" style="margin-top: 16px; margin-left: 32px; border-left: 2px solid #888;"><span>CLIENT</span></p> 
-          {% elif users.usertype == 2 %}
-          <p class="user-identifier" style="margin-top: 16px; margin-left: 32px; border-left: 2px solid #888;"><span>APPLYING FOR VOLUNTEER</span></p> 
-          {% elif users.usertype == 4 %}
-          <p class="user-identifier" style="margin-top: 16px; margin-left: 32px; border-left: 2px solid #888;"><span>VOLUNTEER</span></p> 
-          {% elif users.usertype == 6 %}
-          <p class="user-identifier" style="margin-top: 16px; margin-left: 32px; border-left: 2px solid #888;"><span>CLIENT and VOLUNTEER</span></p> 
-          {% endif %}
-        </div>
-        <div onclick="handleToggle()">
-          <i class="fa fa-bars" style="font-size:32px; color: #f8f8f8;"></i>
-        </div>
-      </nav>
-    <div class="mobile-menu">
-      <ul>
-        <li class=""><a class="" href="userhome"><i class="fas fa-home" style="padding-right: 16px; width: 32px;"></i><span>Home</span></a></li>
-        <li class=""><a class="" href="userprofile"><i class="fas fa-user" style="padding-right: 16px; width: 32px;"></i><span>User Profile</span></a></li>
-        <li class=""><a class="" href="userappointments"><i class="far fa-calendar-alt" style="padding-right: 16px; width: 32px;"></i><span>Appointments</span></a></li>
-        <li class=""><a class="" href="userpets"><i class="fas fa-paw" style="padding-right: 16px; width: 32px;"></i><span>My Pets</span></a></li>
-        {% if users.usertype == 1 or users.usertype == 5 or users.usertype == 2 %}
-          <li class="">
-            <a class="b-bot disabled-link" href="#">
-              <i class="fas fa-lock" style="padding-right: 16px; width: 32px;"></i><span>My Highlights</span>
-            </a>
-          </li>
-        {% else %}
-          <li class="">
-            <a class="b-bot" href="userhighlights">
-              <i class="fas fa-star" style="padding-right: 16px; width: 32px;"></i><span>My Highlights</span>
-            </a>
-          </li>
-        {% endif %}
-        <li class=""><a class="b-bot" href="/logout_view"><i class="fa-solid fa-right-from-bracket fa-rotate-180" style="padding-left: 16px; width: 32px;"></i><span>Logout</span></a></li>
-      </ul>
-    </div>
-  </div>
-    
   </div>
   <div class="dashboard">
 </body>

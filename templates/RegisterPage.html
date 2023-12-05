@@ -17,6 +17,13 @@
     @import url('https://fonts.googleapis.com/css2?family=Nunito:wght@500&display=swap');
     /* body base text */
     @import url('https://fonts.googleapis.com/css2?family=Hind+Guntur&display=swap');
+
+    .form-label{
+      font-family: 'Hind Guntur';
+    }
+    .form-control{
+      font-family: 'Nunito';
+    }
     h1 {
       font-size: 2.986rem;
     }
@@ -64,6 +71,7 @@
       justify-content: start;
       flex-direction: row;
       align-items: center;
+      font-family: 'Nunito';
     }
     .opt-field {
       margin: 16px 0 0 8px;
@@ -86,6 +94,7 @@
       place-items: center;
       grid-template-columns: auto auto;
       border-bottom: 2px solid #0000002c;
+      font-family: 'Nunito';
       /* filter: drop-shadow(1px 0 1px); */
     }
     
@@ -392,16 +401,16 @@
               <div class="form-section row col-custom">
                 <div class="col-md-9 c-password">
                   <label for="password" class="form-label">Password <span style="color: rgb(202, 6, 6)">*</span></label>
-                  <div style="display:flex; align-items: center">
+                  <div style="display:flex; align-items: center; position: relative;">
                     <input type="password" name="password" class="form-control" id="password" required minlength="6">
-                    <i class="toggle-password fas fa-eye" onclick="togglePassword('password')"></i>
+                    <i class="toggle-password fas fa-eye" onclick="togglePassword('password')" style="position: absolute; right: 12px; font-size: 1.1rem; color: #000000c5; cursor: pointer; padding:4px;"></i>
                   </div>
                 </div>
                 <div class="col-md-9 c-password2">
                   <label for="password2" class="form-label">Confirm Password <span style="color: rgb(202, 6, 6)">*</span></label>
-                  <div style="display:flex; align-items: center">
+                  <div style="display:flex; align-items: center; position: relative;">
                     <input type="password" name="password2" class="form-control" id="password2" required minlength="6">
-                    <i class="toggle-password fas fa-eye" onclick="togglePassword('password2')"></i>
+                    <i class="toggle-password fas fa-eye" onclick="togglePassword('password2')" style="position: absolute; right: 12px; font-size: 1.1rem; color: #000000c5; cursor: pointer; padding:4px;"></i>
                   </div>
                 </div>
               </div>
@@ -585,17 +594,17 @@
                 <br>
                 <div class="col-md-6 fname">
                   <label for="orgPassword" class="form-label">Password <span style="color: rgb(202, 6, 6)">*</span></label>
-                  <div style="display:flex; align-items: center">
+                  <div style="display:flex; align-items: center; position: relative;">
                     <input type="password" name="clinic_password" class="form-control" id="orgPassword" required>
-                    <i class="toggle-password fas fa-eye" onclick="togglePassword('orgPassword')"></i>
+                    <i class="toggle-password fas fa-eye" onclick="togglePassword('orgPassword')" style="position: absolute; right: 12px; font-size: 1.1rem; color: #000000c5; cursor: pointer; padding:4px;"></i>
                   </div>
                 </div>
                 <br>
                 <div class="col-md-6 fname">
                   <label for="orgPassword1" class="form-label">Repeat Password <span style="color: rgb(202, 6, 6)">*</span></label>
-                  <div style="display:flex; align-items: center">
+                  <div style="display:flex; align-items: center; position: relative;">
                     <input type="password" name="clinic_password2" class="form-control" id="orgPassword1" required>
-                    <i class="toggle-password fas fa-eye" onclick="togglePassword('orgPassword1')"></i>
+                    <i class="toggle-password fas fa-eye" onclick="togglePassword('orgPassword1')" style="position: absolute; right: 12px; font-size: 1.1rem; color: #000000c5; cursor: pointer; padding:4px;"></i>
                   </div>
                 </div>
               </div>

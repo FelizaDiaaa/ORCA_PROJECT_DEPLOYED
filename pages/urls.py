@@ -24,10 +24,6 @@ urlpatterns = [
     path('userpets', views.UserPetsPage.as_view(), name='UserPetsPage'),
     path('userhighlights', views.UserHighlightsPage.as_view(), name='UserHighlightsPage'),
 
-    path('try', views.trypage.as_view(), name='trypage'),
-    path('sample', views.Sample.as_view(), name='sample.html'),
-
-
     path('orgdashboard', views.OrgDashboard.as_view(), name='OrgDashboard'),
     path('orghome', views.OrgHomePage.as_view(), name='OrgHomePage'),
     path('orgprofile', views.OrgProfilePage.as_view(), name='OrgProfilePage'),
@@ -42,6 +38,9 @@ urlpatterns = [
 
     path('logout_view/', views.logout_view, name='logout_view'),
     path('logout_view', views.logout_view, name='logout_view'),
-    
+
 ]
+
+urlpatterns += static(settings.STATIC_URL, document_root=settings.STATIC_ROOT)
 urlpatterns += static(settings.MEDIA_URL, document_root=settings.MEDIA_ROOT)
+

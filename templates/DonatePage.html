@@ -8,18 +8,20 @@
   <link rel="icon" type="image/x-icon" href="{% static 'img/orca web logo.png' %}">
   <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
   <title>ORCA: Donate to Animal Clinics</title>
-  <style>/* Heading 1 */
+  <style>
+    /* Heading 1 */
     @import url('https://fonts.googleapis.com/css2?family=Arvo:wght@700&display=swap');
     /* Subheaders */
     @import url('https://fonts.googleapis.com/css2?family=Nunito:wght@500&display=swap');
     /* body base text */
     @import url('https://fonts.googleapis.com/css2?family=Hind+Guntur&display=swap');
+
     h1 {
       font-size: 2.986rem;
     }
     .Subheaders {
       font-family: 'Nunito';
-      font-size: 1.728rem;
+      font-size: 2rem;
     }
     .Subheaders > span {
       font-size: 2.986rem;
@@ -39,6 +41,7 @@
     .l-nav{
       height: 100%;
       display: flex;
+      font-family: 'Nunito';
     }
     .nav-item{
       height: 100%;
@@ -86,6 +89,7 @@
       height: 20%;
       display: flex;
       align-items: center;
+      justify-content: center;
     }
     .clinics {
       width: 100%;
@@ -94,7 +98,6 @@
       grid-template-columns: repeat(auto-fit, minmax(600px, auto));
       justify-content: space-evenly;
       grid-gap: 32px;
-      padding: 32px 0 32px 0;
     }
     .card {
       height: fit-content;
@@ -142,7 +145,6 @@
       height: 60px; 
       width: fit-content;
       padding: 0 0 0 32px;
-      filter: drop-shadow(#000 1px 3px 1px);
     }
     .dnt-btn {
       background-color: #FF6200;
@@ -288,6 +290,9 @@
       .buymeacoffee-container {
         padding-top: 600px;
       }
+      .Subheaders{
+        font-size: 1.7rem;
+      }
     }
     @media screen and (min-width: 360px) and (max-width: 767px){
       .lg-screen{
@@ -310,13 +315,14 @@
         grid-gap: 32px;
         padding: 32px;
         height: 100%;
-        width: fit-content;
+        width: 100%;
+      }
+      .container {
+        display: flex;
       }
       .mobile-card {
-        position: relative;
         width: 100%;
         display: grid;
-        place-items: space-between;
         align-items: center;
         background-color: #2F4858;
         font-family: "Hind Guntur";
@@ -465,7 +471,7 @@
   </div>
   <div class="content">
     <div class="title" style="display: flex;">
-      <h2 class="Subheaders">CHOOSE CLINICS YOU WANT TO DONATE</h2>
+      <h2 class="Subheaders">CHOOSE CLINICS YOU WANT TO <span style="color: limegreen;">DONATE</span></h2>
     </div>
     <div class="container">
       
@@ -473,7 +479,7 @@
         {% for organization in organizations %}
         <div class="card">
           <div class="ngo-icon">
-            <img src={{organization.cliniclogo}}  alt="clinic image 1" style="height: 150px;">
+            <img src={{organization.cliniclogo.url}}  alt="clinic image 1" style="height: 150px;">
           </div>
           <div class="ngo-desc">
             <h3>{{organization.organization_name}}</h3>
@@ -491,7 +497,7 @@
         <div class="mobile-card">
           <div class="ico-container">
             <div class="ngo-icon">
-              <img src={{organization.cliniclogo}}  alt="clinic image 1" style="height: 80px;">
+              <img src={{organization.cliniclogo.url}}  alt="clinic image 1" style="height: 80px;">
             </div>
           </div>
           <div class="ngo-desc">

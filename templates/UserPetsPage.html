@@ -10,14 +10,43 @@
   <link rel="icon" type="image/x-icon" href="{% static 'img/orca web logo.png' %}">
   <title>User Pets Page</title>
   <style>
-
+    @import url('https://fonts.googleapis.com/css2?family=Arvo:wght@700&display=swap');
+      /* Subheaders */
+      @import url('https://fonts.googleapis.com/css2?family=Nunito:wght@500&display=swap');
+      /* body base text */
+      @import url('https://fonts.googleapis.com/css2?family=Hind+Guntur&display=swap');
+      h1 {
+        font-size: 2.986rem;
+        font-family: 'Arvo';
+      }
+      .Subheaders {
+        font-family: 'Nunito';
+        font-size: 1.728rem;
+      }
+      .Subheaders > span {
+        font-size: 2.986rem;
+        font-weight: 700;
+      }
+      body {
+        all: initial;
+        font-family: 'Hind Guntur';
+        font-size: 1rem;
+      }
     .flex-grow-1{
       height: auto;
       min-height: 100vh;
       display: flex;
       background-color: #FFEED9;
     }
-    
+    .center {
+        width:auto;
+        align-items:center;
+        justify-content:center;
+        text-align:center;
+        display:flex;
+        height:auto;
+    }
+
     .profile-box{
       background: white;
       border-radius: 5px;
@@ -26,12 +55,7 @@
       margin-bottom: 10px;
       margin: 10px;
     }
-    
-    /* .profile-box img{
-      width: 230px;
-      height: 150px;
-      object-fit: cover;
-    } */
+
 
     .container-img{
       overflow: hidden;
@@ -39,11 +63,20 @@
       width: 230px;
       height: 230px;
       background-color: #000000;
-      
+
+    }
+     .container-img img{
+      width: 230px;
+      height: 150px;
+      object-fit: cover;
+      text-align:center;
+      display:flex;
+      justify-content:center;
+      align-items:center;
     }
 
     .pet-name {
-      font-size: 18px;
+      font-size: 3em;
       text-align: center;
       font-weight: bold;
       margin-top: 10px;
@@ -54,7 +87,7 @@
 
     }
 
-    @media (max-width: 768px){
+    @media screen and (min-width: 375px) and (max-width: 768px){
       .container{
         flex-wrap: wrap;
         justify-content: center;
@@ -64,12 +97,14 @@
         display: none;
       }
       .profile-box{
-        padding: 10px;
+        width: 100%;
       }
       .side-logo{
         width: 40px;
         margin-left: -10px;
       }
+
+
     }
 
     .hashtag-container {
@@ -99,11 +134,11 @@
         border-radius: 4px;
         margin: 4px;
       }
-      
+
       .hashtag {
         margin-right: 4px;
       }
-      
+
       .badge-close {
         cursor: pointer;
         margin-left: 4px;
@@ -116,7 +151,7 @@
         flex-wrap: wrap;
         gap: 10px; /* Adjust the gap between options as needed */
       }
-      
+
       /* Style the custom checkbox */
       .hashtag-option + label {
         flex: 0 0 calc(33.33% - 10px); /* Adjust the width of each option, considering the gap */
@@ -125,7 +160,7 @@
         cursor: pointer;
         margin-bottom: 10px; /* Adjust the margin between rows as needed */
       }
-      
+
       .hashtag-option + label:before {
         content: "";
         position: absolute;
@@ -139,20 +174,20 @@
         box-sizing: border-box;
         transition: background-color 0.3s;
       }
-      
+
       .hashtag-option:checked + label:before {
         background-color: #007bff; /* Change background color when checked */
         border-color: #007bff; /* Change border color when checked */
       }
-      
+
       /* Style the text next to the checkbox */
       .hashtag-option + label:after {
         content: attr(data-option);
         margin-left: 8px; /* Space between checkbox and text */
       }
-      
-      
-      
+
+
+
   </style>
 </head>
 
@@ -160,13 +195,13 @@
   <div class="d-flex">
    {% include 'UserDashboard.html' %}
     <!--USER PROFILE INFORMATION-->
-    <div class="flex-grow-1 p-5">
+    <div class="flex-grow-1 p-4">
         <!--pets and add a pet button-->
         <form id="fetchBreed" method="POST">
           {% csrf_token %}
         </form>
-        <div class="row-md-3">
-          <div class="d-flex justify-content-between align-items-center mb-3">
+        <div class="row-md-3 w-100">
+          <div class="d-flex justify-content-between align-items-center mb-3 w-100 h-auto">
             <h2 class="mb-0">PETS</h2>
             <button id="addPetButton" class="btn btn-primary" data-bs-toggle="modal" data-bs-target="#addPetModal">
                 Add a Pet
@@ -174,12 +209,14 @@
           </div>
 
           <!--pets-->
-          <div class="container d-flex flex-wrap">
+          <div class="container d-flex flex-wrap p-0 m-0 gap-2">
               {% for pets in pets %}
                 <div class="profile-box">
-                  <div class="container-img">
-                    <img src={{pets.pet_picture}} alt="pet photo" style="height: 230px;">
-                  </div>
+                    <div class="center">
+                      <div class="container-img">
+                        <img src={{pets.pet_picture.url}} alt="pet photo" style="height: 230px;">
+                      </div>
+                    </div>
                     <div class="pet-name">{{pets.pet_name}}</div>
                       <div class="pet-info">
                         <strong>Birthdate: </strong>{{ pets.pet_birthdate|date:"F d, Y" }}</br>
@@ -190,7 +227,7 @@
                       </div>
                       <br/>
                 </div>
-              {% endfor %} 
+              {% endfor %}
           </div>
 
   <!-- Modal for adding a pet -->
@@ -317,7 +354,7 @@ function petTypeChanged() {
     body: formData
   })
   .then(response => response.json())
-  .then(data => { 
+  .then(data => {
     const defaultBreeds = data.breeds.map(breed => breed.breed);
 
     // Set default breeds to the optionsList

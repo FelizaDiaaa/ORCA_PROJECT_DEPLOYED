@@ -9,12 +9,10 @@ from django.utils import timezone
 from datetime import datetime, timedelta, time, date
 from django.core import serializers
 current_date = timezone.now().date()
-from .forms import UserUpdateForm
 from asgiref.sync import async_to_sync
-from channels.layers import get_channel_layer
-from django.db.models import Sum, Min, Count
-
-
+from django.db.models import Sum, Min
+from django.db import transaction
+from django.db.models import Q
 orgID = ""
 @login_required
 def protected_view(request):
@@ -41,14 +39,14 @@ class MainPage(TemplateView):
     template_name = 'MainPage.html'
     def get(self,request):
         try:
-            users = User.objects.get(email = request.session['username']) 
+            users = User.objects.get(email = request.session['username'])
             if users.usertype == 3:
                 return redirect('/orghome')
             elif users.usertype == 7:
                 request.session.flush()
                 return render(request,'MainPage.html')
             elif users.usertype != 3 and users.usertype != 7:
-                return redirect('/userhome') 
+                return redirect('/userhome')
         except Exception as e:
             return render(request,'MainPage.html')
 
@@ -66,7 +64,7 @@ class VolunteerOrgPage(TemplateView):
         organizations = Organization.objects.filter(organizationstatus=2)
 
         return render(request, 'VolunteerOrgPage.html', {"organizations": organizations})
-    
+
 class VolunteerPage (TemplateView):
     template_name = 'VolunteerPage.html'
     def post(self,request):
@@ -79,14 +77,29 @@ class VolunteerPage (TemplateView):
         if password1 != password2:
             return JsonResponse({'noData' : False, 'error' : 'Password do not match!'})
         try:
+            try:
+                existing_user = User.objects.get(Q(email=request.POST['email']))
+            except:
+                existing_user = ""
 
-            
-            org = Organization.objects.get(id = org_cookie_value)       
-            user = User.objects.create_superuser(firstname = request.POST['firstname'], lastname = request.POST['lastname'], 
+            try:
+                existing_user1 = User.objects.get(Q(contactnumber=request.POST['number']))
+            except:
+                existing_user1 = ""
+            if existing_user and existing_user1:
+                error = "Email and Contact Number Already Used"
+            elif existing_user:
+                error = "Email Already Used"
+            elif existing_user1:
+                error = "Contact Number Already Used"
+            return JsonResponse({'noData': False, 'error':error})
+        except:
+
+            org = Organization.objects.get(id = org_cookie_value)
+            user = User.objects.create_superuser(firstname = request.POST['firstname'], lastname = request.POST['lastname'],
                                         contactnumber = request.POST['contactnumber'], address = request.POST['address'],
                                         email = request.POST['email'], usertype = 2, password = request.POST['password'] )
             user.save()
-            user_id = user.id
             volunteer = Volunteer.objects.create(user = user, idpicture = request.FILES['validID'], idpictureback=request.FILES['validID1'])
             volunteer.save()
 
@@ -97,31 +110,22 @@ class VolunteerPage (TemplateView):
 
             volunteerRecords.save()
             return JsonResponse({'noData': True})
-        except Exception as e:
-            print(e)
-            try:
-                user = User.objects.get(id = user_id)
-                user.delete()
-            except:
-                print(user_id)
-            return JsonResponse({'noData': False, 'error':str(e)})
 
 class RegisterPage(TemplateView):
     template_name = 'RegisterPage.html'
     def get(self,request):
         try:
-            users = User.objects.get(email = request.session['username']) 
+            users = User.objects.get(email = request.session['username'])
             if users.usertype == 3:
                 return redirect('/orghome')
             elif users.usertype == 7:
                 request.session.flush()
                 return render(request, 'RegisterPage.html')
             elif users.usertype != 3 and users.usertype != 7:
-                return redirect('/userhome') 
+                return redirect('/userhome')
         except Exception as e:
             return render(request, 'RegisterPage.html')
-        
-        
+
     def post(self,request):
         usertype = request.POST.get('usertype')
         password1 = request.POST.get('password')
@@ -132,7 +136,7 @@ class RegisterPage(TemplateView):
 
         if request.POST['usertype'] == "client":
             try:
-                user = User.objects.create_superuser(firstname = request.POST['firstname'], lastname = request.POST['lastname'], 
+                user = User.objects.create_superuser(firstname = request.POST['firstname'], lastname = request.POST['lastname'],
                                                     contactnumber = request.POST['contactnumber'], address = request.POST['address'],
                                                     email = request.POST['email'], usertype = 1, password = request.POST['password'] )
                 user.save()
@@ -141,18 +145,34 @@ class RegisterPage(TemplateView):
                 print(f"An error occurred: {e}")
                 return JsonResponse({'noData': False, 'error': str(e)})
         else:
-                
+
             if request.POST['clinic_password'] != request.POST['clinic_password2']:
                 return JsonResponse({'noData' : False, 'error' : 'Password do not match!'})
             try:
-                user = User.objects.create_superuser(firstname = "org", lastname = "org", 
+                try:
+                    existing_user = User.objects.get(Q(email=request.POST['clinic_email']))
+                except:
+                    existing_user = ""
+
+                try:
+                    existing_user1 = User.objects.get(Q(contactnumber=request.POST['contact_number']))
+                except:
+                    existing_user1 = ""
+                if existing_user and existing_user1:
+                    error = "Email and Contact Number Already Used"
+                elif existing_user:
+                    error = "Email Already Used"
+                elif existing_user1:
+                    error = "Contact Number Already Used"
+                return JsonResponse({'noData': False, 'error':error})
+            except:
+                user = User.objects.create_superuser(firstname = "org", lastname = "org",
                                                     contactnumber = request.POST['contact_number'], address = request.POST['clinic_location'],
                                                     email = request.POST['clinic_email'], usertype = 3, password = request.POST['clinic_password'] )
                 user.save()
-                user_id = user.id
-                organization = Organization.objects.create(organization_name = request.POST['organization_name'], user = user, 
-                                                        cliniclogo = request.FILES['cliniclogo'], 
-                                                        qrcodebuymeacoffee = request.FILES['qrcodebuymeacoffee'], qrcodegcash = request.FILES['qrcodegcash'], 
+                organization = Organization.objects.create(organization_name = request.POST['organization_name'], user = user,
+                                                        cliniclogo = request.FILES['cliniclogo'],
+                                                        qrcodebuymeacoffee = request.FILES['qrcodebuymeacoffee'], qrcodegcash = request.FILES['qrcodegcash'],
                                                         qrcodepaypal = request.FILES['qrcodepaypal'], certificate_of_accreditation = request.FILES['certificate_of_accreditation'])
                 organization.save()
                 checked_values = request.POST.getlist('days[]')
@@ -179,7 +199,7 @@ class RegisterPage(TemplateView):
                         while current_time < time_out:
                             if current_time.time() < lunch_start or current_time.time() >= lunch_end:
                                 AppointmentTime.objects.create(appointment_time=current_time.time().strftime('%H:%M'), businesshours=business)
-                            
+
                             current_time += timedelta(minutes=60)
                 services = Services.objects.filter(organization_id=organization.id).exists()
 
@@ -190,26 +210,20 @@ class RegisterPage(TemplateView):
                     Services.objects.create(service_offered="Checkup", organization_id=organization.id, duration=15)
 
                 return JsonResponse({'noData': True, 'org': request.POST['organization_name']})
-            except Exception as e:
-                try:
-                    user = User.objects.get(id = user_id)
-                    user.delete()
-                except:
-                    print(user_id)
-                return JsonResponse({'noData': False, 'error':str(e)})
+
 
 class LoginPage (TemplateView):
     template_name = 'LoginPage.html'
+
     def get(self,request):
         try:
-            users = User.objects.get(email = request.session['username']) 
-            if users.usertype == 3:
-                return redirect('/orghome')
-            elif users.usertype == 7:
+            users = User.objects.get(email = request.session['username'])
+            if users.usertype == 7:
                 request.session.flush()
                 return render(request,'LoginPage.html')
-            elif users.usertype != 3 and users.usertype != 7:
-                return redirect('/userhome') 
+            else:
+                return redirect('/main')
+
         except Exception as e:
             return render(request,'LoginPage.html')
     def post(self,request):
@@ -220,35 +234,32 @@ class LoginPage (TemplateView):
             login(request,user)
             request.session['username'] = email
             request.session.save()
-            user = User.objects.get(email = request.session['username']) 
+            user = User.objects.get(email = request.session['username'])
             return JsonResponse({'noData': False, 'usertype': user.usertype})
         else:
 
             return JsonResponse({'noData': True, 'error': "Invalid Email or Password!"})
 
-class Sample(TemplateView):
-    template_name = 'sample.html'
-    
-class UserDashboard(TemplateView, LoginRequiredMixin):
+
+class UserDashboard( LoginRequiredMixin, TemplateView):
     template_name = 'UserDashboard.html'
     def get(self,request):
         users = User.objects.get(email = request.session['username'])
         return render(request, 'UserDashboard.html', {"users" : users})
 
-class UserProfilePage(TemplateView, LoginRequiredMixin):
+class UserProfilePage(LoginRequiredMixin, TemplateView):
     template_name = 'UserProfilePage.html'
 
     def get(self,request):
         try:
-            users = User.objects.get(email = request.session['username']) 
-            if users.usertype == 3 or users.usertype == 7:
-                return redirect('/login')
-            else: 
-                return render(request, 'UserProfilePage.html', {"users" : users})   
+            users = User.objects.get(email = request.session['username'])
+            if users.usertype == 3:
+                 return render(request, 'UserHomePage.html', {"error": "You don't have permission to access this web page!"})
+            return render(request, 'UserProfilePage.html', {"users" : users})
         except Exception as e:
             print(e)
-            return redirect('/login')
-        
+            return redirect('/main')
+
 
     def post(self,request):
         user = User.objects.get(id= request.POST['userid'])
@@ -261,85 +272,82 @@ class UserProfilePage(TemplateView, LoginRequiredMixin):
         user.save()
         return JsonResponse({'accepted': True})
 
-class UserHomePage(TemplateView, LoginRequiredMixin):
+
+class UserHomePage(LoginRequiredMixin, TemplateView):
     template_name = 'UserHomePage.html'
 
-    def get(self,request):
-        try:
-            users = User.objects.get(email = request.session['username']) 
-            if users.usertype == 3 or users.usertype == 7:
-                return redirect('/login')
-            else:
-                pets = PetBreed.objects.exists()
-                if not pets:
-                    PetBreed.objects.create(pet_breed='Aspin', pet_type="dog")
-                    PetBreed.objects.create(pet_breed='Shih Tzu', pet_type="dog")
-                    PetBreed.objects.create(pet_breed='Chow Chow', pet_type="dog")
-                    PetBreed.objects.create(pet_breed='Poodle', pet_type="dog")
-                    PetBreed.objects.create(pet_breed='Golden Retriever', pet_type="dog")
-                    PetBreed.objects.create(pet_breed='Siberian Husky', pet_type="dog")
-                    PetBreed.objects.create(pet_breed='Pug', pet_type="dog")
-                    PetBreed.objects.create(pet_breed='Pomeranian', pet_type="dog")
-                    PetBreed.objects.create(pet_breed='German Shepherd', pet_type="dog")
-                    PetBreed.objects.create(pet_breed='Beagle', pet_type="dog")
-                    PetBreed.objects.create(pet_breed='Puspin', pet_type="cat")
-                    PetBreed.objects.create(pet_breed='Siamese', pet_type="cat")
-                    PetBreed.objects.create(pet_breed='Himalayan', pet_type="cat")
-                    PetBreed.objects.create(pet_breed='Persian', pet_type="cat")
-                    PetBreed.objects.create(pet_breed='Russian Blue', pet_type="cat")
-                    PetBreed.objects.create(pet_breed='Chinchilla', pet_type="cat")
-                    PetBreed.objects.create(pet_breed='Tonkinese', pet_type="cat")
-                    PetBreed.objects.create(pet_breed='Birman', pet_type="cat")
-                    PetBreed.objects.create(pet_breed='Korat', pet_type="cat")
-                    PetBreed.objects.create(pet_breed='Tiffanie', pet_type="cat")
-                organizations = Organization.objects.filter(organizationstatus=2)
-                veterinarians = Veterinarian.objects.all()
-                highlights = Highlights.objects.all()
-                pets = Pets.objects.filter(user_id = users.id)
-                volunteerRecords = VolunteerRecord.objects.all()
-                volunteers = Volunteer.objects.all()
-                data = []
-                for organization in organizations:
-                    try:
-                        volunteer = Volunteer.objects.get(user_id = users.id)
-                        organization_exists_in_records = volunteerRecords.get(org_id=organization.id, volunteer_id=volunteer.id)
-                    except:
-                        organization_exists_in_records = False
 
-                    if organization_exists_in_records:
-                        organization_exists_in_records = True
-                        volunteer = Volunteer.objects.get(user_id = users.id)
-                        try:
-                            volunteer_get_status = VolunteerRecord.objects.get(org_id = organization.id, volunteer_id = volunteer.id)
-                            volunteer_status = volunteer_get_status.volunteerstatus
-                        except:
-                            volunteer_status = None
-                    else:
+    def get(self,request):
+        users = User.objects.get(email = request.session['username'])
+        try:
+            pets = PetBreed.objects.exists()
+            if not pets:
+                PetBreed.objects.create(pet_breed='Aspin', pet_type="dog")
+                PetBreed.objects.create(pet_breed='Shih Tzu', pet_type="dog")
+                PetBreed.objects.create(pet_breed='Chow Chow', pet_type="dog")
+                PetBreed.objects.create(pet_breed='Poodle', pet_type="dog")
+                PetBreed.objects.create(pet_breed='Golden Retriever', pet_type="dog")
+                PetBreed.objects.create(pet_breed='Siberian Husky', pet_type="dog")
+                PetBreed.objects.create(pet_breed='Pug', pet_type="dog")
+                PetBreed.objects.create(pet_breed='Pomeranian', pet_type="dog")
+                PetBreed.objects.create(pet_breed='German Shepherd', pet_type="dog")
+                PetBreed.objects.create(pet_breed='Beagle', pet_type="dog")
+                PetBreed.objects.create(pet_breed='Puspin', pet_type="cat")
+                PetBreed.objects.create(pet_breed='Siamese', pet_type="cat")
+                PetBreed.objects.create(pet_breed='Himalayan', pet_type="cat")
+                PetBreed.objects.create(pet_breed='Persian', pet_type="cat")
+                PetBreed.objects.create(pet_breed='Russian Blue', pet_type="cat")
+                PetBreed.objects.create(pet_breed='Chinchilla', pet_type="cat")
+                PetBreed.objects.create(pet_breed='Tonkinese', pet_type="cat")
+                PetBreed.objects.create(pet_breed='Birman', pet_type="cat")
+                PetBreed.objects.create(pet_breed='Korat', pet_type="cat")
+                PetBreed.objects.create(pet_breed='Tiffanie', pet_type="cat")
+            organizations = Organization.objects.filter(organizationstatus=2)
+            veterinarians = Veterinarian.objects.all()
+            highlights = Highlights.objects.all()
+            pets = Pets.objects.filter(user_id = users.id)
+            volunteerRecords = VolunteerRecord.objects.all()
+            volunteers = Volunteer.objects.all()
+            data = []
+            for organization in organizations:
+                try:
+                    volunteer = Volunteer.objects.get(user_id = users.id)
+                    organization_exists_in_records = volunteerRecords.get(org_id=organization.id, volunteer_id=volunteer.id)
+                except:
+                    organization_exists_in_records = False
+
+                if organization_exists_in_records:
+                    organization_exists_in_records = True
+                    volunteer = Volunteer.objects.get(user_id = users.id)
+                    try:
+                        volunteer_get_status = VolunteerRecord.objects.get(org_id = organization.id, volunteer_id = volunteer.id)
+                        volunteer_status = volunteer_get_status.volunteerstatus
+                    except:
                         volunteer_status = None
-                    data.append({
-                        'id': organization.id,
-                        'cliniclogo': organization.cliniclogo,
-                        'organization_name': organization.organization_name,
-                        'address': organization.user.address,
-                        'contactnumber': organization.user.contactnumber,
-                        'organization_exists_in_records': organization_exists_in_records,
-                        'volunteer_status': volunteer_status
-                    })
-                return render(request, 'UserHomepage.html', {"veterinarians" : veterinarians ,"organizations": data, "pets": pets, 
-                "highlights": highlights, 'volunteerRecords': volunteerRecords, "users": users})
-        except Exception as e: 
-            print(e)
-            return redirect('/login')
+                else:
+                    volunteer_status = None
+                data.append({
+                    'id': organization.id,
+                    'cliniclogo': organization.cliniclogo,
+                    'organization_name': organization.organization_name,
+                    'address': organization.user.address,
+                    'contactnumber': organization.user.contactnumber,
+                    'organization_exists_in_records': organization_exists_in_records,
+                    'volunteer_status': volunteer_status
+                })
+            return render(request, 'UserHomePage.html', {"veterinarians" : veterinarians ,"organizations": data, "pets": pets,
+            "highlights": highlights, 'volunteerRecords': volunteerRecords, "users": users})
+        except Exception as e:
+             return render(request, 'UserHomePage.html', {"error": "You don't have permission to access this web page!"})
 
     def post(self,request):
         org_cookie_value = request.COOKIES.get('orgstr', '')
-        print(org_cookie_value)
         vet_cookie_value = request.COOKIES.get('getVetstr', '')
         user = User.objects.get(email = request.session['username'])
 
         if request.POST.get('orgHiddenId'):
             client_volunteer = Volunteer.objects.create(user_id = user.id, idpicture = request.FILES['validID'], idpictureback=request.FILES['validID1'])
-            
+
             client_volunteer.save()
             user.usertype = 5
             user.save()
@@ -367,8 +375,11 @@ class UserHomePage(TemplateView, LoginRequiredMixin):
 
         elif request.POST.get('orgIdHidden'):
             volunteer = Volunteer.objects.get(user_id = user.id)
+            volunteer.idpicture = request.FILES['validID2']
+            volunteer.idpictureback = request.FILES['validID3']
             current_datetime = timezone.now()
             record = VolunteerRecord.objects.create(volunteer_id = volunteer.id, org_id = request.POST['orgIdHidden'], dateapproved = current_datetime)
+            volunteer.save()
             record.save()
             return redirect('/userhome')
 
@@ -412,50 +423,47 @@ class UserHomePage(TemplateView, LoginRequiredMixin):
             return redirect('/userappointments')
 
 
-class UserAppointmentsPage(TemplateView, LoginRequiredMixin):
+
+class UserAppointmentsPage( LoginRequiredMixin, TemplateView):
     template_name = 'UserAppointmentsPage.html'
     def get(self,request):
         try:
             users = User.objects.get(email = request.session['username'])
-            if users.usertype == 3 or users.usertype == 7:
-                return redirect('/login')
-            else:
-                pets = Pets.objects.filter(user_id = users.id)
-                pet_ids = [pet.id for pet in pets]
+            pets = Pets.objects.filter(user_id = users.id)
+            pet_ids = [pet.id for pet in pets]
 
-                # Get current date and time
-                current_datetime = timezone.now()
+            # Get current date and time
+            current_datetime = timezone.now()
 
-                # Fetch future appointments (appointments with a start date/time greater than the current date/time)
-                future_appointments = Appointment.objects.filter(
-                    pettobring_id__in=pet_ids,
-                    appointmentdate__gte=current_datetime
-                )
+            # Fetch future appointments (appointments with a start date/time greater than the current date/time)
+            future_appointments = Appointment.objects.filter(
+                pettobring_id__in=pet_ids,
+                appointmentdate__gte=current_datetime
+            )
 
-                # Fetch past appointments (appointments with a start date/time less than or equal to the current date/time)
-                past_appointments = Appointment.objects.filter(
-                    pettobring_id__in=pet_ids,
-                    appointmentdate__lt=current_datetime
-                )
+            # Fetch past appointments (appointments with a start date/time less than or equal to the current date/time)
+            past_appointments = Appointment.objects.filter(
+                pettobring_id__in=pet_ids,
+                appointmentdate__lt=current_datetime
+            )
 
-                return render(request, 'UserAppointmentsPage.html', {
-                    "appointments": future_appointments,
-                    "past_appointments": past_appointments,
-                    'users': users
-                })
+            return render(request, 'UserAppointmentsPage.html', {
+                "appointments": future_appointments,
+                "past_appointments": past_appointments,
+                'users': users
+            })
         except Exception as e:
-            print(e)
-            return redirect('/login')
-            
-class UserPetsPage(TemplateView, LoginRequiredMixin):
+            return render(request, 'UserHomePage.html', {"error": "You don't have permission to access this web page!"})
+
+class UserPetsPage( LoginRequiredMixin, TemplateView):
     template_name = 'UserPetsPage.html'
 
     def get(self,request):
-       
+
 
         def calculate_age(birthdate):
             # Assuming birthdate is a string in the format 'YYYY-MM-DD'
-        
+
             birthdate_obj = birthdate
             date_today = datetime.now()
 
@@ -466,11 +474,11 @@ class UserPetsPage(TemplateView, LoginRequiredMixin):
                 age_years -= 1
 
             age_months = date_today.month - birthdate_obj.month
-           
+
             if date_today.day < birthdate_obj.day:
                 age_months -= 1
                 age_months = (age_months + 12) % 12
-        
+
             age_string = ''
             if age_years > 0:
                 age_string += f'{age_years} {"year" if age_years == 1 else "years"}'
@@ -483,22 +491,18 @@ class UserPetsPage(TemplateView, LoginRequiredMixin):
             return age_string
         try:
             users = User.objects.get(email = request.session['username'])
-            if users.usertype == 3 or users.usertype == 7:
-                return redirect('/login')
-            else:
-                pets = Pets.objects.filter(user_id = users.id)
-                for pet in pets:
-                    age = calculate_age(pet.pet_birthdate)
-                    pet.pet_age = age
-                    pet.save()
 
-                return render(request, 'UserPetsPage.html', {"pets": pets,  "users" : users})
+            pets = Pets.objects.filter(user_id = users.id)
+            for pet in pets:
+                age = calculate_age(pet.pet_birthdate)
+                pet.pet_age = age
+                pet.save()
+
+            return render(request, 'UserPetsPage.html', {"pets": pets,  "users" : users})
         except Exception as e:
-            print(e)
-            return redirect('/login')
-
+            return render(request, 'UserHomePage.html', {"error": "You don't have permission to access this web page!"})
     def post(self,request):
-        if request.POST.get('pet_type_breeds'): 
+        if request.POST.get('pet_type_breeds'):
             pet_breeds = PetBreed.objects.filter(pet_type=request.POST['pet_type_breeds'])
 
             pet_breeds_list = [
@@ -518,22 +522,18 @@ class UserPetsPage(TemplateView, LoginRequiredMixin):
             return redirect('/userpets')
 
 
-class UserHighlightsPage(TemplateView, LoginRequiredMixin):
+class UserHighlightsPage( LoginRequiredMixin, TemplateView):
     template_name = 'UserHighlightsPage.html'
 
     def get(self,request):
         try:
             users = User.objects.get(email = request.session['username'])
-            if users.usertype == 3 or users.usertype == 7:
-                return redirect('/login')
-            else:
-                volunteer = Volunteer.objects.get(user_id = users.id)
-                highlights = Highlights.objects.filter(volunteer_id = volunteer.id)
+            volunteer = Volunteer.objects.get(user_id = users.id)
+            highlights = Highlights.objects.filter(volunteer_id = volunteer.id)
 
-                return render(request, 'UserHighlightsPage.html', {"highlights" : highlights, 'users':users})
+            return render(request, 'UserHighlightsPage.html', {"highlights" : highlights, 'users':users})
         except Exception as e:
-            print(e)
-            return redirect('/login')
+            return render(request, 'UserHomePage.html', {"error": "You don't have permission to access this web page!"})
 
     def post(self,request):
         user = User.objects.get(email = request.session['username'])
@@ -543,9 +543,6 @@ class UserHighlightsPage(TemplateView, LoginRequiredMixin):
         highlights.save()
 
         return redirect('/userhighlights')
-    
-class trypage(TemplateView):
-    template_name = 'trypage.html'
 
 
 class OrgDashboard(TemplateView):
@@ -557,65 +554,59 @@ class OrgDashboard(TemplateView):
 
         return render(request, 'OrgDashboard.html', {"volunteers": volunteers, "volunteer_count": volunteer_count})
 
-    
-class OrgHomePage(TemplateView, LoginRequiredMixin):
+
+class OrgHomePage( LoginRequiredMixin, TemplateView):
     template_name = 'OrgHomePage.html'
     def get(self,request):
         try:
             users = User.objects.get(email = request.session['username'])
-            if users.usertype == 3:
-                unique_dates = set()
-                organization = Organization.objects.get(user_id = users.id)
-                veterinarians = Veterinarian.objects.filter(organization_id = organization.id)
-                services = Services.objects.filter(organization_id = organization.id)
-                appointments = Appointment.objects.filter(appointed_to_id = organization.id)
+            unique_dates = set()
+            organization = Organization.objects.get(user_id = users.id)
+            veterinarians = Veterinarian.objects.filter(organization_id = organization.id)
+            services = Services.objects.filter(organization_id = organization.id)
+            appointments = Appointment.objects.filter(appointed_to_id = organization.id)
 
 
-                volunteer_count = get_volunteer_count(request)
-                unique_dates_list = []
-                for appointment in appointments:
-                    date_str = appointment.appointmentdate.strftime('%Y-%m-%d')
-                    # Check if the date is not already in the set
-                    if date_str not in unique_dates:
-                        unique_dates.add(date_str)
-                        unique_dates_list.append({'date': date_str})
-                appointments_list = [
+            volunteer_count = get_volunteer_count(request)
+            unique_dates_list = []
+            for appointment in appointments:
+                date_str = appointment.appointmentdate.strftime('%Y-%m-%d')
+                # Check if the date is not already in the set
+                if date_str not in unique_dates:
+                    unique_dates.add(date_str)
+                    unique_dates_list.append({'date': date_str})
+            appointments_list = [
 
-                    {
-                        'id': appointment.id,
-                        'name': appointment.appointed_by.firstname + " " + appointment.appointed_by.lastname,
-                        'date': appointment.appointmentdate.strftime('%Y-%m-%d'), 
-                        'time': appointment.appointmenttime.strftime('%H:%M:%S'),
-                        'status': appointment.appointmentstatus,
-                        'pet': appointment.pettobring.pet_name,
-                        'service': appointment.servicetype,
-                        # Add more fields as needed
-                    }
-                    for appointment in appointments
-                ]
-
-                return render(request, 'OrgHomePage.html', {"org": organization, "veterinarians" : veterinarians, "services" : services, "appointments": appointments_list, 'appointment_dates': unique_dates_list, "volunteer_count": volunteer_count })
-            else:
-                return redirect('/login')
-        except Exception as e:
-            print(e)
-            return redirect('/login')
-
+                {
+                    'id': appointment.id,
+                    'name': appointment.appointed_by.firstname + " " + appointment.appointed_by.lastname,
+                    'date': appointment.appointmentdate.strftime('%Y-%m-%d'),
+                    'time': appointment.appointmenttime.strftime('%H:%M:%S'),
+                    'status': appointment.appointmentstatus,
+                    'pet': appointment.pettobring.pet_name,
+                    'service': appointment.servicetype,
+                    # Add more fields as needed
+                }
+                for appointment in appointments
+            ]
+            return render(request, 'OrgHomePage.html', {"org": organization, "user": users, "veterinarians" : veterinarians, "services" : services, "appointments": appointments_list, 'appointment_dates': unique_dates_list, "volunteer_count": volunteer_count })
+        except:
+            return render(request, 'OrgHomePage.html', {"error": "You don't have permission to access this web page!"})
     def post(self,request):
         user = User.objects.get(email = request.session['username'])
         organization = Organization.objects.get(user_id = user.id)
-        
-        if request.POST.get('vetname'): 
+
+        if request.POST.get('vetname'):
             veterinarians = Veterinarian.objects.create(organization_id = organization.id, profilepicture = request.FILES['profilepicture'], vetname = request.POST['vetname'], vetdescription = request.POST['vetdescription'])
 
             veterinarians.save()
-        
+
             return redirect('/orghome')
 
         elif request.POST.get('isButtonClicked'):
             day_name = date(int(request.POST["year"]), int(request.POST["month"]), int(request.POST["day"])).strftime('%A')[:3].lower()
             businesshours = BusinessHours.objects.get(organization_id = organization.id, day=day_name)
-            
+
             appointments_time = AppointmentTime.objects.filter(businesshours_id = businesshours.id)
             appointments_list = [
                 {'appointment_time': appointment.appointment_time.strftime('%H:%M')}
@@ -636,7 +627,7 @@ class OrgHomePage(TemplateView, LoginRequiredMixin):
             services.delete()
 
             return self.get(request)
-        
+
         elif request.POST.get('service_id_duration'):
             services = Services.objects.get(id = request.POST["service_id_duration"])
             services.duration = request.POST["duration"]
@@ -684,22 +675,18 @@ class OrgHomePage(TemplateView, LoginRequiredMixin):
         return redirect('/orghome')
 
 
-class OrgProfilePage(TemplateView, LoginRequiredMixin):
+class OrgProfilePage( LoginRequiredMixin, TemplateView):
     template_name = 'OrgProfilePage.html'
 
     def get(self, request):
         try:
             users = User.objects.get(email = request.session['username'])
-            if users.usertype == 3:
-                organization = Organization.objects.get(user=users)
-                businesshours = BusinessHours.objects.filter(organization_id=organization.id)
-                volunteer_count = get_volunteer_count(request)
-                return render(request, 'OrgProfilePage.html', {"organization": organization, "user": users, "businesshours": businesshours, 'volunteer_count':volunteer_count})
-            else:
-                return redirect('/login')
-        except Exception as e:
-            print(e)
-            return redirect('/login')
+            organization = Organization.objects.get(user=users)
+            businesshours = BusinessHours.objects.filter(organization_id=organization.id)
+            volunteer_count = get_volunteer_count(request)
+            return render(request, 'OrgProfilePage.html', {"organization": organization, "user": users, "businesshours": businesshours, 'volunteer_count':volunteer_count})
+        except:
+            return render(request, 'OrgHomePage.html', {"error": "You don't have permission to access this web page!"})
 
     def post(self,request):
         if request.POST.get('isChecked'):
@@ -762,26 +749,19 @@ class OrgProfilePage(TemplateView, LoginRequiredMixin):
             return JsonResponse({'accepted': True})
 
 
-class OrgClientsPage(TemplateView, LoginRequiredMixin):
+class OrgClientsPage( LoginRequiredMixin, TemplateView):
     template_name = 'OrgClientsPage.html'
 
     def get(self,request):
         try:
             user = User.objects.get(email = request.session['username'])
-            if user.usertype == 3:
-                organization = Organization.objects.get(user=user)
-
-                user_ids = Appointment.objects.filter(appointed_to_id=organization.id, appointmentstatus="accepted").values_list('appointed_by_id', flat=True)
-
-            # Get the User objects for the extracted user IDs
-                users = User.objects.filter(id__in=user_ids)
-                volunteer_count = get_volunteer_count(request)
-                return render(request, 'OrgClientsPage.html', {"users": users, 'volunteer_count':volunteer_count})
-            else:
-                return redirect('/login')
-        except Exception as e:
-            print(e)
-            return redirect('/login')
+            organization = Organization.objects.get(user=user)
+            user_ids = Appointment.objects.filter(appointed_to_id=organization.id, appointmentstatus="accepted").values_list('appointed_by_id', flat=True)
+            users = User.objects.filter(id__in=user_ids)
+            volunteer_count = get_volunteer_count(request)
+            return render(request, 'OrgClientsPage.html', {"users": users, 'volunteer_count':volunteer_count})
+        except:
+            return render(request, 'OrgHomePage.html', {"error": "You don't have permission to access this web page!"})
 
     def post(self, request):
 
@@ -806,8 +786,8 @@ class OrgClientsPage(TemplateView, LoginRequiredMixin):
                     'note': appointment.petmedicalrecord.note,
                     'vet': appointment.veterinarian.vetname,
                 }
-               
-            except: 
+
+            except:
                 appointment_data = {
                     'id': appointment.id,
                     'date': appointment.appointmentdate,
@@ -832,7 +812,7 @@ class OrgClientsPage(TemplateView, LoginRequiredMixin):
             appointment.veterinarian_id = request.POST['vetname']
             appointment.save()
             return JsonResponse({'isSuccessful': True})
-        elif request.POST.get('isAllAppointments'): 
+        elif request.POST.get('isAllAppointments'):
             pet = Pets.objects.get(id=request.POST['pet_id_appointment'])
             appointments = Appointment.objects.filter(pettobring_id=request.POST['pet_id_appointment'])
             appointment_list = [
@@ -854,7 +834,7 @@ class OrgClientsPage(TemplateView, LoginRequiredMixin):
                     appointed_by_id=request.POST['user_id'],
                     petmedicalrecord_id__isnull=True
                 ).values_list('pettobring_id', flat=True)
-            else: 
+            else:
                 pet_ids = Appointment.objects.filter(appointed_by_id=request.POST['user_id']).values_list('pettobring_id', flat=True)
 
             pets = Pets.objects.filter(id__in=pet_ids)
@@ -871,30 +851,28 @@ class OrgClientsPage(TemplateView, LoginRequiredMixin):
             ]
             # Return JSON response
             return JsonResponse({'pets': pets_list})
-        
 
-class OrgVolunteersPage(TemplateView, LoginRequiredMixin):
+
+class OrgVolunteersPage( LoginRequiredMixin, TemplateView):
     template_name = 'OrgVolunteersPage.html'
 
     def get(self,request):
         try:
 
             user = User.objects.get(email = request.session['username'])
-            if user.usertype == 3:
-                organization = Organization.objects.get(user_id = user.id)
-                records = VolunteerRecord.objects.filter(org_id = organization.id, volunteerstatus=1)
-                volunteer_ids = records.values_list('volunteer_id', flat=True)
 
-                # Filter volunteers based on volunteer_ids
-                volunteers = Volunteer.objects.filter(id__in=volunteer_ids)
-                volunteer_count = get_volunteer_count(request)
+            organization = Organization.objects.get(user_id = user.id)
+            records = VolunteerRecord.objects.filter(org_id = organization.id, volunteerstatus=1)
+            volunteer_ids = records.values_list('volunteer_id', flat=True)
 
-                return render(request, 'OrgVolunteersPage.html', {"volunteers": volunteers, 'volunteer_count': volunteer_count, } )
-            else:
-                return redirect('/login')
-        except Exception as e:
-            print(e) 
-            return redirect('/login')
+            # Filter volunteers based on volunteer_ids
+            volunteers = Volunteer.objects.filter(id__in=volunteer_ids)
+            volunteer_count = get_volunteer_count(request)
+
+            return render(request, 'OrgVolunteersPage.html', {"volunteers": volunteers, 'volunteer_count': volunteer_count, } )
+        except:
+            return render(request, 'OrgHomePage.html', {"error": "You don't have permission to access this web page!"})
+
     def post(self, request):
         user = User.objects.get(email = request.session['username'])
         organization = Organization.objects.get(user_id = user.id)
@@ -931,7 +909,7 @@ class OrgVolunteersPage(TemplateView, LoginRequiredMixin):
                     'idpicture': volunteer.idpicture.url,
                     'idpictureback': volunteer.idpictureback.url
                 }
-                
+
                 return JsonResponse({'volunteer': volunteer_data})
         elif request.POST.get('showAccepted'):
             records = VolunteerRecord.objects.filter(org_id=organization.id, volunteerstatus__in=[4, 6])
@@ -957,30 +935,41 @@ class OrgVolunteersPage(TemplateView, LoginRequiredMixin):
             return JsonResponse({'volunteers': volunteer_data})
 
 
-class OrgAppointmentRecsPage(TemplateView, LoginRequiredMixin):
+class OrgAppointmentRecsPage( LoginRequiredMixin, TemplateView):
     template_name = 'OrgAppointmentRecsPage.html'
-    def get(self, request):
-        volunteer_count = get_volunteer_count(request)
-        return render(request, 'OrgAppointmentRecsPage.html', {'volunteer_count': volunteer_count} )
+    def get(self,request):
+        try:
+            user = User.objects.get(email = request.session['username'])
+            organization = Organization.objects.get(user_id = user.id)
+            records = VolunteerRecord.objects.filter(org_id = organization.id, volunteerstatus=1)
+            volunteer_ids = records.values_list('volunteer_id', flat=True)
+
+            # Filter volunteers based on volunteer_ids
+            volunteers = Volunteer.objects.filter(id__in=volunteer_ids)
+            volunteer_count = get_volunteer_count(request)
+
+            return render(request, 'OrgVolunteersPage.html', {"volunteers": volunteers, 'volunteer_count': volunteer_count, } )
+        except:
+            return render(request, 'OrgHomePage.html', {"error": "You don't have permission to access this web page!"})
 
 class SystemAdminDashboard(TemplateView):
     template_name = 'SystemAdminDashboard.html'
 
-class SystemAdminHome(TemplateView, LoginRequiredMixin):
+class SystemAdminHome( LoginRequiredMixin, TemplateView):
     template_name = 'SystemAdminHome.html'
 
     def get(self,request):
         try:
-            user = User.objects.get(email = request.session['username']) 
+            user = User.objects.get(email = request.session['username'])
             if user.usertype == 7:
                 organizations = Organization.objects.filter(organizationstatus=1)
                 return render(request, 'SystemAdminHome.html', {"organizations": organizations})
-            else: 
-                return redirect('/systemadminlogin')
+            else:
+                return redirect('/main')
         except Exception as e:
             print(e)
-            return redirect('/systemadminlogin')
-        
+            return redirect('/main')
+
 
     def post(self,request):
         if request.POST.get('acceptID'):
@@ -1007,24 +996,24 @@ class SystemAdminHome(TemplateView, LoginRequiredMixin):
                 "qrcodegcash": organization.qrcodegcash.url if organization.qrcodegcash else None,
                 "qrcodepaypal": organization.qrcodepaypal.url if organization.qrcodepaypal else None,
             }
-            return JsonResponse({'organization': organization_data})  
-            
-    
-    
-class SystemAdminOrgs(TemplateView, LoginRequiredMixin):
+            return JsonResponse({'organization': organization_data})
+
+
+
+class SystemAdminOrgs( LoginRequiredMixin, TemplateView):
     template_name = 'SystemAdminOrgs.html'
-    
+
     def get(self,request):
         try:
-            user = User.objects.get(email = request.session['username']) 
+            user = User.objects.get(email = request.session['username'])
             if user.usertype == 7:
                 organizations = Organization.objects.filter(organizationstatus=2)
                 return render(request, 'SystemAdminOrgs.html', {"organizations": organizations})
-            else: 
-                return redirect('/systemadminlogin')
+            else:
+                return redirect('/main')
         except Exception as e:
             print(e)
-            return redirect('/systemadminlogin')
+            return redirect('/main')
 
 
     def post(self,request):
@@ -1035,7 +1024,7 @@ class SystemAdminOrgs(TemplateView, LoginRequiredMixin):
             organizations.delete()
             user = User.objects.get(id = user_id)
             user.delete()
-            return JsonResponse({'delete': True, 'email':email})  
+            return JsonResponse({'delete': True, 'email':email})
         elif request.POST.get('see_id'):
             organization = Organization.objects.get(id = request.POST["see_id"])
             organization_data = {
@@ -1047,13 +1036,13 @@ class SystemAdminOrgs(TemplateView, LoginRequiredMixin):
                 "qrcodegcash": organization.qrcodegcash.url if organization.qrcodegcash else None,
                 "qrcodepaypal": organization.qrcodepaypal.url if organization.qrcodepaypal else None,
             }
-            return JsonResponse({'organization': organization_data})  
-      
-class SystemAdminLogin(TemplateView, LoginRequiredMixin):
+            return JsonResponse({'organization': organization_data})
+
+class SystemAdminLogin(TemplateView):
     template_name = 'SystemAdminLoginPage.html'
     def get(self, request):
         try:
-            user = User.objects.create(email='orcaproject123@gmail.com', password='orca', firstname='admin', lastname='admin', contactnumber=1234567890, address='ateneo', usertype=7)
+            user = User.objects.create_superuser(email='orcaproject123@gmail.com', password='orca', firstname='admin', lastname='admin', contactnumber=1234567890, address='ateneo', usertype=7)
             user.save()
             return render(request, 'SystemAdminLoginPage.html')
         except Exception as e:
@@ -1067,10 +1056,10 @@ class SystemAdminLogin(TemplateView, LoginRequiredMixin):
             login(request,user)
             request.session['username'] = username
             request.session.save()
-            user = User.objects.get(email = request.session['username']) 
+            user = User.objects.get(email = request.session['username'])
             if user.usertype == 7:
                 return redirect('/systemadminhome')
-            else: 
+            else:
                 return redirect('/systemadminlogin')
         else:
             return redirect('/systemadminlogin')

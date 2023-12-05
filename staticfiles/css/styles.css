@@ -1,0 +1,73 @@
+/* Constant styling */
+* {
+  padding: 0;
+  margin: 0;
+}
+body{
+  font-family: 'eczar', serif;
+  font-size: 1rem;
+  scroll-behavior: smooth;
+}
+h1 {
+  font-size: 2.986rem;
+}
+.Subheaders {
+  font-size: 1.728rem;
+}
+nav {
+  font-size:x-large;
+  font-family: 'Aileron', arial;
+  font-weight:lighter;
+}
+
+/* Styling for header includes the brand name and navigation bar */
+.header{
+  position: fixed;
+  height: 80px;
+  width: 100vw;
+  top: 0;
+  left: 0;
+  display: flex;
+  justify-content: space-between;
+  background-color: #1e262d;
+  align-items: center;
+  padding: 0 16px 0 16px;
+}
+.brand-name {
+  display: flex;
+  gap: 8px;
+  align-items: center;
+  top: 0;
+}
+/* Brand Name */
+.logo-container{
+  height: auto;
+  width: auto;
+  display: flex;
+  top: 0;
+  gap: 8px;
+}
+/* logo */
+.center-logo{
+  display: flex;
+  height: 80px;
+  justify-items: center;
+  align-items: center;
+}
+/* NGO text */
+.outer-lo{
+  height: 80px;
+  display: flex;
+  justify-items: center;
+  align-items: center;
+}
+.org-name{
+  color: #ff8200;
+  display: flex;
+  flex-direction: column;
+  justify-items:flex-start;
+  font-size: .7rem;
+  letter-spacing:5px;
+  align-items:start;
+  font-family: "eczar";
+}

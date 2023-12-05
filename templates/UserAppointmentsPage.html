@@ -16,31 +16,23 @@
      .flex-grow-1{
       height: auto;
       min-height: 100vh;
+      width: 100%;
       display: flex;
+      flex-direction: column;
       background-color: #FFEED9;
     }
 
-    /* Clinic and Volunteer box descriptions */
-    .profile-box p{
-        margin-bottom: 5px;
-    }
-
-    @media (max-width: 768px){
+    @media screen and (min-width: 375px) and (max-width: 768px){
       .sidebar-text {
         display: none;
-      }
-      .profile-box{
-        padding: 10px;
       }
       .side-logo{
         width: 40px;
         margin-left: -10px;
       }
-      .table-responsive {
-        display: block;
+      .profile-box {
         width: 100%;
-        overflow-x: auto;
-        white-space: nowrap;
+        overflow: scroll;
       }
     }
   </style>
@@ -50,47 +42,39 @@
   <div class="d-flex">
     {% include 'UserDashboard.html' %}
     <!-- USER PROFILE INFORMATION -->
-    <div class="flex-grow-1 p-5">
-      <div class="row mb-4">
-        <div>
-          <h2 class="mb-3">ACTIVE APPOINTMENTS</h2>
-          <div class="d-flex align-items-center">
-            <button id="viewHistoryButton" class="btn btn-primary" data-bs-toggle="modal" data-bs-target="#viewHistoryModal"> View History</button><br/>
-          </div>
-
-          <br/>
-          <div class="row">
-            <div class="mb-3">
-              <div class="profile-box">
-                <table class="table table-bordered">
-                  <thead>
-                    <tr>
-                      <th>CLINIC</th>
-                      <th>DATE APPOINTMENT</th>
-                      <th>TIME</th>
-                      <th>PET TO BRING</th>
-                      <th>TYPE OF SERVICE</th>
-                      <th>STATUS</th>
-                    </tr>
-                  </thead>
-                  <tbody>
-                    {% for appointment in appointments %}
-                    <tr>
-                      <td>{{appointment.appointed_to.organization_name}}</td> <!--SI PARA DGDI PA-->
-                      <td>{{appointment.appointmentdate}}</td>
-                      <td>{{appointment.appointmenttime}}</td>
-                      <td>{{appointment.pettobring.pet_name | title}}</td> <!--SI PARA DGDI PA-->
-                      <td>{{appointment.servicetype}}</td> 
-                      <td>{{appointment.appointmentstatus | title}} </td> 
-                    </tr>
-                    <!-- Add more rows for each active appointment -->
-                  </tbody>
-                  {% endfor %}
-                </table>
-              </div>
-            </div>
-          </div>
+    <div class="flex-grow-1 p-4">
+      <div class="header-appointments pb-4">
+        <h2 class="mb-3">ACTIVE APPOINTMENTS</h2>
+        <div class="d-flex align-items-center">
+          <button id="viewHistoryButton" class="btn btn-primary" data-bs-toggle="modal" data-bs-target="#viewHistoryModal"> View History</button><br/>
         </div>
+      </div>
+      <div class="profile-box">
+        <table class="table table-bordered">
+          <thead>
+            <tr style="white-space: nowrap;">
+              <th>CLINIC</th>
+              <th>DATE APPOINTMENT</th>
+              <th>TIME</th>
+              <th>PET TO BRING</th>
+              <th>TYPE OF SERVICE</th>
+              <th>STATUS</th>
+            </tr>
+          </thead>
+          <tbody>
+            {% for appointment in appointments %}
+            <tr style="white-space: nowrap;">
+              <td>{{appointment.appointed_to.organization_name}}</td> <!--SI PARA DGDI PA-->
+              <td>{{appointment.appointmentdate}}</td>
+              <td>{{appointment.appointmenttime}}</td>
+              <td>{{appointment.pettobring.pet_name | title}}</td> <!--SI PARA DGDI PA-->
+              <td>{{appointment.servicetype}}</td> 
+              <td>{{appointment.appointmentstatus | title}} </td> 
+            </tr>
+            <!-- Add more rows for each active appointment -->
+          </tbody>
+          {% endfor %}
+        </table>
       </div>
     </div>
     <!-- Modal -->
