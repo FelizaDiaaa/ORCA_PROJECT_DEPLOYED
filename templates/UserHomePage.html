@@ -76,12 +76,16 @@
     }
     .card-container {
       all: initial;
+      padding: 1rem;
       display: flex;
       flex-wrap: wrap;
+      height:78vh;
+      overflow-y: scroll;
+      background-color: #ffffff5c;
       gap:32px;
     }
     .card {
-      width: auto;
+      width: 325px;
       height: auto;
       padding: 16px;
       display: grid;
@@ -104,8 +108,16 @@
       border-radius: 5px;
     }
     .highlight-container {
+      margin-top: 32px;
       height: 100vh;
-      background-color: #109f26;
+      width: 100%;
+      display: grid;
+      place-items: center;
+      align-items: center;
+      background-color: #1e262d;
+    }
+    .bg-carousel {
+      background-color: #1e262d;
     }
     /*SET APPOINTMENT & VIEW DOCTORS BUTTONS*/
     .clinic-buttons {
@@ -163,8 +175,10 @@
       color: #ff8200;
     }
     .clinic-info {
-      font-size: 14px;
+      font-size: 1rem;
       color: #000000;
+      width: 100%;
+      padding: 0;
       margin-top: 10px;
       text-align: left;
       list-style-type: none;
@@ -291,7 +305,11 @@
 
     @media screen and (min-width: 375px) and (max-width: 768px) {
       .card-container {
+        overflow-y: none;
         width: 100%;
+        height: 100%;
+        background-color: transparent;
+        padding: 0;
         display: grid;
         place-items: center;
       }
@@ -307,7 +325,20 @@
       .doctor-box {
         padding: 10px;
       }
-
+      .carousel-caption {
+        height: 50px;
+      }
+      .carousel-caption h4 {
+        margin-top: -12px;
+        font-size: 1rem;
+      }
+      .highlight-container {
+        height: 50vh;
+      }
+      .carousel-caption p {
+        margin-top: -12px;
+        font-size: .8rem;
+      }
       .doctor-name {
         font-size: 1rem;
       }
@@ -325,6 +356,8 @@
     }
 
   </style>
+  <!-- Bootstrap CSS -->
+  <link href="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css" rel="stylesheet">
 </head>
 {% if error %}
 <body>
@@ -337,9 +370,9 @@
 </body>
 {% else %}
 <body>
-  <div class="d-flex">
+  <div class="d-flex position-sticky">
     {% include 'UserDashboard.html' %}
-    <div class="flex-grow-1 p-4" style="">
+    <div class="flex-grow-1 p-4">
       <h2 class="Subheaders pb-4">LIST OF CLINICS</h2>
       <form id="organizationClinics" method="POST">
         {% csrf_token %}
@@ -379,20 +412,35 @@
         </div>
         {% endfor %}
       </div>
-
-      <!--FOR HIGHLIGHTS-->
-      <div class="highlight-container">
-        <form id="highlightsFields" method="POST" enctype="multipart/form-data">
-          {% csrf_token %}
-          {% for item in highlights %}
-          <div class = "row">
-            <div class="clinic-box">
-              <img src={{item.highlightsphoto.url}} alt="highlight photo">
-                <p><strong>{{item.highlightsdescription}}</strong></p>
+        <!-- FOR HIGHLIGHTS Carousel Container -->
+        <div class="highlight-container">
+          <div id="myCarousel" class="carousel slide w-75" data-ride="carousel">
+            <div class="carousel-inner">
+              {% for item in highlights %}
+                <div class="carousel-item bg-carousel
+                {% if forloop.first %} 
+                  active
+                {% endif %}">
+                <div class="d-flex justify-content-center">
+                  <img class="d-block w-75" src="{{ item.highlightsphoto }}" alt="Slide {{ forloop.counter }}">
+                </div>
+                <div class="carousel-caption d-md-block d-sm-block" style="background-color: #1e262d83; border-radius: 10px;">
+                    <h4>{{ item.highlightstitle }}</h4>
+                    <p>{{ item.highlightsdescription }}</p>
+                  </div>
+                </div>
+              {% endfor %}
             </div>
+            <a class="carousel-control-prev" href="#myCarousel" role="button" data-slide="prev">
+              <span class="carousel-control-prev-icon" aria-hidden="true"></span>
+              <span class="sr-only">Previous</span>
+            </a>
+            <a class="carousel-control-next" href="#myCarousel" role="button" data-slide="next">
+              <span class="carousel-control-next-icon" aria-hidden="true"></span>
+              <span class="sr-only">Next</span>
+            </a>
           </div>
-          {% endfor %}
-        </form>
+        </div>        
       </div>
       </div>
     </div>
@@ -525,6 +573,10 @@
       </div>
     </div>
 
+  <!-- Bootstrap JS and dependencies -->
+<script src="https://code.jquery.com/jquery-3.3.1.slim.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.14.7/umd/popper.min.js"></script>
+<script src="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/js/bootstrap.min.js"></script>
 
   <!-- Bootstrap JavaScript (Make sure you have Bootstrap JavaScript included) -->
   <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
@@ -532,6 +584,14 @@
 </body>
 {% endif %}
 <script>
+  
+  $(document).ready(function() {
+      // Auto-advance every 5 seconds
+      setInterval(function() {
+        $('#myCarousel').carousel('next');
+        
+      }, 8000);
+    });
 function handleServiceChange() {
   document.getElementById('appointmentTime').value = "";
   getHours()
@@ -607,7 +667,7 @@ function createVeterinarianModal(veterinarianData) {
   doctorBox.classList.add('doctor-box');
 
   var vetImage = document.createElement('img');
-  vetImage.src = veterinarianData.profilepicture;
+  vetImage.src = "media/" + veterinarianData.profilepicture;
   vetImage.alt = 'Doctor 1';
 
   var vetName = document.createElement('div');

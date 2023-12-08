@@ -49,13 +49,15 @@
           background-color: #ff8200 !important;
           pointer-events: all !important;
       }
-      ul {
+      .ulist {
           list-style-type: none;
           padding: 0;
           margin: 0;
+          width: 100%;
+          padding: 0 1rem 0 1rem;
       }
       /* Style for list items */
-      ul li {
+      .ulist > li {
           margin: 5px 0;
           font-size: 15px;
           color: rgb(0, 0, 0);
@@ -63,10 +65,9 @@
       .client-list {
           display: flex;
           flex-wrap: wrap;
-          padding: 20px;
+          padding: 1rem;
           gap: 20px;
           height: 400px;
-          width: 400px;
       }
       .client {
           display: flex;
@@ -75,16 +76,16 @@
           justify-content: center;
           border: 1px solid #ccc;
           cursor: pointer;
-          width: 350px;
+          width: 100%;
           height: 300px;
           box-shadow: 0 0 5px rgba(0, 0, 0, 0.1);
           transition: transform 0.2s;
           overflow: hidden; /* Prevent photo from overflowing */
       }
       .client-photo {
-          width: 90px;
-          height: 90px;
-          border-radius: 50%;
+          width: 120px;
+          height: 120px;
+          border-radius: 100%;
           margin: 10px auto;
       }
       .client p {
@@ -96,7 +97,7 @@
           font-size: 20px;
       }
       .client:hover {
-          transform: scale(1.05);
+          transform: scale(1.01);
       }
       .modal {
           display: none;
@@ -191,7 +192,8 @@
               max-width: 500px;
           }
           .flex-grow-1{
-            display: flex;
+            display: grid;
+            place-items: center;
           }
       }
   </style>
@@ -215,8 +217,8 @@
             <div class="client-list">
                 <div class="client" onclick="showModal({{user.id}})" data-toggle="modal" data-target="#clientModal1" data-user-id="{{user.id}}">
                     <img class="client-photo" src="{% if user.userphoto %}{{ user.userphoto.url }}{% else %}{% static 'img/user.png' %}{% endif %}" alt="Client 1 Photo">
-                    <h3>{{user.firstname}} {{ user.lastname }}</h3>
-                    <ul>
+                    <h3 style="font-weight: 600;">{{user.firstname}} {{ user.lastname }}</h3>
+                    <ul class="ulist">
                         <li><strong>Contact Number:</strong> {{user.contactnumber}}</li>
                         <li><strong>Email:</strong> {{user.email}}</li>
                         <li><strong>Address:</strong> {{user.address}}</li>

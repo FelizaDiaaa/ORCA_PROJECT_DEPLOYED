@@ -68,7 +68,7 @@
         border: 1px solid #ddd;
         padding: 15px;
         margin-bottom: 15px;
-        height: 300px !important;
+        height: auto !important;
     }
     .highlight-card img {
         width: 100%;
@@ -88,10 +88,16 @@
       height: auto;
     }
     .highlights {
+      margin-top: 1rem;
       width: 100%;
+      padding: 1rem;
+      display: grid;
+      place-items: center;
+      gap: 1rem;
+      grid-template-columns: repeat(3, 1fr);
     }
     .h-card {
-      width: 50%;
+      width: 375px;
     }
     @media (max-width: 768px){
       .sidebar-text {
@@ -99,6 +105,21 @@
       }
       .photo-box{
         padding: 10px;
+      }
+      .h-card {
+        min-width: 100%;
+      }
+      .card {
+        display: grid;
+        place-items: center;
+      }
+      .card-body {
+        width: 100%;
+        text-align: left;
+      }
+      .highlights {
+        grid-template-columns: auto;
+        padding: 0;
       }
       .side-logo{
         width: 40px;
@@ -122,8 +143,10 @@
         {% for item in highlights %}
           <div class="h-card">
               <div class="card highlight-card">
+                <div class="w-100 bg-dark d-flex justify-content-center rounded">
                   <img src={{item.highlightsphoto.url}} class="card-img-top small-image" alt="Photo 1">
-                  <div class="card-body">
+                </div>
+                <div class="card-body">
                       <h5 class="card-title">{{item.highlightstitle}}</h5>
                       <p class="card-text">{{item.highlightsdescription}}</p>
                   </div>
