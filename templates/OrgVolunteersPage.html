@@ -13,12 +13,27 @@
     <script src="https://unpkg.com/sweetalert/dist/sweetalert.min.js"></script>
     <!-- Popper.js -->
     <script src="https://cdn.jsdelivr.net/npm/popper.js@1.16.1/dist/umd/popper.min.js"></script>
-
     <!-- Bootstrap JS -->
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@4.6.2/dist/js/bootstrap.min.js"></script>
     <link rel="icon" type="image/x-icon" href="{% static 'img/orca web logo.png' %}">
+
     <title>Org Volunteers Page</title>
     <style>
+        @import url('https://fonts.googleapis.com/css2?family=Arvo:wght@700&display=swap');
+        /* Subheaders */
+        @import url('https://fonts.googleapis.com/css2?family=Nunito:wght@500&display=swap');
+        /* body base text */
+        @import url('https://fonts.googleapis.com/css2?family=Hind+Guntur&display=swap');
+
+        .Subheaders {
+            font-family: 'Nunito';
+            font-size: 1.728rem;
+            font-weight: bold;
+        }
+        .Subheaders > span {
+            font-size: 2.986rem;
+            font-weight: 700;
+        }
         .card-img-top {
             height: 20rem;
         }
@@ -49,6 +64,14 @@
             align-items: center;
             justify-content: center;
             overflow: auto;
+        }
+
+        .modal-title{
+            font-weight: bold;
+        }
+
+        .modal.fade.show{
+            background-color: rgba(0, 0, 0, 0.7) !important;
         }
 
         .zoomed-image img {
@@ -87,6 +110,8 @@
             </div>
         </div>
         <br />
+
+        <!--Volunteer Applicants Table-->
         <div class="vol-container">
             <table class="table">
                 <thead>
@@ -117,33 +142,33 @@
 	</div>
 
     <!--Modal for Volunteer List-->
-      <div class="modal fade" id="volunteerListModal" role="dialog" aria-labelledby="volunteerListModalLabel" aria-hidden="true" data-bs-backdrop="false">
-        <div class="modal-dialog modal-lg" role="document">
-            <div class="modal-content">
-                <div class="modal-header">
-                    <h5 class="modal-title" id="volunteerListModalLabel">Volunteer List</h5>
-                    <button type="button" class="close" data-dismiss="modal" aria-label="Close">
-                        <span aria-hidden="true">&times;</span>
-                    </button>
-                </div>
-                <div class="modal-body">
-                    <table class="table">
-                        <thead>
-                            <tr style="white-space: nowrap;">
-                                <th>Name</th>
-                                <th>Contact</th>
-                                <th>Address</th>
-                                <th>Email</th>
-                                <th>Valid ID Front</th>
-                                <th>Valid ID Back</th>
-                            </tr>
-                        </thead>
-                        <tbody>
-                        </tbody>
-                    </table>
-                </div>
-            </div>
-        </div>
+    <div class="modal fade" id="volunteerListModal" role="dialog" aria-labelledby="volunteerListModalLabel" aria-hidden="true" data-bs-backdrop="false">
+      <div class="modal-dialog modal-lg" role="document">
+          <div class="modal-content">
+              <div class="modal-header">
+                  <h5 class="modal-title" id="volunteerListModal">Volunteer List</h5>
+                  <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                      <span aria-hidden="true">&times;</span>
+                  </button>
+              </div>
+              <div class="modal-body">
+                  <table class="table" style="overflow: scroll;">
+                      <thead style="white-space: nowrap;">
+                          <tr>
+                              <th>Name</th>
+                              <th>Contact</th>
+                              <th>Address</th>
+                              <th>Email</th>
+                              <th>Valid ID Front</th>
+                              <th>Valid ID Back</th>
+                          </tr>
+                      </thead>
+                      <tbody>
+                      </tbody>
+                  </table>
+              </div>
+          </div>
+      </div>
     </div>
 </body>
 
@@ -163,10 +188,10 @@
                 // Create modal elements
                 var modal = document.createElement('div');
                 modal.classList.add('modal', 'fade');
-                modal.id = 'johnDoeModal';
+                modal.id = 'volunteerListModalLabel';
                 modal.tabIndex = -1;
                 modal.role = 'dialog';
-                modal.setAttribute('aria-labelledby', 'johnDoeModalLabel');
+                modal.setAttribute('aria-labelledby', 'volunteerListModalLabel');
                 modal.setAttribute('aria-hidden', 'true');
 
                 var modalDialog = document.createElement('div');
@@ -182,7 +207,7 @@
 
                 var modalTitle = document.createElement('h5');
                 modalTitle.classList.add('modal-title');
-                modalTitle.id = 'johnDoeModalLabel';
+                modalTitle.id = 'volunteerListModalLabel';
                 modalTitle.textContent = 'Volunteer Profile';
 
                 var modalCloseButton = document.createElement('button');
@@ -272,8 +297,6 @@
                         console.error('Error:', error);
                     }
                 });
-
-
 
              declineButton.addEventListener('click', async function () {
                 formData.append("isDeclined", true);
@@ -444,7 +467,6 @@
         zoomedContainer.appendChild(zoomedImage);
         document.body.appendChild(zoomedContainer);
       }
-
 </script>
 
 </html>

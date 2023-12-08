@@ -132,17 +132,16 @@
       </div>
       <div class="form-group">
           <label for="email"  >Email <span style="color: rgb(202, 6, 6)">*</span></label>
-          <input type="email" name="email" id = "email" placeholder="email@gmail.com" required>
+          <input type="email" name="email" id = "email" placeholder="email@gmail.com" required autofocus>
       </div>
 
       <div class="form-group">
           <label for="password" >Password <span style="color: rgb(202, 6, 6)">*</span></label>
           <div class="form-group" style="display:flex; position: relative;">
             <input type="password" name="password" class="w-100" id = "password" placeholder="********" required>
-            <i class="toggle-password fas fa-eye" onclick="togglePassword('password')" style="position: absolute; right: 12px; font-size: 1.1rem; top: 50%; transform: translateY(-50%);"></i>
+            <i class="toggle-password fas fa-eye" onclick="togglePassword('password')" style="position: absolute; right: 12px; font-size: 1.1rem; top: 50%; transform: translateY(-50%); cursor: pointer;"></i>
           </div>
       </div>
-      <p id="err-container" style="color:red; font-size: 14px; width: 100%;"></p>
       <div class="form_button">
           <a href="main" class="g-back">Go Back</a>
           <div onclick="loginTo()" class="login-btn">Login</div>
@@ -165,13 +164,6 @@
         }
         }
         function loginTo(){
-          var emailIsValid = document.getElementById('email');
-          var passIsValid = document.getElementById('password');
-          var errMessage = document.getElementById('err-container');
-
-          if (emailIsValid.value === '' && passIsValid.value === '') {
-            errMessage.innerText = 'Enter correct email and/or password';
-          }
             event.preventDefault()
             var myForm = document.querySelector('#loginForm');
             var formData = new FormData(myForm);
@@ -199,7 +191,8 @@
                         className: "btn btn-danger",
                       }
                     }
-                  }).then((value) => {
+                  }
+                  ).then((value) => {
                     if (value === "login") {
                       swal.close()
                     }

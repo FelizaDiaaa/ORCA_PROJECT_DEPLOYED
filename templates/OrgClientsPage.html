@@ -5,14 +5,25 @@
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/bootstrap/5.3.0/css/bootstrap.min.css">
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/bootstrap/5.3.0/js/bootstrap.bundle.min.js"></script>
-    <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.3/css/all.min.css">
-    <link rel="stylesheet" type="text/css" href="{% static 'css/orgclientspage.css' %}">
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/bootstrap/5.3.0/js/bootstrap.bundle.min.js"></script>
+  <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.3/css/all.min.css">
   <link rel="icon" type="image/x-icon" href="{% static 'img/orca web logo.png' %}">
   <title>Veterinary Clinic Clients</title>
+  
   <style>
-
+    @import url('https://fonts.googleapis.com/css2?family=Arvo:wght@700&display=swap');
+    /* Subheaders */
+    @import url('https://fonts.googleapis.com/css2?family=Nunito:wght@500&display=swap');
+    /* body base text */
+    @import url('https://fonts.googleapis.com/css2?family=Hind+Guntur&display=swap');
+    
+    .modal-title {
+      font-size: 1.25rem;
+      font-weight: bold;
+      font-family: 'Nunito';
+    }
+    
     .flex-grow-1{
         display: flex;
         flex-wrap: wrap;
@@ -34,7 +45,7 @@
       }
       .modal-content button:disabled{
           opacity: 0.5 !important;
-          cursor: not-allowed !important; 
+          cursor: not-allowed !important;
           background-color: #ff8200 !important;
           pointer-events: all !important;
       }
@@ -64,7 +75,7 @@
           justify-content: center;
           border: 1px solid #ccc;
           cursor: pointer;
-          width: 350px; 
+          width: 350px;
           height: 300px;
           box-shadow: 0 0 5px rgba(0, 0, 0, 0.1);
           transition: transform 0.2s;
@@ -81,8 +92,8 @@
               font-size: 12px;
       }
       .client h3 {
-          margin-top: 5px; 
-          font-size: 20px; 
+          margin-top: 5px;
+          font-size: 20px;
       }
       .client:hover {
           transform: scale(1.05);
@@ -103,7 +114,7 @@
           border-radius: 5px;
           box-shadow: 0 0 10px rgba(0, 0, 0, 0.2);
           width: 80%;
-          max-width: 800px; 
+          max-width: 800px;
           display: flex;
           flex-direction: row; /* Display content in a row */
           padding: 20px;
@@ -123,11 +134,12 @@
       .btn:hover {
           background-color: #0056b3;
       }
+
       #addPetRecordBtn {
-          background-color: #00cc00; 
-          color: #fff; 
+          background-color: #00cc00;
+          color: #fff;
           border: none;
-          border-radius: 5px; 
+          border-radius: 5px;
           padding: 5px 10px;
       }
       /* Style for the table */
@@ -161,6 +173,7 @@
           background-color: #e0e0e0;
           cursor: pointer;
       }
+      
       .modal-header .close{
         display: flex;
         flex-direction: column;
@@ -185,8 +198,8 @@
 </head>
 
 <body>
-    
-    <div class="d-flex">    
+
+    <div class="d-flex">
     {% include 'OrgDashboard.html' %}
     <form id="getPetData" method="post">
         {% csrf_token %}
@@ -201,7 +214,7 @@
             {% for user in users %}
             <div class="client-list">
                 <div class="client" onclick="showModal({{user.id}})" data-toggle="modal" data-target="#clientModal1" data-user-id="{{user.id}}">
-                    <img class="client-photo" src="{{user.image}}" alt="Client 1 Photo">
+                    <img class="client-photo" src="{% if user.userphoto %}{{ user.userphoto.url }}{% else %}{% static 'img/user.png' %}{% endif %}" alt="Client 1 Photo">
                     <h3>{{user.firstname}} {{ user.lastname }}</h3>
                     <ul>
                         <li><strong>Contact Number:</strong> {{user.contactnumber}}</li>
@@ -211,9 +224,9 @@
                 </div>
             </div>
             {% endfor %}
-        </div>  
+        </div>
     </div>
-    
+
     <!--MODAL FOR CLIENT-->
     <div class="modal fade" id="clientModal1" tabindex="-1" role="dialog" aria-labelledby="clientModalLabel1" aria-hidden="true">
         <div class="modal-dialog modal-lg" role="document">
@@ -224,7 +237,7 @@
                 <button class="btn">Delete Account</button>
 
                 <button type="button" class="btn btn-secondary" data-dismiss="modal">Cancel</button>
-           
+
             </div>
         </div>
     </div>
@@ -236,9 +249,7 @@
             <div class="modal-content">
                 <div class="modal-header">
                     <h3 class="modal-title">Pets' Information</h3>
-                    <button type="button" class="close" data-dismiss="modal" aria-label="Close">
-                        <span aria-hidden="true">&times;</span>
-                    </button>
+                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
                 </div>
                 <div class="modal-body">
                     <div class="table-responsive">
@@ -293,7 +304,7 @@
             </div>
         </div>
     </div>
-    
+
 
         <!-- Add Pet Medical Record Modal -->
         <div class="modal fade" id="addPetRecordModal" tabindex="-1" role="dialog" aria-labelledby="addPetRecordModalLabel" aria-hidden="true">
@@ -301,9 +312,7 @@
                 <div class="modal-content">
                     <div class="modal-header">
                         <h5 class="modal-title" id="addPetRecordModalLabel">Add Pet Medical Record</h5>
-                        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
-                            <span aria-hidden="true">&times;</span>
-                        </button>
+                        <button type="button" class="close" data-dismiss="modal" aria-label="Close"></button>
                     </div>
                     <div class="modal-body">
                         <form method="post" id="addMedicine">
@@ -314,7 +323,7 @@
                                 <select class="form-control" id="petName">
                                 </select>
                             </div>
-                            
+
                             <div class="form-group">
                                 <label for="petAge">Age</label>
                                 <input type="text" class="form-control" id="petAge" placeholder="Enter Age">
@@ -353,7 +362,7 @@
    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
 
     <script>
-        var userId = "" 
+        var userId = ""
         function showModal(id) {
             event.preventDefault();
             userId = id
@@ -369,7 +378,7 @@
                 method: 'POST',
                 body: formData
             }).then(response => response.json())
-            .then(data => { 
+            .then(data => {
 
                 const petTableBody = document.querySelector('#petInformation tbody');
 
@@ -395,22 +404,22 @@
                     button.dataset.toggle = 'modal';
                     button.dataset.target = '#petRecordsModal';
                     button.textContent = 'View';
-                    
+
                     // Add an event listener to the button
                     button.addEventListener('click', function() {
                         // Call the viewMedicalRecords function with the actual pet.id
                         viewMedicalRecords(pet.id);
                     });
-                    
+
                     // Append the button to the container
-                   
-                    
+
+
                     nameCell.textContent = pet.name;
                     const birthdateString = pet.birthdate;
                     const birthdate = new Date(birthdateString);
                     const options = { year: 'numeric', month: 'long', day: 'numeric' };
                     const formattedDate = birthdate.toLocaleDateString('en-US', options);
-                    
+
                     buttonCell.appendChild(button);
                     // Set the formatted date to the text content of the element
                     birthdateCell.textContent = formattedDate;
@@ -424,7 +433,7 @@
                     newRow.appendChild(breedCell);
                     newRow.appendChild(buttonCell);
                     petTableBody.appendChild(newRow);
-                    
+
                 });
             })
         }
@@ -438,16 +447,16 @@
                 method: 'POST',
                 body: formData
             }).then(response => response.json())
-            .then(data => { 
+            .then(data => {
                 const petTableBody = document.querySelector('#petMedicalRecords tbody');
                 const petNameRecord = document.getElementById('pet_name_record');
-        
+
                 petNameRecord.textContent = data.pet_name;
                 petTableBody.innerHTML = '';
-        
+
                 // Sort appointments by date
                 data.appointments.sort((a, b) => new Date(a.date) - new Date(b.date));
-        
+
                 data.appointments.forEach(appointment => {
                     const newRow = document.createElement('tr');
                     const clinicCell = document.createElement('td');
@@ -456,36 +465,36 @@
                     const medicineCell = document.createElement('td');
                     const vetCell = document.createElement('td');
                     const noteCell = document.createElement('td');
-                   
+
                     clinicCell.textContent = appointment.clinic;
                     const birthdateString = appointment.date;
                     const birthdate = new Date(birthdateString);
                     const options = { year: 'numeric', month: 'long', day: 'numeric' };
                     const formattedDate = birthdate.toLocaleDateString('en-US', options);
-                   
+
                     dateCell.textContent = formattedDate;
                     diagnosisCell.textContent = appointment.diagnosis;
                     medicineCell.textContent = appointment.medicine;
                     vetCell.textContent = appointment.veterinarian;
                     noteCell.textContent = appointment.note;
-        
+
                     newRow.appendChild(clinicCell);
                     newRow.appendChild(dateCell);
                     newRow.appendChild(diagnosisCell);
                     newRow.appendChild(medicineCell);
                     newRow.appendChild(vetCell);
                     newRow.appendChild(noteCell);
-                    
+
                     petTableBody.appendChild(newRow);
                 });
             })
         }
-        
+
         function populatePetData(selectedPet, data) {
             // Find the pet in the data array
             const pet = data.pets.find(pet => pet.id === parseInt(selectedPet));
 
-        
+
             // Populate the corresponding fields with the pet data
             document.getElementById("petAge").value = pet.age;
 
@@ -504,12 +513,12 @@
                 const currentDate = new Date();
                 // Compare appointment date and time with current date and time
                 const isFutureDateTime = appointmentDate > currentDate;
-            
+
                 // Disable fields if the appointment is in the future
                 const dateInput = document.getElementById("dateAdded");
                 const diagnosisInput = document.getElementById("diagnosis");
                 const vetSelectName = document.getElementById("vetName");
-            
+
                 dateInput.value = data.appointment.date;
                 diagnosisInput.value = data.appointment.type;
                 document.getElementById("appointment_id").value = data.appointment.id;
@@ -522,7 +531,7 @@
                     option.textContent = vet.vetname;
                     vetSelectName.appendChild(option);
                 });
-        })  
+        })
         }
 
         function addMedicalRecords() {
@@ -535,8 +544,8 @@
                 method: 'POST',
                 body: formData
             }).then(response => response.json())
-            .then(data => { 
-                
+            .then(data => {
+
                 const petNameSelect = document.getElementById("petName");
                 petNameSelect.innerHTML = '';
                 // Iterate through each pet and create a table row
@@ -555,7 +564,7 @@
             })
         }
 
-        
+
         function addMedicalRecord() {
             event.preventDefault();
             var myForm = document.querySelector('#addMedicine');
@@ -565,7 +574,7 @@
                 method: 'POST',
                 body: formData
             }).then(response => response.json())
-            .then(data => { 
+            .then(data => {
                 if (data.isSuccessful) {
                     location.reload()
                 }

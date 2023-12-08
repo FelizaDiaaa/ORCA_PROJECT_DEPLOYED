@@ -22,12 +22,10 @@
     /* body base text */
     @import url('https://fonts.googleapis.com/css2?family=Hind+Guntur&display=swap');
 
-    h1 {
-      font-size: 2.986rem;
-    }
     .Subheaders {
       font-family: 'Nunito';
       font-size: 2rem;
+      font-weight: bold;
     }
     .Subheaders > span {
       font-size: 2.986rem;
@@ -43,11 +41,6 @@
     .unavailable {
       background-color: #af1b13; /* Adjust the background color for inactive buttons */
     }
-
-    .reserved {
-      background-color:blue; /* Adjust the background color for inactive buttons */
-    }
-
     .active {
       background-color: #4CAF50; /* Adjust the background color for active buttons */
       color: white; /* Adjust the text color for active buttons */
@@ -110,7 +103,10 @@
       object-fit: cover;
       border-radius: 5px;
     }
-
+    .highlight-container {
+      height: 100vh;
+      background-color: #109f26;
+    }
     /*SET APPOINTMENT & VIEW DOCTORS BUTTONS*/
     .clinic-buttons {
       bottom: 0;
@@ -159,7 +155,7 @@
         color: #000000;
       }
     .clinic-name {
-      font-size: 20px;
+      font-size: 1.3rem;
       text-align: center;
       font-weight: bold;
       margin-top: 10px;
@@ -173,58 +169,18 @@
       text-align: left;
       list-style-type: none;
       font-family: 'Hind Guntur';
+      
     }
+
     /* Clinic and Volunteer box descriptions */
     .clinic-box p{
       margin-bottom: 5px;
     }
 
-    .legend{
-      display: none;
-    }
-    .legend ::after{
-      display: block;
-    }
-    .modal-header{
+    .modal-title{
+      font-size: 1.25rem;
+      font-weight: bold;
       font-family: 'Nunito';
-    }
-
-    @media (max-width: 768px){
-      .clinic-container {
-        flex-wrap: wrap;
-        justify-content: center;
-        align-items: center;
-      }
-
-      .clinic-box {
-        margin: 10px 0;
-      }
-      .sidebar-text {
-        display: none;
-      }
-      .clinic-box{
-        padding: 10px;
-      }
-
-      .modal-dialog {
-        margin: 30px auto;
-      }
-
-      .doctor-box {
-        padding: 10px;
-      }
-
-      .doctor-name {
-        font-size: 1rem;
-      }
-
-      .doctor-description {
-        font-size: 0.8rem;
-      }
-      .side-logo{
-        width: 40px;
-        margin-left: -10px;
-      }
     }
 
     /*FOR SET AN APPOINTMENT MODAL*/
@@ -247,10 +203,10 @@
     }
 
     #viewDoctorsModal .modal-title {
-      font-size: 1.5rem;
-      font-weight: bold;
+      font-size: 1.25rem !important;
     }
-        /* Style for doctor boxes */
+    
+    /* Style for doctor boxes */
     .doctor-box {
       text-align: center;
       padding: 15px;
@@ -259,36 +215,41 @@
       box-shadow: 0px 0px 5px rgba(0, 0, 0, 0.2);
       margin-bottom: 20px;
       margin: 10px;
+      max-width: 390px;
+      min-width: 300px;
     }
-      .doctor-box img {
-        width: 100px; /* Adjust the width as needed */
-        height: 100px; /* Adjust the height as needed */
-        border-radius: 50%;
-        margin-bottom: 10px;
+
+    .doctor-box img {
+      width: 100px; /* Adjust the width as needed */
+      height: 100px; /* Adjust the height as needed */
+      border-radius: 50%;
+      margin-bottom: 10px;
     }
-      .doctor-name {
-        font-size: 1.2rem;
-        font-weight: bold;
-        margin-bottom: 5px;
-      }
-      .doctor-description {
+    .doctor-name {
+      font-size: 1rem;
+      font-weight: bold;
+      margin-bottom: 3px;
+      font-family: 'Nunito';
+    }
+    .doctor-description {
       font-size: 0.9rem;
       color: #6c757d;
-      }
-      .disabled-link {
-        pointer-events: none;
-        color: #888;
-        cursor: not-allowed !important;
-      }
-      .ngo-icon {
-        width: 250px;
-        height: 250px;
-        overflow: hidden;
-        padding: 4px;
-        background-color: #fff;
-        border-radius: 100%;
-        filter: drop-shadow(#000 2px 0 3px);
-      }
+      font-family: 'Hind Guntur';
+    }
+    .disabled-link {
+      pointer-events: none;
+      color: #888;
+      cursor: not-allowed !important;
+    }
+    .ngo-icon {
+      width: 250px;
+      height: 250px;
+      overflow: hidden;
+      padding: 4px;
+      background-color: #fff;
+      border-radius: 100%;
+      filter: drop-shadow(#000 2px 0 3px);
+    }
 
     .clinic-buttons {
       display: grid;
@@ -297,13 +258,72 @@
       height: auto;
     }
 
+    /*For Apply Volunteer Modal Style*/
+    .volunteer-form-label{
+      font-weight: bold;
+      font-size: 1.2rem;
+    }
+
+    /*For Org that has not been accepted yet*/
+    .screen{
+      width: 100vw;
+      height: 100vh;
+      background-color: grey;
+      opacity: .5;
+      align-items: center;
+      justify-content: center;
+      color: white;
+      display: flex !important;
+    }
+    .warning{
+      font-size: 50px;
+      text-align: center;
+    }
+    .logout{
+      width: 90px !important;
+      height: 50px;
+      border-radius: 5px;
+      border-color: #ff8200;
+      background-color: #ff8200;
+      border: none;
+      color: white;
+    }
+
     @media screen and (min-width: 375px) and (max-width: 768px) {
       .card-container {
         width: 100%;
         display: grid;
         place-items: center;
       }
+      .clinic-box {
+        margin: 10px 0;
+        padding: 10px;
+      }
+
+      .modal-dialog {
+        margin: 30px auto;
+      }
+
+      .doctor-box {
+        padding: 10px;
+      }
+
+      .doctor-name {
+        font-size: 1rem;
+      }
+
+      .doctor-description {
+        font-size: 0.8rem;
+      }
+      .side-logo{
+        width: 40px;
+        margin-left: -10px;
+      }
+      .sidebar-text {
+        display: none;
+      }
     }
+
   </style>
 </head>
 {% if error %}
@@ -311,7 +331,7 @@
   <div class="screen">
     <div class="row" style="align-items: center; justify-content: center;">
       <p class="warning"><span style="font-style: italic;">{{error}}</span> <br> </p>
-        <button class="logout" onclick="window.location.href='/main'">Go to Homepage</button>
+        <button class="logout" onclick="window.location.href='/main'"card-containerclini>Go to Homepage</button>
     </div>
   </div>
 </body>
@@ -361,7 +381,7 @@
       </div>
 
       <!--FOR HIGHLIGHTS-->
-      <div class="row">
+      <div class="highlight-container">
         <form id="highlightsFields" method="POST" enctype="multipart/form-data">
           {% csrf_token %}
           {% for item in highlights %}
@@ -382,7 +402,7 @@
       <div class="modal-dialog">
         <div class="modal-content">
           <div class="modal-header">
-            <h5 class="modal-title" id="appointmentModalLabel">SET AN APPOINTMENT</h5>
+            <h5 class="modal-title" id="appointmentModalLabel">Set an Appointment</h5>
             <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
           </div>
           <form id="appointmentsDate" method="POST" >
@@ -409,9 +429,6 @@
                   <label for="appointmentDate" class="form-label">Date: <span style="color: rgb(202, 6, 6)">*</span></label>
                   <input type="text" name="appointmentdate" class="form-control" id="appointmentDate" onchange="getHours()" required>
                 </div>
-                  <div class="legend">
-                    <span>Red</span><span>Green</span><span>Blue</span>
-                  </div>
                   <div class="button-style" id="buttonContainer"></div>
                   <input type="time" name="appointmenttime" class="form-control" id="appointmentTime" hidden required>
                 <div class="mb-3">
@@ -437,7 +454,7 @@
           </div>
           <div class="modal-body">
               <div class="row">
-                <div class="d-flex col" id="veterinarianInfo">
+                <div class="d-flex col" id="veterinarianInfo" style="display: flex; flex-wrap: wrap; justify-content: center;">
                   <!-- <div class="d-flex flex-wrap" id="veterinarianInfo"></div> -->
                 </div>
               </div>
@@ -458,8 +475,8 @@
             <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
           </div>
             <div class="modal-body">
-              <div class="col-md-6">
-                  <label for="validID" class="volunteer-form-label">Valid ID <span style="color: rgb(202, 6, 6)">*</span></label>
+              <div class="col-md-6" style="font-family: 'Nunito';">
+                  <label for="validID" class="volunteer-form-label">Valid ID <span style="color: rgb(202, 6, 6)">*</span></label><br>
                   <br>
                   <label for="validID" style="font-weight: normal;">Front:</label>
                   <input type="file" name="validID" class="form-control" id="validID" accept="image/*" required/>
@@ -478,7 +495,7 @@
     </div>
 
 
-    <!-- Modal for Apply Volunteer -->
+    <!-- Modal for Apply Volunteer (if rejected) -->
     <div class="modal fade" id="yesNoModal" tabindex="-1" aria-labelledby="yesNoModalLabel" aria-hidden="true">
       <div class="modal-dialog">
         <div class="modal-content">

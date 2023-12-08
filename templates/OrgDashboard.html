@@ -13,32 +13,23 @@
 </head>
 <style>
   @import url('https://fonts.googleapis.com/css2?family=Arvo:wght@700&display=swap');
-    /* Subheaders */
-    @import url('https://fonts.googleapis.com/css2?family=Nunito:wght@500&display=swap');
-    /* body base text */
-    @import url('https://fonts.googleapis.com/css2?family=Hind+Guntur&display=swap');
-    h1 {
-      font-size: 2.986rem;
-      font-family: 'Arvo';
-    }
-    .Subheaders {
-      font-family: 'Nunito';
-      font-size: 1.728rem;
-    }
-    .Subheaders > span {
-      font-size: 2.986rem;
-      font-weight: 700;
-    }
-    body {
-      all: initial;
-      font-family: 'Hind Guntur';
-      font-size: 1rem;
-    }
+  /* Subheaders */
+  @import url('https://fonts.googleapis.com/css2?family=Nunito:wght@500&display=swap');
+  /* body base text */
+  @import url('https://fonts.googleapis.com/css2?family=Hind+Guntur&display=swap');
+
+  body {
+    all: initial;
+    font-family: 'Nunito';
+    font-size: 1rem;
+  }
   .user-identifier{
-    color: white;
-    font-size: 1em;
-    font-weight:500;
-    width: 100%;
+   color: white;
+   font-size: 1em;
+   font-weight:500;
+   width: 100%;
+   font-family: 'Nunito';
+   margin: 16px 0 8px 0;
   }
   .side-logo {
     width: 240px;
@@ -71,8 +62,17 @@
     padding: 0;
     cursor: pointer;
   }
+
+  .notification {
+    background-color: red;
+    color: white;
+    padding: 3px 6px;
+    border-radius: 50%;
+    margin-left: 5px; /* Adjust the margin as needed */
+  }
+
    @media screen and (min-width: 769px) {
-       .mobile-menu {
+      .mobile-menu {
       display: grid !important;
     }
    }
@@ -182,7 +182,7 @@
       padding: 100px 0 0 0;
     }
     .navbtn {
-      font-family: "Hind Guntur";
+      font-family: "Nunito";
       font-size: 1rem;
     }
     .side-logo > .mobile {
@@ -193,21 +193,13 @@
       display: block;
       height: auto;
       color: #fff;
-      font-family: "Hind Guntur";
+      font-family: "Nunito";
       font-size: 1.1rem;
     }
     .mob-view {
       padding: 0 0 0 12px; border-left: 3px solid rgb(178, 178, 178);
     }
   }
-  .notification {
-    background-color: red;
-    color: white;
-    padding: 3px 6px;
-    border-radius: 50%;
-    margin-left: 5px; /* Adjust the margin as needed */
-  }
-
 </style>
 
 <body>
@@ -233,7 +225,6 @@
                   {% endif %}
               </a>
           </li>
-
             <li class="navbtn"><a class="b-bot" href="orgappointmentrecs"><i class="fa-solid fa-box-archive" style="padding-right: 16px; width: 32px;"></i><span>Appointment Records</span></a></li>
             <li class="navbtn"><a class="b-bot" href="/logout_view"><i class="fa-solid fa-right-from-bracket fa-rotate-180" style="padding-left: 16px; width: 32px;"></i><span>Logout</span></a></li>
           </ul>

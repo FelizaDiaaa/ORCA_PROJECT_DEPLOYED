@@ -18,10 +18,8 @@
       @import url('https://fonts.googleapis.com/css2?family=Nunito:wght@500&display=swap');
       /* body base text */
       @import url('https://fonts.googleapis.com/css2?family=Hind+Guntur&display=swap');
-      h1 {
-        font-size: 2.986rem;
-        font-family: 'Arvo';
-      }
+     
+
       .Subheaders {
         font-family: 'Nunito';
         font-size: 1.728rem;
@@ -29,6 +27,12 @@
       .Subheaders > span {
         font-size: 2.986rem;
         font-weight: 700;
+      }
+      .btn-container{
+        width: 100%;
+        min-width: fit-content;
+        display: flex;
+        justify-content: end;
       }
       body {
         all: initial;
@@ -165,6 +169,8 @@
         height: 100%;
         width: fit-content;
         background-color: #fff;
+        align-items: center;
+
       }
       .table {
         width: 100%s;
@@ -203,6 +209,7 @@
 
       .profile-name {
           margin-top: 8px;
+          padding-bottom: 10px;
           font-weight: bold;
           font-size: 18px;
           color: #333;
@@ -270,6 +277,11 @@
 
       .delete-button:hover {
         background-color: white;
+      }
+
+      .add-icon {
+        color: #00cc00;
+        background-color: transparent;
       }
 
       @media screen and (min-width: 320px) and (max-width: 768px) {
@@ -344,7 +356,7 @@
         <h2 class="Subheaders title-header">
           <span style="font-size: 1.5rem; font-weight: 700;">SERVICES</span>
           <button class="add-btn" data-bs-toggle="modal" data-bs-target="#addServiceModal">
-            <i class="fa-regular fa-plus-square add-icon"></i>
+
           </button>
         </h2>
       </div>
@@ -452,7 +464,7 @@
                       </form>
                   </div>
               </div>
-          </div>
+            </div>
         </div>
 
         <br/>
@@ -480,7 +492,9 @@
                                 <label for="doctorPhoto" class="form-label">Doctor Photo:</label>
                                 <input type="file" name= "profilepicture" class="form-control" id="doctorPhoto" accept="image/*" required>
                             </div>
-                            <button type="submit" class="btn btn-primary" data-bs-dismiss="#addDoctorModal">Add Doctor</button>
+                            <div class="btn-container">
+                              <button type="submit" class="btn btn-primary" data-bs-dismiss="#addDoctorModal">Add Doctor</button>
+                            </div>
                         </form>
                     </div>
                 </div>

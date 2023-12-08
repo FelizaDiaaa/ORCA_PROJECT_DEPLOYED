@@ -19,21 +19,10 @@
     @import url('https://fonts.googleapis.com/css2?family=Nunito:wght@500&display=swap');
     /* body base text */
     @import url('https://fonts.googleapis.com/css2?family=Hind+Guntur&display=swap');
-    h1 {
-      font-size: 2.986rem;
-      font-family: 'Arvo';
-    }
-    .Subheaders {
-      font-family: 'Nunito';
-      font-size: 1.728rem;
-    }
-    .Subheaders > span {
-      font-size: 2.986rem;
-      font-weight: 700;
-    }
+   
     body {
       all: initial;
-      font-family: 'Hind Guntur';
+      font-family: 'Hind Guntur'!important;
       font-size: 1rem;
     }
   .user-identifier{
@@ -41,6 +30,8 @@
     font-size: 1em;
     font-weight:500;
     width: 100%;
+    font-family: 'Nunito';
+    margin: 16px 0 8px 0;
   }
   .side-logo {
     width: 240px;
@@ -56,6 +47,7 @@
     max-width: 144px;
   }
   .navbar-container {
+    display: block;
     height: 100%;
     width: 100%;
     z-index: 500;
@@ -159,6 +151,20 @@
     .navbar-container, .user-identifier {
       display: none;
     }
+    .side-logo > .mobile {
+      all: initial;
+      display: grid;
+      place-items: center;
+      padding: 0 24px;
+      display: block;
+      height: auto;
+      color: #fff;
+      font-family: "Nunito";
+      font-size: 1.1rem;
+    }
+    .mob-view {
+      padding: 0 0 0 12px; border-left: 3px solid rgb(178, 178, 178);
+    }
     .dashboard {
       padding: 0;
       margin: 0;
@@ -173,7 +179,7 @@
       height: 100%;
       margin-right: 16px;
     }
-
+    
     .side-logo {
       all: initial;
       height: 100%;
@@ -217,6 +223,9 @@
       height: fit-content;
       padding: 100px 0 0 0;
     }
+    .navbtn {
+      font-family: 'Hind Guntur';
+    }
   }
 </style>
 
@@ -225,7 +234,7 @@
     <nav class="c-width">
       <div class="side-logo">
         <img src="{%static 'img/orca web logo.png'%}" alt="Logo">
-        <p class="user-identifier mobile"><span>SYSTEM ADMIN</span></p>
+        <p class="user-identifier mobile"><span class="mob-view">SYSTEM ADMIN</span></p>
       </div>
       <div class="burg-button" onclick="menuToggle()">
         <i class="fa fa-bars" style="font-size:32px; color: #f8f8f8;"></i>

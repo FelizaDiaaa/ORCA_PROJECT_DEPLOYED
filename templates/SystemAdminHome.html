@@ -18,125 +18,128 @@
     @import url('https://fonts.googleapis.com/css2?family=Nunito:wght@500&display=swap');
     /* body base text */
     @import url('https://fonts.googleapis.com/css2?family=Hind+Guntur&display=swap');
-    h1 {
-      font-size: 2.986rem;
-      font-family: 'Arvo';
-    }
+   
     .Subheaders {
       font-family: 'Nunito';
       font-size: 1.728rem;
+      font-weight: bold;
     }
-    .Subheaders > span {
-      font-size: 2.986rem;
-      font-weight: 700;
+
+    .modal-title {
+      font-size: 1.25rem;
+      font-weight: bold;
+      font-family: 'Nunito';
     }
+
     body {
       all: initial;
-      font-family: 'Hind Guntur';
+      font-family: 'Nunito';
       font-size: 1rem;
     }
 
+    .mt-5 {
+      margin-top: 3rem;
+    }
 
-  .mt-5 {
-    margin-top: 3rem;
-  }
+    .clinic-card {
+      border: 1px solid #ccc;
+      position: static;
+      border-radius: 5px;
+      padding: 15px;
+      display: grid;
+      place-items: center;
+      text-align: center;
+      background-color: #fff;
+      box-shadow: 0 2px 6px rgba(0, 0, 0, 0.1);
+    }
 
-  .clinic-card {
-    border: 1px solid #ccc;
-    width: auto;
-    height: auto;
-    min-width: 300px;
-    position: static;
-    border-radius: 5px;
-    padding: 15px;
-    display: grid;
-    place-items: center;
-    text-align: center;
-    background-color: #fff;
-    box-shadow: 0 2px 6px rgba(0, 0, 0, 0.1);
-  }
+    .clinic-image {
+      width: auto;
+      height: 150px;
+      border-radius: 12px;
 
-  .clinic-image {
-    width: auto;
-    height: 150px;
-    border-radius: 12px;
+    }
+    .clinic-name {
+      font-size: 20px;
+      font-weight: bold;
+      margin-top: 10px;
+      color: #007bff;
+    }
 
-  }
-  .clinic-name {
-    font-size: 20px;
-    font-weight: bold;
-    margin-top: 10px;
-    color: #007bff;
-  }
+    .clinic-info {
+      font-size: 14px;
+      color: #555;
+      margin-top: 10px;
+      text-align: left;
+    }
 
-  .clinic-info {
-    font-size: 14px;
-    color: #555;
-    margin-top: 10px;
-    text-align: left;
-  }
+    .modal-footer{
+      font-family: 'Nunito';
+    }
+    .btn-clinic {
+      font-size: 16px;
+      padding: 10px 20px;
+      border-radius: 5px;
+      background-color: #ea7603;
+      border-color: #ffffff;
+      color: #fff4f4;
+      width: 100%;
+      margin-top: 10px;
+      font-family: 'Nunito';
+    }
 
-  .btn-clinic {
-    font-size: 16px;
-    padding: 10px 20px;
-    border-radius: 5px;
-    background-color: #ea7603;
-    border-color: #ffffff;
-    color: #fff4f4;
-    width: 100%;
-    margin-top: 10px;
-  }
-
-  .btn-clinic:hover {
-    background-color: #0056b3;
-    border-color: #ffffff;
-  }
-  .container {
-    width: 100%;
-    height: 100%;
-    min-height: 100vh;
-    background-color: blanchedalmond;
-  }
-  .clinics-ls{
-    width: 100%;
-    height: fit-content; 
-    display:grid;
-    grid-template-columns: repeat(auto-fit, minmax(300px, auto));
-    justify-content: space-evenly;
-    grid-gap: 32px;
-  }
-  .clinic-card {
-    width: 100%;
-  }
-  .clinic-card > ul {
-    height: auto;
-    padding: 0;
-    width: 100%;
-    list-style: none;
-  }
-  .clinic-info > li{
-    display: flex;
-    width: 100%;
-    justify-content: start;
-    align-items: start;
-  }
-  @media screen and (min-width: 375px) and (max-width: 768px) {
+    .btn-clinic:hover {
+      background-color: #0056b3;
+      border-color: #ffffff;
+    }
     .container {
       width: 100%;
-      min-width: 100vw;
-      height: auto;
+      height: 100%;
       min-height: 100vh;
+      background-color: blanchedalmond;
     }
-  }
+    .clinics-ls{
+      width: 100%;
+      height: fit-content; 
+      display:grid;
+      grid-template-columns: repeat(auto-fit, minmax(375px, 350px));
+      justify-content:start; 
+      grid-gap: 32px;
+    }
+    .clinic-card > ul {
+      height: auto;
+      padding: 0;
+      width: 100%;
+      list-style: none;
+    }
+    .clinic-info > li{
+      display: flex;
+      width: 100%;
+      justify-content: start;
+      align-items: start;
+    }
+    .modal.fade.show{
+      background-color: rgba(0, 0, 0, 0.7);
+    }
+    @media screen and (min-width: 375px) and (max-width: 768px) {
+      .container {
+        width: 100%;
+        min-width: 100vw;
+        height: auto;
+        min-height: 100vh;
+      }
+      .clinics-ls {
+        justify-content: center;
+      }
+    }
   </style>
 </head>
 
 <body>
 {% include 'SystemAdminDashboard.html' %}
   <div class="container p-4">
-    <h2 class="Subheaders pb-4">ORGANIZATIONS/CLINICS REGISTER</h2>
-        <!-- Clinic 1 -->
-        
+    <h2 class="Subheaders pb-4 pt-2">LIST OF APPLICANTS FOR VETERINARY CLINICS</h2>
+        <!-- Clinic -->
           <form id="systemadminhomeFields" method="POST" enctype="multipart/form-data">
             {% csrf_token %}
           </form>
@@ -153,6 +156,7 @@
                 <button class="btn-clinic" onclick="getOrgDetailsID({{organization.id}})" data-bs-toggle="modal" data-bs-target="#clinicModal">See More Info</button>
             </div>
           {% endfor %}
+
           <!-- Modal for Clinic Details-->
           <div class="modal fade" id="clinicModal" data-bs-backdrop="false" tabindex="-1" aria-labelledby="clinicModalLabel" aria-hidden="true">
             <div class="modal-dialog modal-lg">
@@ -169,10 +173,6 @@
                       </div>
                   </form>
                 </div>
-                  <div class="modal-body" id="orgDetails">
-                  </div>
-                  <div class="modal-footer">
-                  </div>
               </form>
             </div>
         </div>

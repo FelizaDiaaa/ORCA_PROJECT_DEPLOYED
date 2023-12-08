@@ -12,14 +12,39 @@
   <link rel="icon" type="image/x-icon" href="{% static 'img/orca web logo.png' %}">
   <title>User Appointments Page</title>
   <style>
-     /* Main content area */
-     .flex-grow-1{
+
+    @import url('https://fonts.googleapis.com/css2?family=Arvo:wght@700&display=swap');
+    /* Subheaders */
+    @import url('https://fonts.googleapis.com/css2?family=Nunito:wght@500&display=swap');
+    /* body base text */
+    @import url('https://fonts.googleapis.com/css2?family=Hind+Guntur&display=swap');
+
+    /* Main content area */
+    .flex-grow-1{
       height: auto;
       min-height: 100vh;
       width: 100%;
       display: flex;
       flex-direction: column;
       background-color: #FFEED9;
+      font-family: 'Nunito';
+    }
+
+    .table{
+      border-style: solid;
+    }
+
+    .mb-3{
+      font-weight: bold;
+      font-size: 1.728rem;
+    }
+
+    .modal-title{
+      font-weight: bold;
+      font-family: 'Nunito';
+    }
+    .modal-body{
+      font-family: 'Nunito';
     }
 
     @media screen and (min-width: 375px) and (max-width: 768px){
@@ -77,12 +102,13 @@
         </table>
       </div>
     </div>
-    <!-- Modal -->
-    <div class="modal fade" id="viewHistoryModal" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true" data-bs-backdrop="false">  
+
+    <!-- Modal for Appointment History-->
+    <div class="modal fade" id="viewHistoryModal" tabindex="-1" aria-labelledby="AppointmentModalLabel" aria-hidden="true" data-bs-backdrop="true">  
       <div class="modal-dialog modal-lg">
         <div class="modal-content">
           <div class="modal-header">
-            <h5 class="modal-title" id="exampleModalLabel">Appointment History</h5>
+            <h5 class="modal-title" id="AppointmentModalLabel">Appointment History</h5>
             <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
           </div>
           <div class="modal-body">

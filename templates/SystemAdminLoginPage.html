@@ -11,6 +11,12 @@
     <title>System Admin Login Page</title>
 
     <style>
+        @import url('https://fonts.googleapis.com/css2?family=Arvo:wght@700&display=swap');
+        /* Subheaders */
+        @import url('https://fonts.googleapis.com/css2?family=Nunito:wght@500&display=swap');
+        /* body base text */
+        @import url('https://fonts.googleapis.com/css2?family=Hind+Guntur&display=swap');
+        
         body{
             background-color: #FFCC9D;
             background-image: url('{% static "img/.jpg" %}');
@@ -45,10 +51,12 @@
         }
         
         .form_button{
-            display: flex; 
-            flex-direction: column; 
-            align-items: center;
-            justify-content: center;
+            width: 100%;
+            display: grid;
+            grid-template-columns: auto auto;
+            justify-content: space-between;
+            cursor:pointer;
+            padding-top: 32px;
         }
         
         .btn-primary{
@@ -79,43 +87,71 @@
             padding: 0.625em;
             border-radius: 5px;
             width: 100%;
+            font-family: 'Nunito';
         }
         
         .form-label{
             font-weight: bold;
-            font-family: 'Canva Sans', Arial;
+            font-family: 'Nunito';
             color: rgba(43, 43, 43, 0.848);
         }
-        
+        .g-back, .login-btn {
+            padding: 8px 24px;
+            font-size: 1.10rem;
+            border-radius: 5px;
+        }
+        .g-back {
+            background-color: #5e7e9a0d;
+            color: #1e262d;
+        }
+        .g-back:hover {
+            background-color: #5e7e9a59;
+            color: #000 ;
+            transition: .9s;
+        }
+        .login-btn {
+            background-color: #ff8200;
+            color: #f8f8f8;
+            border: none;
+        }
+        .login-btn:active {
+            background-color: #174786;
+            border: none;
+        }
         /* Media queries for responsiveness */
         @media screen and (max-width: 600px){
-        .container {
-            max-width: 100%;
-            padding: 0.625em;
-            align-items: center;
-            justify-content: center;
-        }
-        
-        .form {
-            padding: 1.25em;
-            background-color: white;
-        }
-        
-        .form-group {
-            margin-bottom: 1rem;
-        }
-        
-        .form-logo img {
-            height: 100px;
-            margin-right: 0;
-        }
-        
-        .btn-primary{
-            width: 80%;
-        }
-        .btn-secondary{
-            width: 50%;
-        }
+            .container {
+                max-width: 100%;
+                padding: 0.625em;
+                align-items: center;
+                justify-content: center;
+            }
+            
+            .form {
+                padding: 1.25em;
+                background-color: white;
+            }
+
+            .form-logo{
+                display: grid;
+                justify-items: center;
+            }
+            
+            .form-group {
+                margin-bottom: 1rem;
+            }
+            
+            .form-logo img {
+                height: 100px;
+                margin-right: 0;
+            }
+            
+            .btn-primary{
+                width: 80%;
+            }
+            .btn-secondary{
+                width: 50%;
+            }
         }
     </style>
 </head>
@@ -140,8 +176,8 @@
             </div>
 
             <div class="form_button">
-                <button class="btn btn-primary login_button mb-3">LOGIN</button>
-                <a href="main" class="btn btn-secondary back_button">Go Back</a>
+                <a href="main" class="g-back" style="text-decoration: none;">Go Back</a>
+                <button class="login-btn" >LOGIN</button>
             </div>
         </form>
     </div>

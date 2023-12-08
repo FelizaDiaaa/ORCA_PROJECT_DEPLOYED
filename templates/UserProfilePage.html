@@ -16,13 +16,11 @@
     @import url('https://fonts.googleapis.com/css2?family=Nunito:wght@500&display=swap');
     /* body base text */
     @import url('https://fonts.googleapis.com/css2?family=Hind+Guntur&display=swap');
-    h1 {
-      font-size: 2.986rem;
-      font-family: 'Arvo';
-    }
+
     .Subheaders {
       font-family: 'Nunito';
-      font-size: 1.728rem;
+      font-size: 1.7rem;
+      font-weight: bold;
     }
     .Subheaders > span {
       font-size: 2.986rem;
@@ -34,37 +32,36 @@
       font-size: 1rem;
     }
      /* Main content area */
-     .flex-grow-1{
-      height: auto;
-      min-height: 100vh;
-      display: flex;
-      background-color: #FFEED9;
+    .flex-grow-1{
+     height: auto;
+     min-height: 100vh;
+     display: flex;
+     background-color: #FFEED9;
     }
-
+    .profile-info {
+      width: 100%;
+      padding-left: 16px;
+      margin: 0;
+      display: flex;
+      flex-direction: column;
+    }
     .profile-info strong {
       font-size: 25px;
       font-weight: bold;
       color: #737982;
     }
-
-    .profile-info span {
-      margin-left: 20px;
-      color: black;
+    .center {
+      padding-top: 50px;
     }
-
     .profile-box{
-      content: ;
       width: 100%;
       height: fit-content;
       padding: 15px;
-      position: relative;
       background-color: #fff;
       border-radius: 10px;
-    }
-    .center {
-        display: flex;
-        justify-content: space-between;
-        width:95%;
+      display: flex;
+      flex-direction: row;
+      justify-content: start;
     }
 
     .img-container {
@@ -78,10 +75,19 @@
       object-fit: cover;
     }
 
+    .modal-title {
+      font-size: 1.25rem;
+      font-weight: bold;
+      font-family: 'Nunito';
+    }
+
+    .mb-3{
+      font-family: 'Nunito';
+    }
     /* Clinic and Volunteer box descriptions */
     .profile-box {
       display: flex;
-      flex-direction: column;
+      flex-direction: row;
     }
 
     .profile-info-item {
@@ -105,12 +111,16 @@
     .sec-container {
       display: flex;
       flex-direction: row;
-      width: 100%;
-      min-width: fit-content;
+      max-width: 400px;
       padding: 32px ;
+      gap: 16px;
       text-align:center;
-      align-items:center;
-      justify-content: center;
+    }
+    .btn-container {
+      height: 180px;
+      display: flex;
+      justify-content: start;
+      align-items: end;
     }
     .btn-primary {
       background-color: transparent !important;
@@ -126,34 +136,93 @@
       background-color: transparent;
     }
 
+    .btn-success{
+      background-color: #ff8200;
+      border: none;
+    }
+    .btn:hover{
+      background-color: #0056b3;
+      border: none;
+    }
+
     .buttons{
       background-color: transparent;
     }
-    @media (max-width: 425px) {
-    /* Your styles for small screens go here */
-    .center {
-        display: flex;
-        justify-content: space-between;
-        width:90%;
+    .col1-info {
+      height: 60px;
+      width: 95%;
+      min-width: fit-content;
+      display: flex;
+      justify-content: space-between;
     }
-
-    /* Add more styles as needed */
+    .col2-info {
+      height: 100%;
+      width: 100%;
+      min-width: fit-content;
+      display: flex;
+      justify-content: start;
+    }
+    .about {
+      font-family: 'Nunito';
+      font-weight: 600;
+      font-size: 1.5rem;
+      display: flex;
+      align-items: center;
+    }
+    .basic-info {
+      width: 40%;
+      display: flex;
+      flex-direction: column;
+    }
+    .fullname {
+      font-size: 1.7rem;
+      font-weight: 600;
+    }
+    .contact-num, .email {
+      font-size: 1.5rem;
+      font-weight: 500;
+      width: fit-content;
+    }
+    .info-container {
+      display: flex;
+      flex-direction: column;
+    }
+    @media (max-width: 425px){
+      .center {
+          display: flex;
+          justify-content: space-between;
+          width:90%;
+      }
     }
 
     @media (max-width: 768px){
       .sidebar-text {
         display: none;
       }
+      .dspn-mobile {
+        display: flex;
+        align-items: center;
+        padding-right: 50px;
+      }
       nav{
         width: 100%;
       }
-
+      .center {
+        padding: 0;
+      }
+      .col1-info {
+        padding: 0;
+        margin: 0;
+        width: 100%;
+      }
       .side-logo{
         width: 40px;
         margin-left: -10px;
       }
 
-
+      .sec-container {
+        justify-content: center;
+      }
       /* Adjust padding for main content on mobile */
       .flex-grow-1 {
         padding: 1rem;
@@ -162,29 +231,41 @@
       /* Adjust profile box size on mobile */
       .profile-box {
         width: 100%;
+        flex-direction: column;
         height: auto;
         padding: 10px;
       }
-
-      /* Center profile image on mobile */
-      .profile-box img {
-        width: 50%;
-        margin: 0 auto;
+      .profile-info {
+        flex-direction: column;
       }
-
+      .col2-info {
+        flex-direction: column;
+      }
       /* Make profile info text smaller on mobile */
       .profile-info strong {
         font-size: 18px;
       }
 
+      .fullname {
+        font-size: 1.5rem;
+        text-wrap: nowrap;
+      }
       .profile-info span {
-        font-size: 17px;
+        font-size: 18px;
       }
       /* Adjust the modal width for mobile */
       .modal-dialog {
         max-width: 90%;
       }
+      .input-group {
+        position: relative;
+        width: 50% !important;
+      }
+      .center{
+        width: 90% !important;
+      }
     }
+
     /* Hide the default file input text */
     input[type="file"] {
         opacity: 0;
@@ -193,15 +274,15 @@
     }
     .input-group {
       position: relative;
-      width: 30% !important;
+      width: 30%;
     }
 
     /* Style the input group text (icon) */
     .input-group-text {
         cursor: pointer;
-        background-color: #007bff;
+        background-color: #333;
         color: #fff;
-        border-color: #007bff;
+        border-color: #333
     }
 
     /* Style the input group text on hover */
@@ -210,7 +291,7 @@
         color: #fff;
         border-color: #0056b3;
     }
-    .edit_img{
+    .edit_img {
       width: 150px;
       height: 150px;
       overflow: hidden;
@@ -235,21 +316,11 @@
     <!--USER PROFILE INFORMATION-->
     <div class="container p-4">
         {% csrf_token %}
-
+        <h2 class="Subheaders pb-2">USER INFORMATION</h2>
         <div class="profile-box">
-        <div class="center">
-             <h2 class="Subheaders pb-2">USER INFORMATION</h2>
-              <div class="btn-container">
-                <button class="btn-primary buttons" data-bs-toggle="modal" data-bs-target="#editProfileModal">
-                  <i class="fas fa-edit"></i>
-                </button>
-              </div>
-        </div>
-
-          <div class="p-2">
             <div class="sec-container">
               <div class="img-container">
-                <img id="profileImage" src={{users.userphoto.url}} alt="profile photo" style="position:absolute;
+                <img src="{% if user.userphoto %}{{ user.userphoto.url }}{% else %}{% static 'img/user.png' %}{% endif %}" alt="User Photo" style="position:absolute;
                 top: 50%;
                 left: 50%;
                 transform: translate(-50%, -50%); height: 180px; width: 180px;">
@@ -257,20 +328,35 @@
             </div>
 
             <div class="profile-info">
-              <div class="profile-info-item">
-                <strong>First Name: </strong><span id="profileFirstName">{{user.firstname}}</span>
+              <div class="col1-info">
+                <span class="about" style="margin: 0;">About</span>
+                <div class="dspn-mobile">
+                  <button class="btn-primary buttons" data-bs-toggle="modal" data-bs-target="#editProfileModal" style="background-color:yellow;">
+                    <i class="fas fa-edit"></i>
+                </div>
               </div>
-              <div class="profile-info-item">
-                <strong>Last Name: </strong><span id="profileLastName">{{user.lastname}}</span>
+              <div class="col2-info">
+                <div class="basic-info">
+                  <div class="info-container">
+                    <div class="fullname">{{user.firstname}} {{user.lastname}}</div>
+                  </div>
+                  <div class="info-container">
+                    <span class="contact-num">{{user.contactnumber}}</span>
+                    <span style="margin: -16px 0 0 0; font-family: 'Hind Guntur'; font-size: 1rem;">Contact Number</span>
+                  </div>
+                  <div class="info-container">
+                    <span class="email">{{user.email}}</span>
+                    <span style="margin: -16px 0 0 0; font-family: 'Hind Guntur'; font-size: 1rem;">Email</span>
+                  </div>
+                </div>
+                <div class="basic-info">
+                  <div class="info-container center">
+                    <span class="email">{{user.address}}</span>
+                    <span style="margin: -16px 0 0 0; font-family: 'Hind Guntur'; font-size: 1rem;">Address</span>
+                  </div>
+                </div>
+                
               </div>
-              <div class="profile-info-item">
-                <strong>Contact Number: </strong><span id="profileContact">{{user.contactnumber}}</span>
-              </div>
-              <div class="profile-info-item">
-                <strong>Email: </strong><span id="profileEmail">{{user.email}}</span>
-              </div>
-            </div>
-          </div>
         </div>
     </div>
   </div>
@@ -293,7 +379,7 @@
 
                 <!-- Display current organization logo -->
                 <div class="current-logo-container">
-                    <img id="currentLogo" class="edit_img" src="{{users.userphoto.url}}" alt="Current Photo" class="current-logo">
+                    <img id="currentLogo" class="edit_img" src="{{user.userphoto}}" alt="Current Photo" class="current-logo">
                 </div>
 
                 <!-- Input for changing organization logo -->

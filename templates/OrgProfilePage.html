@@ -11,6 +11,18 @@
   <title>Org Profile Page</title>
 
   <style>
+    @import url('https://fonts.googleapis.com/css2?family=Arvo:wght@700&display=swap');
+    /* Subheaders */
+    @import url('https://fonts.googleapis.com/css2?family=Nunito:wght@500&display=swap');
+    /* body base text */
+    @import url('https://fonts.googleapis.com/css2?family=Hind+Guntur&display=swap');
+
+    .modal-title {
+      font-size: 1.25rem;
+      font-weight: bold;
+      font-family: 'Nunito';
+    }
+    
     .profile-box{
       height: auto;
       padding: 15px;
@@ -19,7 +31,6 @@
         border-radius: 10px;
         position: relative;
     }
-
     .profile-box img{
       width: 150px;
       height: 150px;
@@ -49,8 +60,7 @@
         height: 500px;
     }
 
-     /* Main content area */
-
+    /* Main content area */
     .profile-info strong {
       font-size: 16px;
       font-weight: bold;
@@ -110,55 +120,6 @@
       align-items: center;
     }
 
-    @media (max-width: 768px){
-      .sidebar-text {
-        display: none;
-      }
-      nav{
-        width: 100%;
-      }
-
-      .side-logo{
-        width: 40px;
-        margin-left: -10px;
-      }
-
-      /* Adjust padding for main content on mobile */
-      .flex-grow-1 {
-        padding: 1rem;
-      }
-
-      /* Adjust profile box size on mobile */
-      .profile-box {
-        width: 100%;
-        height: auto;
-        padding: 10px;
-      }
-
-      /* Center profile image on mobile */
-      .profile-box img {
-        width: 50%;
-        margin: 0 auto;
-      }
-      .certificate-images img {
-        width: 100px;
-        height: 75px;
-      }
-      .qr-code-images img {
-        width: 90px;
-        height: 75px;
-      }
-
-      /* Make profile info text smaller on mobile */
-      .profile-info strong {
-        font-size: 14px;
-      }
-
-      /* Adjust the modal width for mobile */
-      .modal-dialog {
-        max-width: 90%;
-      }
-    }
     /* Hide the default file input text */
     input[type="file"] {
         opacity: 0;
@@ -168,24 +129,17 @@
 
     /* Style the input group */
     .input-group {
-        position: relative;
-        width: 30% !important;
+      position: relative;
+      width: 30% !important;
     }
-
-    /* Style the input group text (icon) */
-    .input-group-text {
-        cursor: pointer;
-        background-color: #007bff;
-        color: #fff;
-        border-color: #007bff;
-    }
-
+    
     /* Style the input group text on hover */
     .input-group-text:hover {
-        background-color: #0056b3;
-        color: #fff;
-        border-color: #0056b3;
+      background-color: #0056b3 !important;
+      color: #fff !important;
+      border-color: #0056b3 !important;
     }
+
     .edit_img{
       width: 150px;
       height: 150px;
@@ -195,12 +149,15 @@
       border-radius: 100%;
       filter: drop-shadow(#000 2px 0 3px);
     }
+
     .hrs-container {
       all: initial;
       display: flex;
       flex-direction: column;
       gap: 24px;
       padding: 32px 0;
+      font-size: 0.9rem;
+      font-family: 'Nunito';
     }
     .day-container {
       display: grid;
@@ -221,11 +178,11 @@
       height: 100%;
     }
     .switch-label {
-        display: grid;
-        place-items: center;
-        justify-content: center;
-        align-items: start;
-        width: 80%;
+      display: grid;
+      place-items: center;
+      justify-content: center;
+      align-items: start;
+      width: 80%;
     }
     .am, .pm{
       height: fit-content;
@@ -297,35 +254,102 @@
         width: 120px;
         padding:2px 8px;
     }
+
+    .btn-container{
+      width: 100%;
+      min-width: fit-content;
+      display: flex;
+      justify-content: end;
+    }
+
+    @media (max-width: 768px){
+      .sidebar-text {
+        display: none;
+      }
+      nav{
+        width: 100%;
+      }
+
+      .side-logo{
+        width: 40px;
+        margin-left: -10px;
+      }
+
+      /* Adjust padding for main content on mobile */
+      .flex-grow-1 {
+        padding: 1rem;
+      }
+
+      /* Adjust profile box size on mobile */
+      .profile-box {
+        width: 100%;
+        height: auto;
+        padding: 10px;
+      }
+
+      /* Center profile image on mobile */
+      .profile-box img {
+        width: 50%;
+        margin: 0 auto;
+      }
+      .certificate-images img {
+        width: 100px;
+        height: 75px;
+      }
+      .qr-code-images img {
+        width: 90px;
+        height: 75px;
+      }
+
+      /* Make profile info text smaller on mobile */
+      .profile-info strong {
+        font-size: 14px;
+      }
+
+      /* Adjust the modal width for mobile */
+      .modal-dialog {
+        max-width: 90%;
+      }
+    }
+    
     @media screen and (min-width: 375px) and (max-width: 768px) {
-        .mbl-responsive {
-          display: flex;
-          flex-direction: column;
-          justify-content:center;
-          align-items: center;
-        }
-        .profile-box {
-          all: initial;
-        }
-        .day-container {
-          display: flex;
-          flex-direction: column;
-        }
-        .time-container {
-          display: grid;
-          grid-gap: 16px;
-          padding: 8px;
-          grid-template-columns: auto;
-          height: fit-content;
-              justify-content: space-evenly;
+      .mbl-responsive {
+        display: flex;
+        flex-direction: column;
+        justify-content:center;
+        align-items: center;
+      }
+      .profile-box {
+        all: initial;
+      }
+      .day-container {
+        display: flex;
+        flex-direction: column;
+      }
+      .time-container {
+        display: grid;
+        grid-gap: 16px;
+        padding: 8px;
+        grid-template-columns: auto;
+        height: fit-content;
+            justify-content: space-evenly;
       }
       .am, .pm {
         height: 100%;
       }
       .col {
           width: 100%;
-        }
-
+      }
+      .switch-label{
+        justify-content: start;
+      }
+      .input-group {
+        position: relative;
+        width: 50% !important;
+      }
+      .edit-button{
+        display: block;
+      }
     }
   </style>
 </head>
@@ -339,7 +363,7 @@
     </form>
     <div class="flex-grow-1 p-4">
       <div class="container p-0 m-0 row">
-        <h3 class="mb-3">ORGANIZATION INFO</h3>
+        <h3 class="mb-3" style="font-weight: bold;">ORGANIZATION INFO</h3>
         <div class="col d-flex gap-4 mbl-responsive">
             <div class="col">
                 <div class="profile-box h-100">
@@ -350,19 +374,20 @@
                   <img id="profileImage" src={{organization.cliniclogo.url}} alt="profile photo" style="width: 150px;">
                   <hr>
                   <div class="profile-info">
-                    <strong>ORGANIZATION NAME </strong><br />{{organization.organization_name}}<br>
-                    <strong>CONTACT NUMBER </strong><br />{{organization.user.contactnumber}}<br>
-                    <strong>CLINIC LOCATION </strong><br />{{organization.user.address}}<br>
-                    <strong>EMAIL </strong><br />{{organization.user.email}}</span><br>
-                    <strong>CERTIFICATE OF ACCREDITATION </strong><br /><a href="{{organization.certificate_of_accreditation.url}}" target="_blank">View Certificate</a>
-                  </div>
-                  <!-- QR Codes for Donations -->
-                  <h4 class="mb-3">QR Codes for Donations</h4>
-                  <div class="qr-code-images">
-                    <img src="{{organization.qrcodebuymeacoffee.url}}" onclick="enlargeImage('{{organization.qrcodebuymeacoffee.url}}')" alt="QR Code 1">
-                    <img src="{{organization.qrcodegcash.url}}" onclick="enlargeImage('{{organization.qrcodegcash.url}}')" alt="QR Code 2">
-                    <img src="{{organization.qrcodepaypal.url}}" onclick="enlargeImage('{{organization.qrcodepaypal.url}}')" alt="QR Code 3">
-                  </div>
+                    <strong>Organization Name: </strong><br />{{organization.organization_name}}<br><br>
+                    <strong>Contact Number: </strong><br />{{organization.user.contactnumber}}<br><br>
+                    <strong>Clinic Location: </strong><br />{{organization.user.address}}<br><br>
+                    <strong>Email: </strong><br />{{organization.user.email}}</span><br><br>
+                    <strong>Certificate of Accreditation: </strong><br/><a href="{{organization.certificate_of_accreditation.url}}" target="_blank">View Certificate</a><br><br>
+                  
+                    <!-- QR Codes for Donations -->
+                    <strong>QR Codes for Donations:</strong>
+                    <div class="qr-code-images">
+                      <img src="{{organization.qrcodebuymeacoffee.url}}" onclick="enlargeImage('{{organization.qrcodebuymeacoffee.url}}')" alt="QR Code 1">
+                      <img src="{{organization.qrcodegcash.url}}" onclick="enlargeImage('{{organization.qrcodegcash.url}}')" alt="QR Code 2">
+                      <img src="{{organization.qrcodepaypal.url}}" onclick="enlargeImage('{{organization.qrcodepaypal.url}}')" alt="QR Code 3">
+                    </div>
+                </div>
                 </div>
             </div>
 
@@ -525,14 +550,13 @@
   </div>
 
 
-  <!-- Edit Profile Modal -->
+  <!-- Edit Organization Profile Modal -->
   <div class="modal fade" id="editProfileModal" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
     <div class="modal-dialog" role="document">
       <div class="modal-content">
         <div class="modal-header">
           <h5 class="modal-title" id="exampleModalLabel">Edit Organization Profile</h5>
-          <button type="button" class="close" data-bs-dismiss="modal" aria-label="Close">
-            <span aria-hidden="true">&times;</span>
+          <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close">
           </button>
         </div>
         <div class="modal-body">
@@ -552,7 +576,7 @@
               <!-- Input for changing organization logo -->
               <div class="input-group">
                   <input type="file" class="form-control" id="changeOrgPhoto" accept="image/*" name="profileorg" onchange="displaySelectedProfile()">
-                  <label class="input-group-text" for="changeOrgPhoto">
+                  <label class="input-group-text" for="changeOrgPhoto" style="background-color: #333; color: white;">
                       <!-- Icon for the input -->
                       <i class="fas fa-upload"></i>
                   </label>
@@ -594,7 +618,7 @@
                           View Certificate of Accreditation
                           <i class="fas fa-external-link-alt mr-3"></i> <!-- Icon for opening in a new tab -->
                       </a>
-                      <i class="fas fa-upload upload-icon" onclick="triggerFileInput('certAccreditation')"></i>
+                      <i class="fas fa-upload upload-icon" onclick="triggerFileInput('certAccreditation')" style="padding-left: 5px;"></i>
                   {% endif %}
               </div>
 
@@ -603,7 +627,6 @@
                   <input id="certAccreditation" type="file" class="form-control" name="accreditationcertificate" accept=".pdf">
               </div>
             </div>
-
 
            <!-- QR Code for Donations -->
            <div class="row">
@@ -665,8 +688,9 @@
               </div>
           </div>
 
-
-            <button type="submit" onclick="updateOrgForm({{organization.id}})" class="btn btn-primary">Save Changes</button>
+            <div class="btn-container">
+              <button type="submit" onclick="updateOrgForm({{organization.id}})" class="btn btn-primary">Save Changes</button>
+            </div>
           </form>
         </div>
       </div>
