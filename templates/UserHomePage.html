@@ -183,7 +183,7 @@
       text-align: left;
       list-style-type: none;
       font-family: 'Hind Guntur';
-      
+
     }
 
     /* Clinic and Volunteer box descriptions */
@@ -219,7 +219,7 @@
     #viewDoctorsModal .modal-title {
       font-size: 1.25rem !important;
     }
-    
+
     /* Style for doctor boxes */
     .doctor-box {
       text-align: center;
@@ -663,6 +663,7 @@ function createVeterinarianModal(veterinarianData) {
   var modal = document.createElement('div');
   modal.classList.add('modal', 'fade');
 
+
   var doctorBox = document.createElement('div');
   doctorBox.classList.add('doctor-box');
 
@@ -711,36 +712,49 @@ function getHours() {
     buttonContainer.innerHTML = ''; // Clear previous buttons
 
     appointmentTimes.forEach(appointment => {
-      var petsChecked = countCheckbox()
-      var button = document.createElement('button');
-      button.textContent = appointment.appointment_time;
-      var myForm = document.querySelector('#appointmentsDate')
-      var formData = new FormData(myForm)
-      formData.append("isBusinessHoursDate", true)
-      formData.append("servicesType", document.getElementById('serviceType').value)
-      formData.append("time_appointed", appointment.appointment_time)
-      formData.append("date_appointed", document.getElementById('appointmentDate').value)
-      fetch('/userhome', {
-        method: 'POST',
-        body: formData
-      }) .then(response => response.json())
-      .then(data => {
-        console.log(data.choosen_service_duration * petsChecked)
-        if (data.min_duration + data.total_duration > 60 || (data.choosen_service_duration * petsChecked)+ data.total_duration > 60) {
-          button.disabled = true;
-          button.classList.add('unavailable'); // Add a class for styling
-        }
-        else {
-          button.addEventListener('click', function(event) {
-            event.preventDefault();
-            document.getElementById('appointmentTime').value = appointment.appointment_time;
-            handleButtonClick(this);
-          });
-        }
+        var petsChecked = countCheckbox();
+        var button = document.createElement('button');
+
+        // Convert the appointment time to a Date object
+        var appointmentTime = new Date('2000-01-01T' + appointment.appointment_time);
+        
+        // Format the time in 12-hour format
+        var formattedTime = appointmentTime.toLocaleTimeString('en-US', { hour: 'numeric', minute: 'numeric', hour12: true });
+
+        // Set the formatted time as text content
+        button.textContent = formattedTime;
+
+        // Set the original time as a data attribute or any custom attribute
+        button.setAttribute('data-appointment-time', appointment.appointment_time);
+
+        var myForm = document.querySelector('#appointmentsDate');
+        var formData = new FormData(myForm);
+        formData.append("isBusinessHoursDate", true);
+        formData.append("servicesType", document.getElementById('serviceType').value);
+        formData.append("time_appointed", appointment.appointment_time);
+        formData.append("date_appointed", document.getElementById('appointmentDate').value);
+
+        fetch('/userhome', {
+            method: 'POST',
+            body: formData
+        }).then(response => response.json())
+        .then(data => {
+            console.log(data.choosen_service_duration * petsChecked);
+            if (data.min_duration + data.total_duration > 60 || (data.choosen_service_duration * petsChecked) + data.total_duration > 60) {
+                button.disabled = true;
+                button.classList.add('unavailable'); // Add a class for styling
+            } else {
+                button.addEventListener('click', function(event) {
+                    event.preventDefault();
+                    document.getElementById('appointmentTime').value = this.getAttribute('data-appointment-time');
+                    handleButtonClick(this);
+                });
+            }
         });
+
         buttonContainer.appendChild(button);
     });
-  }
+}
 
   function handleButtonClick(clickedButton) {
     event.preventDefault()

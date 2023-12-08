@@ -29,7 +29,7 @@
             background-color: #FFCC9D;
             font-family: 'Hind Guntur';
             font-size: 1rem;
-        }   
+        }
         .container{
             padding: 16px;
             width: 100vw;
@@ -39,7 +39,7 @@
             align-items: center;
             justify-content: center;
         }
-        
+
         .Subheaders{
             font-family: 'Nunito';
             font-size: 1.875rem;
@@ -67,7 +67,7 @@
             all: initial;
             width: 100%;
         }
-        
+
        .below{
             width: 100%;
             display: grid;
@@ -96,7 +96,7 @@
         .reg-btn:active {
             background-color: #174786;
         }
-        
+
         .reg-btn, .g-back {
             border: none;
             padding: 12px 16px;
@@ -115,7 +115,7 @@
             flex-direction: column;
             filter: drop-shadow(2px 2px 3px);
         }
-        
+
         .volunteer-form {
             align-items: center;
             justify-content: center;
@@ -126,39 +126,39 @@
             background-color: white;
             box-shadow: 5px 5px 15px -1px #1f1f20, -5px -5px 15px -1px #737982;
         }
-        
+
         .volunteer-form_button {
-            display: flex; 
-            flex-direction: column; 
+            display: flex;
+            flex-direction: column;
             align-items: center;
             justify-content: center;
         }
-        
+
         .volunteer-form-logo {
             text-align: center;
             margin-bottom: 20px;
         }
-        
+
         .volunteer-form-logo img {
             max-width: 300px;
             max-height: 300px;
         }
-        
+
         .form-section {
             margin-bottom: 20px;
         }
-        
+
         .btn-primary{
             width: 75%;
             border-radius: 5px;
             background-color: #FF8400;
             border: none;
         }
-        
+
         .btn-primary:hover{
             background-color: #ea7603;
         }
-        
+
         .btn-secondary{
             align-items: center;
             justify-content: center;
@@ -166,16 +166,16 @@
             border-radius: 5px;
             background-color: #6c757d;
         }
-        
+
         .btn-width {
             width: 100%;
         }
-        
+
         .volunteer-form-group{
             margin-bottom: 30px;
             gap: 16px;
         }
-    
+
         .form-control{
             display: block;
             width: 100%;
@@ -191,7 +191,7 @@
             border-radius: 0.25rem;
             transition: border-color .15s ease-in-out, ybox-shadow .15s ease-in-out;
         }
-        
+
         .form-label {
             font-weight: bold;
             font-family: 'Canva Sans', Arial;
@@ -201,7 +201,7 @@
         .labels{
             all: initial;
             width: 400px;
-            
+
         }
         .col-custom {
             all: initial;
@@ -216,29 +216,29 @@
             padding-bottom: 16px;
             font-size: 1rem;
         }
-        
+
         /* Media queries for responsiveness */
         @media screen and (max-width: 768px) {
             body {
                 background-position: center;
                 background-size: auto;
             }
-        
+
             .volunteer-container {
                 flex-direction: column;
                 align-items: center;
             }
-        
+
             .volunteer-form {
                 max-width: 100%;
                 padding: 20px;
             }
-        
+
             .col-md-9 {
                 flex-basis: 100%;
                 margin-bottom: 10px;
             }
-        
+
             .btn-width {
                 width: 100%;
             }
@@ -314,7 +314,7 @@
                                <input type="email" name="email" id="email" class="form-control" required>
                            </div>
                        </div>
-                     
+
 
                        <div class="volunteer-form-group d-flex col">
                             <div class="col-md-9 labels">
@@ -337,21 +337,21 @@
                        <div class="volunteer-form-group d-flex col">
                         <div class="col-md-9 labels">
                             <label for="validID" class="form-label">
-                                Valid ID <span style="color: rgb(202, 6, 6)">*</span> 
+                                Valid ID <span style="color: rgb(202, 6, 6)">*</span>
                                 <i style="font-weight: normal; font-size: small;"> (Front and Back of your ID)</i>
                             </label>
-                        
+
                             <br>
-                        
+
                             <label for="validID" style="font-weight: normal;">For front</label>
                             <input type="file" class="form-control" id="validID" accept="image/*" name="validID" required/>
-                        
+
                             <br>
-                        
+
                             <label for="validID1" style="font-weight: normal;">For back</label>
                             <input type="file" class="form-control" id="validID1" accept="image/*" name="validID1" required/>
                         </div>
-                        
+
                        </div>
 
                    </div>
@@ -360,9 +360,10 @@
 
             <div class="below">
                 <a href="main" class="g-back" style="text-decoration: none;">Go Back</a>
-                <button onclick= "registerButton()" class="reg-btn">REGISTER</button>
+                <button onclick="registerButton()" class="reg-btn" id="registerButton">REGISTER</button>
+
             </div>
-        </div>   
+        </div>
     </div>
     <!-- Bootstrap JS and jQuery -->
     <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
@@ -373,7 +374,7 @@
     function togglePassword(inputId) {
         const passwordInput = document.getElementById(inputId);
         const icon = document.querySelector(`#${inputId} + .toggle-password`);
-    
+
         if (passwordInput.type === 'password') {
             passwordInput.type = 'text';
             icon.classList.remove('fa-eye');
@@ -387,13 +388,21 @@
     function registerButton() {
         event.preventDefault()
         var myForm = document.querySelector('#volunteerForm');
+        if (!validateForm(myForm)) {
+          sweetAlert(false, "Error!", "Please fill out all input fields")
+          return
+        }
         var formData = new FormData(myForm);
+        document.getElementById("registerButton").textContent = "REGISTERING...";
+
+        // Disable the button
+        document.getElementById("registerButton").disabled = true;
         fetch('/volunteer', {
             method: 'POST',
             body: formData
         })
         .then(response => response.json())
-        .then(data => { 
+        .then(data => {
             if(data.noData == true) {
                 swal({
                     title: "Successfully Registered!",
@@ -426,6 +435,10 @@
                   }).then((value) => {
                     if (value === "login") {
                       swal.close()
+                      document.getElementById("registerButton").textContent = "REGISTER";
+
+                        // Disable the button
+                      document.getElementById("registerButton").disabled = false;
                     }
                   });
             }
@@ -434,6 +447,68 @@
            // window.location.href="Registration Success!!!"
         });
     }
+
+    function sweetAlert(isTrue, title, text) {
+      if (isTrue) {
+        swal({
+          title: title,
+          text: text,
+          icon: "success",
+          buttons: {
+            login: {
+              text: "Ok",
+              value: "login",
+              className: "btn btn-primary",
+            }
+          }
+        }).then((value) => {
+          if (value === "login") {
+            window.location.href = '/login';
+          }
+        });
+      }
+      else{
+        swal({
+          title: title,
+          text: text,
+          icon: "error",
+          buttons: {
+            login: {
+              text: "Ok",
+              value: "login",
+              className: "btn btn-danger",
+            }
+          }
+        }).then((value) => {
+          if (value === "login") {
+            swal.close()
+          }
+        });
+      }
+
+    }
+    function validateForm(form) {
+      var isValid = true;
+
+      // Reset previous error messages
+      form.querySelectorAll('.error').forEach(function (error) {
+        error.textContent = '';
+      });
+
+      // Check each required field
+      form.querySelectorAll('[required]').forEach(function (input) {
+        if (!input.value.trim()) {
+
+          isValid = false;
+        }
+      });
+
+      // Additional custom validation if needed
+      // ...
+
+      return isValid;
+    }
+
     </script>
 </body>
 </html>

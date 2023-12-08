@@ -93,7 +93,7 @@
     }
     .clinics {
       width: 100%;
-      height: fit-content; 
+      height: fit-content;
       display:grid;
       grid-template-columns: repeat(auto-fit, minmax(600px, auto));
       justify-content: space-evenly;
@@ -138,7 +138,7 @@
       flex-direction: column;
       justify-content: center;
       color: white;
-        
+
     }
     .ngo-desc ul {
       list-style-type: none;
@@ -146,8 +146,8 @@
     .btn-container {
       display: flex;
       justify-items:end;
-      align-items: center;  
-      height: 60px; 
+      align-items: center;
+      height: 60px;
       width: fit-content;
       padding: 0 0 0 32px;
     }
@@ -344,11 +344,11 @@
         height: 80px;
       }
       .btn-container {
-        all: initial;      
+        all: initial;
         display: flex;
         justify-items:end;
-        align-items: center;  
-        height: 60px; 
+        align-items: center;
+        height: 60px;
         width: 100%;
         filter: drop-shadow(#000 1px 3px 1px);
         padding: 16px 0 16px 0;
@@ -448,10 +448,10 @@
           <a class="mbl-btn2" href="volunteerorg">Volunteer</a>
         </li>
         <ul class="user-form">
-          <li>  
+          <li>
             <a class="nav-item c-1" href="register">Register</a>
           </li>
-          <li>  
+          <li>
             <a class="nav-item c-2" href="login">Login</a>
           </li>
         </ul>
@@ -479,7 +479,7 @@
       <h2 class="Subheaders">CHOOSE CLINICS YOU WANT TO <span style="color: limegreen;">DONATE</span></h2>
     </div>
     <div class="container">
-      
+
       <div class="clinics">
         {% for organization in organizations %}
         <div class="card">
@@ -488,7 +488,7 @@
           </div>
           <div class="ngo-desc">
             <h3>{{organization.organization_name}}</h3>
-            
+
             <ul class="clinic-info">
               <li><strong>Address: </strong>{{organization.user.address}}</li>
               <li><strong>Contact Number: </strong> {{organization.user.contactnumber}}</li>
@@ -507,7 +507,7 @@
           </div>
           <div class="ngo-desc">
             <h3>{{organization.organization_name}}</h3>
-            
+
             <ul class="clinic-info">
               <li><strong>Address: </strong>{{organization.user.address}}</li>
               <li><strong>Contact Number: </strong> {{organization.user.contactnumber}}</li>
@@ -545,8 +545,8 @@
       </div>
     </div>
   </div>
-  
-  <script>  
+
+  <script>
     function showMoreInfo(orgID) {
       const xb = Number(orgID);
       var oname = document.getElementById('name');
@@ -557,9 +557,9 @@
         var orgsId = Number('{{org.id}}');
         if(xb == orgsId){
           oname.textContent = '{{org.organization_name}}';
-          bmc.src = '{{org.qrcodebuymeacoffee}}';
-          gcash.src = '{{org.qrcodegcash}}';
-          ppal.src = '{{org.qrcodepaypal}}';
+          bmc.src = '{{org.qrcodebuymeacoffee.url}}';
+          gcash.src = '{{org.qrcodegcash.url}}';
+          ppal.src = '{{org.qrcodepaypal.url}}';
         }
       {% endfor %}
       // Get the img-toggle element associated with the clicked button
@@ -570,7 +570,7 @@
       } else {
         imgToggle.style.display = 'none';
       }
-      
+
     }
     function handleToggle(){
       var menu = document.querySelector(".mobile-menu");
