@@ -279,6 +279,8 @@ class UserHomePage(LoginRequiredMixin, TemplateView):
 
     def get(self,request):
         users = User.objects.get(email = request.session['username'])
+        if users.usertype == 3:
+            return render(request, 'UserHomePage.html', {"error": "You don't have permission to access this web page!"})
         try:
             pets = PetBreed.objects.exists()
             if not pets:
@@ -749,7 +751,7 @@ class OrgProfilePage( LoginRequiredMixin, TemplateView):
             return JsonResponse({'accepted': True})
 
 
-class OrgClientsPage( LoginRequiredMixin, TemplateView):
+class OrgClientsPage(LoginRequiredMixin, TemplateView):
     template_name = 'OrgClientsPage.html'
 
     def get(self,request):
