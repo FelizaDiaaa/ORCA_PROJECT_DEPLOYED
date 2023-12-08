@@ -28,7 +28,7 @@
       font-size: 2.986rem;
       font-weight: 700;
     }
-
+    
     body {
       all: initial;
       font-family: 'Nunito';
@@ -47,7 +47,7 @@
     .clinic-card {
       border: 1px solid #ccc;
       border-radius: 5px;
-      padding: 15px;
+      padding: 15px;  
       text-align: center;
       background-color: #fff;
       box-shadow: 0 2px 6px rgba(0, 0, 0, 0.1);
@@ -109,7 +109,7 @@
     }
     .orgs-ls {
       width: 100%;
-      height: fit-content;
+      height: fit-content; 
       display:grid;
       grid-template-columns: repeat(auto-fit, minmax(300px, auto));
       justify-content: start;
@@ -229,10 +229,10 @@
             method: 'POST',
             body: formData
         }) .then(response => response.json())
-        .then(data => {
+        .then(data => { 
           if (data.delete)
           emailjs.init("eKqrvGOkVxL0RzYV2")
-          const templateId = "template_txsvixf";
+          const templateId = "template_txsvixf"; 
           const emailParams = {
               to_email: data.email,
               message: "ORCA deleted your account!"
@@ -245,7 +245,7 @@
               }, function(error) {
                   console.error("Email could not be sent:", error);
                   location.reload();
-              });
+              }); 
         })
     }
     function deleteOrg(id){
@@ -261,23 +261,23 @@
           method: 'POST',
           body: formData
       }) .then(response => response.json())
-      .then(data => {
+      .then(data => { 
         // Assuming "organization" is an object containing the necessary data
         const organization = data.organization;
 
         // Select the modal body element
         var modalBody = document.querySelector('.modal-body');
-
+        
         // Address
         var addressParagraph = document.createElement('p');
         addressParagraph.innerHTML = '<strong>Address: </strong>' + organization.address;
         modalBody.appendChild(addressParagraph);
-
+        
         // Contact Number
         var contactNumberParagraph = document.createElement('p');
         contactNumberParagraph.innerHTML = '<strong>Contact Number: </strong>' + organization.contactnumber;
         modalBody.appendChild(contactNumberParagraph);
-
+        
         // Certificate of Accreditation
         var accreditationParagraph = document.createElement('p');
         var accreditationLink = document.createElement('a');
@@ -287,31 +287,31 @@
         accreditationParagraph.innerHTML = '<strong>Certificate of Accreditation: </strong>';
         accreditationParagraph.appendChild(accreditationLink).innerHTML = 'View Certification';
         modalBody.appendChild(accreditationParagraph);
-
+        
         // QR Codes
         var qrCodesParagraph = document.createElement('p');
         qrCodesParagraph.innerHTML = '<strong>QR codes for donation:</strong>';
         modalBody.appendChild(qrCodesParagraph);
-
+        
         var qrCodesRow = document.createElement('div');
         qrCodesRow.className = 'row mt-3';
-
+        
         ['qrcodebuymeacoffee', 'qrcodegcash', 'qrcodepaypal'].forEach(function (qrCode) {
           var qrCodeCol = document.createElement('div');
           qrCodeCol.className = 'col-md-4 g-4 d-flex justify-content-center';
-
+        
           var qrCodeImg = document.createElement('img');
           qrCodeImg.src = organization[qrCode];
           qrCodeImg.alt = 'QR Code';
           qrCodeImg.className = 'img-fluid';
           qrCodeImg.style = 'width:300px;';
-
+        
           qrCodeCol.appendChild(qrCodeImg);
           qrCodesRow.appendChild(qrCodeCol);
         });
-
+        
         modalBody.appendChild(qrCodesRow);
-
+        
       })
   }
 

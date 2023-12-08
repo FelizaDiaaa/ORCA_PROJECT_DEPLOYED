@@ -62,7 +62,7 @@
       flex-direction: column;
       filter: drop-shadow(2px 2px 3px);
     }
-
+    
     .reg-as-container {
       width: 100%;
       padding: 32px 0;
@@ -76,7 +76,7 @@
     .opt-field {
       margin: 16px 0 0 8px;
       height: 35px;
-      width: fit-content;
+      width: fit-content;  
       cursor: pointer;
       background-color: #fff;
       border: 1px solid #ced4da;
@@ -97,7 +97,7 @@
       font-family: 'Nunito';
       /* filter: drop-shadow(1px 0 1px); */
     }
-
+    
     .time-container {
       display: flex;
       flex-direction: row;
@@ -247,7 +247,7 @@
     }
     .row {
       all: initial;
-    }
+    }  
     .col-custom {
       all: initial;
       width: 100%;
@@ -263,7 +263,7 @@
       gap:16px;
       padding: 0;
       margin:0;
-
+      
     }
     .qr-for-donation {
       display: flex;
@@ -354,7 +354,7 @@
         <!-- Client Fields of Registration -->
         <!-- Fields for CLIENT registration -->
         <div id="clientFields">
-          <form id="clientForm" method="POST">
+          <form id="clientForm" method="POST"> 
             {% csrf_token %}
             <div class="center">
               <div class="form-section row col-custom">
@@ -432,7 +432,7 @@
               <div class="hrs-container">
                 <div class="day-container">
                   <div class="switch-label">
-                    <div class="col-md-6">
+                    <div class="col-md-6"> 
                         <label for="sun" class="switch-input">Sunday</label>
                         <label class="switch">
                             <input type="checkbox" id="sun" name="days[]" value="sun">
@@ -443,7 +443,7 @@
                   <div class="time-container">
                     <div class="am">
                       <span>From:</span>
-                      <input type="time" class="time-input" name="time_in_sun" value="08:00">
+                      <input type="time" class="time-input" name="time_in_sun" value="08:00"> 
                     </div>
                     <div class="pm">
                       <span>To:</span>
@@ -464,7 +464,7 @@
                     <div class="time-container">
                       <div class="am">
                         <span>From:</span>
-                        <input type="time" class="time-input" name="time_in_mon" value="08:00">
+                        <input type="time" class="time-input" name="time_in_mon" value="08:00"> 
                       </div>
                       <div class="pm">
                         <span>To:</span>
@@ -486,14 +486,14 @@
                       <div class="am">
                         <span>From:</span>
                         <input type="time" class="time-input" name="time_in_tue" value="08:00">
-                      </div>
+                      </div> 
                       <div class="pm">
                         <span>To:</span>
                         <input type="time" class="time-input" name="time_out_tue" value="17:00">
                       </div>
                     </div>
                   </div>
-
+              
                   <div class="day-container">
                     <div class="switch-label">
                       <div class="col-md-6">
@@ -528,7 +528,7 @@
                     <div class="time-container">
                       <div class="am">
                         <span>From:</span>
-                        <input type="time" class="time-input" name="time_in_thu" value="08:00">
+                        <input type="time" class="time-input" name="time_in_thu" value="08:00"> 
                       </div>
                       <div class="pm">
                         <span>To:</span>
@@ -619,7 +619,7 @@
                 <label for="qrCode" class="form-label">Upload QR Code for Donation <span style="color: rgb(202, 6, 6)">*</span></label>
                   <div class="qr-for-donation">
                     <input type="file" class="form-control" id="qrCode1" accept="image/*" name="qrcodebuymeacoffee"/>
-                    <input type="file" class="form-control" id="qrCode2" accept="image/*" name="qrcodegcash"/>
+                    <input type="file" class="form-control" id="qrCode2" accept="image/*" name="qrcodegcash"/> 
                     <input type="file" class="form-control" id="qrCode3" accept="image/*" name="qrcodepaypal"/>
                   </div>
               </div>
@@ -632,11 +632,11 @@
 
       <div class="below">
         <a href="main" class="g-back" style="text-decoration: none;">Go Back</a>
-       <button onclick="registerButton()" class="reg-btn" id="registerButton">REGISTER</button>
+        <button onclick= "registerButton()" class="reg-btn">REGISTER</button>
       </div>
     </div>
   </div>
-
+  
   <script>
     var registrationType = document.getElementById("registrationType");
     function toggleFields() {
@@ -667,18 +667,13 @@
           sweetAlert(false, "Error!", "Please fill out all input fields")
           return
         }
-        document.getElementById("registerButton").textContent = "REGISTERING...";
-
-        // Disable the button
-        document.getElementById("registerButton").disabled = true;
-
         formData.append("usertype", registrationType.value)
         fetch('/register', {
             method: 'POST',
             body: formData
         })
         .then(response => response.json())
-        .then(data => {
+        .then(data => { 
           if(data.noData == true){
             sweetAlert(true, "Successfully Registered!", "Reload the page to login!")
           } else {
@@ -696,34 +691,28 @@
           sweetAlert(false, "Error!", "Please fill out all input fields")
           return;
         }
-        document.getElementById("registerButton").textContent = "Registering...";
-
-        // Disable the button
-        document.getElementById("registerButton").disabled = true;
-
         formData.append("usertype", registrationType.value)
         fetch('/register', {
             method: 'POST',
             body: formData
         })
         .then(response => response.json())
-        .then(data => {
+        .then(data => { 
           if(data.noData == true){
               emailjs.init("eKqrvGOkVxL0RzYV2")
-              const templateId = "template_txsvixf";
+              const templateId = "template_txsvixf"; 
               const emailParams = {
                   to_email: "orcaproject123@gmail.com",
                   message: `${data.org} registered in your system. Please confirm the registration.`
               };
-
+  
               emailjs.send("service_dmb2o5u", templateId, emailParams)
                   .then(function(response) {
                       console.log("Email sent successfully!", response);
                       sweetAlert(true, "Successfully Registered!", "Reload the page to login!")
                   }, function(error) {
                       console.error("Email could not be sent:", error);
-                      sweetAlert(true, "Successfully Registered!", "Reload the page to login!")
-                  });
+                  }); 
           } else {
             sweetAlert(false, "Error!", data.error)
           }
@@ -735,26 +724,26 @@
     }
     function validateForm(form) {
       var isValid = true;
-
+    
       // Reset previous error messages
       form.querySelectorAll('.error').forEach(function (error) {
         error.textContent = '';
       });
-
+    
       // Check each required field
       form.querySelectorAll('[required]').forEach(function (input) {
         if (!input.value.trim()) {
-
+        
           isValid = false;
         }
       });
-
+    
       // Additional custom validation if needed
       // ...
-
+    
       return isValid;
     }
-
+    
     function sweetAlert(isTrue, title, text) {
       if (isTrue) {
         swal({
@@ -773,7 +762,7 @@
             window.location.href = '/login';
           }
         });
-      }
+      } 
       else{
         swal({
           title: title,

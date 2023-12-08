@@ -183,7 +183,7 @@
       text-align: left;
       list-style-type: none;
       font-family: 'Hind Guntur';
-
+      
     }
 
     /* Clinic and Volunteer box descriptions */
@@ -219,7 +219,7 @@
     #viewDoctorsModal .modal-title {
       font-size: 1.25rem !important;
     }
-
+    
     /* Style for doctor boxes */
     .doctor-box {
       text-align: center;
@@ -422,7 +422,7 @@
                   active
                 {% endif %}">
                 <div class="d-flex justify-content-center">
-                  <img class="d-block w-75" src="{{ item.highlightsphoto }}" alt="Slide {{ forloop.counter }}">
+                  <img class="d-block w-75" src="{{ item.highlightsphoto.url }}" alt="Slide {{ forloop.counter }}">
                 </div>
                 <div class="carousel-caption d-md-block d-sm-block" style="background-color: #1e262d83; border-radius: 10px;">
                     <h4>{{ item.highlightstitle }}</h4>
@@ -662,7 +662,6 @@ function createVeterinarianModal(veterinarianData) {
   var veterinarianInfo = document.getElementById('veterinarianInfo');
   var modal = document.createElement('div');
   modal.classList.add('modal', 'fade');
-
 
   var doctorBox = document.createElement('div');
   doctorBox.classList.add('doctor-box');

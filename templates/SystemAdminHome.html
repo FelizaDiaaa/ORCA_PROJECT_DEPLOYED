@@ -18,7 +18,7 @@
     @import url('https://fonts.googleapis.com/css2?family=Nunito:wght@500&display=swap');
     /* body base text */
     @import url('https://fonts.googleapis.com/css2?family=Hind+Guntur&display=swap');
-
+   
     .Subheaders {
       font-family: 'Nunito';
       font-size: 1.728rem;
@@ -100,10 +100,10 @@
     }
     .clinics-ls{
       width: 100%;
-      height: fit-content;
+      height: fit-content; 
       display:grid;
       grid-template-columns: repeat(auto-fit, minmax(375px, 350px));
-      justify-content:start;
+      justify-content:start; 
       grid-gap: 32px;
     }
     .clinic-card > ul {
@@ -190,8 +190,8 @@ function getOrgDetailsID(id) {
     method: 'POST',
     body: formData
   }) .then(response => response.json())
-  .then(data => {
-
+  .then(data => { 
+  
     const organization = data.organization;
 
     // Select the modal body element
@@ -277,10 +277,10 @@ function acceptOrg(id) {
     method: 'POST',
     body: formData
   }) .then(response => response.json())
-  .then(data => {
+  .then(data => { 
     if (data.accepted) {
     emailjs.init("eKqrvGOkVxL0RzYV2")
-    const templateId = "template_txsvixf";
+    const templateId = "template_txsvixf"; 
     const emailParams = {
         to_email: data.email,
         message: "ORCA accepted your registration"
@@ -292,8 +292,7 @@ function acceptOrg(id) {
             location.reload();
         }, function(error) {
             console.error("Email could not be sent:", error);
-            location.reload();
-        });
+        }); 
       }
   })
 }
@@ -306,10 +305,10 @@ function declineOrg(id) {
     method: 'POST',
     body: formData
   }) .then(response => response.json())
-  .then(data => {
+  .then(data => { 
     if (data.declined) {
     emailjs.init("eKqrvGOkVxL0RzYV2")
-    const templateId = "template_txsvixf";
+    const templateId = "template_txsvixf"; 
     const emailParams = {
         to_email: data.email,
         message: "ORCA declined your registration"
@@ -321,8 +320,7 @@ function declineOrg(id) {
             location.reload();
         }, function(error) {
             console.error("Email could not be sent:", error);
-            location.reload();
-        });
+        }); 
     }
   })
 }

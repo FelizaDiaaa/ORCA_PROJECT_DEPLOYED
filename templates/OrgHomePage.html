@@ -18,7 +18,7 @@
       @import url('https://fonts.googleapis.com/css2?family=Nunito:wght@500&display=swap');
       /* body base text */
       @import url('https://fonts.googleapis.com/css2?family=Hind+Guntur&display=swap');
-
+     
 
       .Subheaders {
         font-family: 'Nunito';
@@ -664,8 +664,8 @@
                     headerRow.appendChild(headerCell);
                 });
                 data.appointments_time.forEach(appointment => {
-                    const appointmentTimeString = appointment.appointment_time.substring(0, 5) + ":00";
 
+ 		                const appointmentTimeString = appointment.appointment_time.substring(0, 5) + ":00";
                     const appointmentTimeDate = new Date('2000-01-01T' + appointmentTimeString);
                     const appointmentTime = appointmentTimeDate.toLocaleTimeString('en-US', { hour: 'numeric', minute: 'numeric', hour12: true });
                     const appointments = {{ appointments|safe }};
@@ -857,7 +857,6 @@
                         const petCell = appointmentRow.insertCell();
                         const serviceCell = appointmentRow.insertCell();
                         const statusCell = appointmentRow.insertCell();
-
                         timeCell.textContent = appointmentTime;
                         nameCell.textContent = "";
                         petCell.textContent = "";
