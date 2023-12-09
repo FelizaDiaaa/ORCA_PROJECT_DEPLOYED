@@ -302,7 +302,14 @@
       border: none;
       color: white;
     }
-
+    .custom-css {
+      height: 500px;
+      overflow: hidden;
+    }
+    .c-size {
+      width: 500px;
+      height: fit-content;
+    }
     @media screen and (min-width: 375px) and (max-width: 768px) {
       .card-container {
         overflow-y: none;
@@ -312,6 +319,13 @@
         padding: 0;
         display: grid;
         place-items: center;
+      }
+      .mb-c-size {
+        all: initial;
+        width: 300px;
+      }
+      .custom-css {
+        height: 300px;
       }
       .clinic-box {
         margin: 10px 0;
@@ -421,9 +435,9 @@
                 {% if forloop.first %} 
                   active
                 {% endif %}">
-                <div class="d-flex justify-content-center">
-                  <img class="d-block w-75" src="{{ item.highlightsphoto.url }}" alt="Slide {{ forloop.counter }}">
-                </div>
+                <div class="d-flex justify-content-center custom-css">
+                  <img class="d-block c-size mb-c-size" src="{{ item.highlightsphoto }}" alt="Slide {{ forloop.counter }}">
+</div>
                 <div class="carousel-caption d-md-block d-sm-block" style="background-color: #1e262d83; border-radius: 10px;">
                     <h4>{{ item.highlightstitle }}</h4>
                     <p>{{ item.highlightsdescription }}</p>

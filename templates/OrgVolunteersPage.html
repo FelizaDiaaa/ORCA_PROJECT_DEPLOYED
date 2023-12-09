@@ -294,6 +294,22 @@
                             });
                         }
                     } catch (error) {
+                        swal({
+                                title: "Accepted!",
+                                text: "The User Accepted Successfully",
+                                icon: "success",
+                                buttons: {
+                                    login: {
+                                        text: "Ok",
+                                        value: "login",
+                                        className: "btn btn-success",
+                                    }
+                                }
+                            }).then((value) => {
+                                if (value === "login") {
+                                    location.reload();
+                                }
+                            });
                         console.error('Error:', error);
                     }
                 });
@@ -337,6 +353,22 @@
                         });
                     }
                 } catch (error) {
+                    swal({
+                            title: "Declined!",
+                            text: "The User Declined Successfully",
+                            icon: "success",
+                            buttons: {
+                                login: {
+                                    text: "Ok",
+                                    value: "login",
+                                    className: "btn btn-success",
+                                }
+                            }
+                        }).then((value) => {
+                            if (value === "login") {
+                                location.reload();
+                            }
+                        });
                     console.error('Error:', error);
                 }
             });

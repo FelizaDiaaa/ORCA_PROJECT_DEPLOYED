@@ -5,7 +5,6 @@
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <link rel="icon" type="image/x-icon" href="{% static 'img/orca web logo.png' %}">
-  <link rel="stylesheet" type="text/css" href="{% static 'css/registerpage.css' %}">
   <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
   <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css">
   <script src="https://unpkg.com/sweetalert/dist/sweetalert.min.js"></script>
@@ -18,8 +17,11 @@
     /* body base text */
     @import url('https://fonts.googleapis.com/css2?family=Hind+Guntur&display=swap');
 
+    
     .form-label{
-      font-family: 'Hind Guntur';
+      font-family: 'Nunito';
+      font-weight: bold;
+      color: rgba(43, 43, 43, 0.848);
     }
     .form-control{
       font-family: 'Nunito';
@@ -50,6 +52,26 @@
       display: flex;
       justify-content: center;
       align-items: center;
+    }
+
+    .btn-primary{
+      width: 100%;
+      border-radius: 5px;
+      background-color: #FF8400;
+      border: none;
+      
+    }
+
+    .btn-primary:hover{
+        background-color: #ea7603;
+    }
+
+    .btn-secondary{
+      align-items: center;
+      justify-content: center;
+      width: 75%;
+      border-radius: 5px;
+      background-color: #6c757d;
     }
     .client-container {
       padding: 32px;
@@ -221,7 +243,7 @@
       display: grid;
       grid-template-columns: auto auto;
       justify-content: space-between;
-      cursor:pointer;
+      cursor: pointer;
       padding-top: 32px;
     }
     .g-back:hover {
@@ -238,8 +260,11 @@
       background-color: #ff8200;
       color: #f8f8f8;
     }
-    .reg-btn:active {
-      background-color: #174786;
+    .reg-btn, .g-back{
+      border: none;
+      padding: 8px 24px;
+      font-size: 1.10rem;
+      border-radius: 5px;
     }
     .center {
       height: auto;
