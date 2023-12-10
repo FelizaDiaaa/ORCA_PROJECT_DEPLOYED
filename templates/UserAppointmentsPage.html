@@ -59,6 +59,7 @@
         width: 100%;
         overflow: scroll;
       }
+
     }
   </style>
 </head>
@@ -112,29 +113,31 @@
             <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
           </div>
           <div class="modal-body">
-            <!-- Table for appointment history -->
-            <table class="table table-bordered">
-              <thead>
-                <tr>
-                  <th>CLINIC</th>
-                  <th>DATE APPOINTMENT</th>
-                  <th>TIME</th>
-                  <th>PET TO BRING</th>
-                  <th>TYPE OF SERVICE</th>
-                </tr>
-              </thead>
-              <tbody>
-                {% for appointment in past_appointments %}
-                <tr>
-                  <td>{{appointment.appointed_to.organization_name}}</td> <!--SI PARA DGDI PA-->
-                  <td>{{appointment.appointmentdate}}</td>
-                  <td>{{appointment.appointmenttime}}</td>
-                  <td>{{appointment.pettobring.pet_name | title}}</td> <!--SI PARA DGDI PA-->
-                  <td>{{appointment.servicetype}}</td> 
-                </tr>
-              </tbody>
-              {% endfor %}
-            </table>
+            <div class="profile-box">
+                <!-- Table for appointment history -->
+                <table class="table table-bordered">
+                  <thead>
+                    <tr>
+                      <th>CLINIC</th>
+                      <th>DATE APPOINTMENT</th>
+                      <th>TIME</th>
+                      <th>PET TO BRING</th>
+                      <th>TYPE OF SERVICE</th>
+                    </tr>
+                  </thead>
+                  <tbody>
+                    {% for appointment in past_appointments %}
+                    <tr>
+                      <td>{{appointment.appointed_to.organization_name}}</td> <!--SI PARA DGDI PA-->
+                      <td>{{appointment.appointmentdate}}</td>
+                      <td>{{appointment.appointmenttime}}</td>
+                      <td>{{appointment.pettobring.pet_name | title}}</td> <!--SI PARA DGDI PA-->
+                      <td>{{appointment.servicetype}}</td> 
+                    </tr>
+                  </tbody>
+                  {% endfor %}
+                </table>
+              </div>
           </div>
         </div>
       </div>

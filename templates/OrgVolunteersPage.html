@@ -78,6 +78,23 @@
             width: 500px;
             height: 500px;
         }
+
+        .modal-body {
+            max-height: calc(100vh - 200px);
+            overflow-y: auto;
+        }
+
+        .modal-dialog {
+            max-height: calc(100vh - 50px);
+        }
+
+        .table thead {
+            position: sticky;
+            top: 0;
+            background-color: #fff; /* Adjust the background color as needed */
+            z-index: 1;
+        }
+
         @media screen and (min-width: 375px) and (max-width: 768px) {
             .vol-container, .modal-body {
                 overflow: scroll;

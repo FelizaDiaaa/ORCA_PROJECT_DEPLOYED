@@ -90,6 +90,7 @@
       padding: 16px;
       display: grid;
       place-items: center;
+      justify-content: center;
       max-width: 390px;
     }
     .col .clinic-box {
@@ -436,8 +437,8 @@
                   active
                 {% endif %}">
                 <div class="d-flex justify-content-center custom-css">
-                  <img class="d-block c-size mb-c-size" src="{{ item.highlightsphoto }}" alt="Slide {{ forloop.counter }}">
-</div>
+                  <img class="d-block c-size mb-c-size" src="{{ item.highlightsphoto.url }}" alt="Slide {{ forloop.counter }}">
+                </div>
                 <div class="carousel-caption d-md-block d-sm-block" style="background-color: #1e262d83; border-radius: 10px;">
                     <h4>{{ item.highlightstitle }}</h4>
                     <p>{{ item.highlightsdescription }}</p>
@@ -479,7 +480,7 @@
                   </select>
                 </div>
                 <div class="mb-3">
-                  <label for="petSelect" class="form-label">Choose Pet: <span style="color: rgb(202, 6, 6)">*</span></label>
+                  <label for="petSelect" class="form-label">Choose Pet: <span style="color: rgb(202, 6, 6)">*</span><i style="font-weight: normal; font-size: small;" hidden>(Add a pet to "My Pets" before scheduling an appointment.)</i></label>
                   {% for pet in pets %}
                     <div class="form-check">
                       <input type="checkbox" class="form-check-input" name="pettobring" id="pet{{ pet.id }}" value="{{ pet.id }}" onchange="handleServiceChange()">

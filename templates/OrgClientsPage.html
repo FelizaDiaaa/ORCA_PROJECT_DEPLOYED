@@ -27,8 +27,9 @@
     }
     
     .flex-grow-1{
-        display: flex;
-        flex-wrap: wrap;
+        display: grid;
+        grid-template-columns: repeat(auto-fit, minmax(600px, auto));
+        justify-content: space-evenly;
     }
       .button {
           background-color: #109f26;
@@ -67,9 +68,9 @@
       .client-list {
           display: flex;
           flex-wrap: wrap;
+          justify-content: space-evenly;
           padding: 1rem;
           gap: 20px;
-          height: 400px;
       }
       .client {
           display: flex;
@@ -174,22 +175,46 @@
           cursor: pointer;
       }
       
-      @media (max-width: 768px) {
-          .client-list {
-              flex-wrap: wrap;
-              justify-content: center;
-              align-items: center;
-          }
-          .modal-content {
-              flex-direction: column;
-              width: 90%;
-              max-width: 500px;
-          }
-          .flex-grow-1{
-            display: grid;
-            place-items: center;
-          }
-      }
+      @media (max-width: 576px) {
+        /* Styles for screens up to 576px wide */
+        .client-list {
+            flex-wrap: wrap;
+            justify-content: center;
+            align-items: center;
+        }
+        .modal-content {
+            flex-direction: column;
+            width: 90%;
+            max-width: 90%;
+        }
+        .client {
+            width: 100%;
+        }
+    }
+
+    @media (min-width: 577px) and (max-width: 768px) {
+        /* Styles for screens between 577px and 768px wide */
+        .client-list {
+            flex-wrap: wrap;
+            justify-content: center;
+            align-items: center;
+        }
+        .modal-content {
+            flex-direction: column;
+            width: 90%;
+            max-width: 500px;
+        }
+    }
+
+    @media (min-width: 769px) {
+        /* Styles for screens 769px and wider */
+        .client-list {
+            justify-content: space-evenly;
+        }
+        .modal-content {
+            flex-direction: row;
+        }
+    }
   </style>
 </head>
 
@@ -242,7 +267,7 @@
 
 
     <!-- MODAL FOR PET INFORMATION -->
-    <div class="modal fade" id="petInfoModal" tabindex="-1" role="dialog" aria-labelledby="petInfoModalLabel" aria-hidden="true">
+    <div class="modal fade" id="petInfoModal" tabindex="-1" role="dialog" aria-labelledby="petInfoModalLabel" aria-hidden="true" data-bs-backdrop="false">
         <div class="modal-dialog modal-lg modal-dialog-scrollable" role="document">
             <div class="modal-content">
                 <div class="modal-header">

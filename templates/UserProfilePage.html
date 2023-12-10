@@ -64,7 +64,7 @@
       justify-content: start;
     }
 
-    .img-container {
+    .img-container, .edit_img {
       width: 180px;
       height: 180px;
       overflow: hidden;
@@ -72,7 +72,11 @@
       background-color: #fff;
       border-radius: 100%;
       filter: drop-shadow(#000 2px 0 3px);
-      object-fit: cover;
+    }
+
+    img {
+      width: 100%;
+      height: auto;
     }
 
     .modal-title {
@@ -290,15 +294,6 @@
         background-color: #0056b3;
         color: #fff;
         border-color: #0056b3;
-    }
-    .edit_img {
-      width: 150px;
-      height: 150px;
-      overflow: hidden;
-      padding: 4px;
-      background-color: #fff;
-      border-radius: 100%;
-      filter: drop-shadow(#000 2px 0 3px);
     }
 
     .container {
